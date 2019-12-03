@@ -132,3 +132,5 @@ disabled_rules:
   - vertical_whitespace_between_cases
 identifier_name:
   min_length: 2
+nesting:
+  type_level: 3
