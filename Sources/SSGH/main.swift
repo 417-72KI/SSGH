@@ -9,14 +9,6 @@ enum Arguments {
     )
 }
 
-enum Flags {
-    static let version = Flag(
-        "version",
-        flag: "v",
-        description: "Display current version."
-    )
-}
-
 enum Options {
     static let gitHubToken = Option<String?>(
         "github-token",
@@ -27,16 +19,10 @@ enum Options {
 }
 
 let main = command(
-    Flags.version,
-    Arguments.target,
-    Options.gitHubToken
+    Options.gitHubToken,
+    Arguments.target
 ) {
-    if $0 {
-        print(ApplicationInfo.version)
-        return
-    }
-
-    let gitHubToken = try $2 ?? (try Environment.getValue(forKey: .gitHubToken))
+    let gitHubToken = try $0 ?? (try Environment.getValue(forKey: .gitHubToken))
 
     do {
         try SSGHCore(target: $1, gitHubToken: gitHubToken).execute()
