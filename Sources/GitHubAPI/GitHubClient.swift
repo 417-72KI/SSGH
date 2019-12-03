@@ -10,20 +10,20 @@ public class GitHubClient {
 }
 
 extension GitHubClient {
-    func send<R: Request>(_ request: R, completionHandler: @escaping  (Result<R.Response, GitHubClient.Error>) -> Void) {
+    func send<R: Request>(_ request: R, completionHandler: @escaping  (Result<R.Response, SessionTaskError>) -> Void) {
         Session.send(request, callbackQueue: .sessionQueue) { result in
             switch result {
             case let .success(entity):
                 completionHandler(.success(entity))
             case let .failure(error):
-                completionHandler(.failure(.other(error)))
+                completionHandler(.failure(error))
             }
         }
     }
 
-    func sendSync<T: Request>(_ request: T) -> Result<T.Response, GitHubClient.Error> {
+    func sendSync<T: Request>(_ request: T) -> Result<T.Response, SessionTaskError> {
         // swiftlint:disable:next implicitly_unwrapped_optional
-        var result: Result<T.Response, GitHubClient.Error>!
+        var result: Result<T.Response, SessionTaskError>!
         let semaphore = DispatchSemaphore(value: 0)
         send(request) {
             result = $0
@@ -79,7 +79,18 @@ extension Request {
 // MARK: - Error
 extension GitHubClient {
     public enum Error: Swift.Error {
-        case userNotFound
+        case userNotFound(String)
         case other(Swift.Error)
+    }
+}
+
+extension GitHubClient.Error: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case let .userNotFound(userId):
+            return "User(\(userId)) not found."
+        case let .other(error):
+            return "Unexpected error. Origin: \(error)."
+        }
     }
 }

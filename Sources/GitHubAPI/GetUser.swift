@@ -5,6 +5,13 @@ import RxSwift
 extension GitHubClient {
     public func getUser(by userId: String) -> Result<User, GitHubClient.Error> {
         sendSync(Users.Get(userId: userId))
+            .mapError {
+                if case let .responseError(re) = $0,
+                    let responseError = re as? APIKit.ResponseError,
+                    case let .unacceptableStatusCode(code) = responseError,
+                    code == 404 { return .userNotFound(userId) }
+                return .other($0)
+        }
     }
 }
 
