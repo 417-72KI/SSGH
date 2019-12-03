@@ -3,11 +3,16 @@ import Foundation
 import RxSwift
 
 extension GitHubAPI {
+    public func getUser(by userId: String) -> Result<User, GitHubAPI.Error> {
+        sendSync(Users.Get(userId: userId))
+    }
+}
+
+extension GitHubAPI {
     enum Users {
         struct Get: Request {
             typealias Response = User
 
-            let token: String
             let userId: String
 
             var method: HTTPMethod { .get }
@@ -15,11 +20,3 @@ extension GitHubAPI {
         }
     }
 }
-
-#if canImport(RxSwift)
-extension Reactive where Base == GitHubAPI {
-    public func getUser(by userId: String) -> Single<User> {
-        send(Base.Users.Get(token: base.token, userId: userId))
-    }
-}
-#endif

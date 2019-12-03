@@ -1,23 +1,17 @@
 import APIKit
 import Foundation
 
-#if canImport(RxSwift)
-import RxSwift
-#endif
-
 public class GitHubAPI {
     let domain = "https://github.com"
 
-    let token: String
-
     public init(token: String) {
-        self.token = token
+        Authorization.shared.token = token
     }
 }
 
 extension GitHubAPI {
     func send<R: Request>(_ request: R, completionHandler: @escaping  (Result<R.Response, GitHubAPI.Error>) -> Void) {
-        Session.send(request) { result in
+        Session.send(request, callbackQueue: .sessionQueue) { result in
             switch result {
             case let .success(entity):
                 completionHandler(.success(entity))
@@ -26,11 +20,22 @@ extension GitHubAPI {
             }
         }
     }
+
+    func sendSync<T: Request>(_ request: T) -> Result<T.Response, GitHubAPI.Error> {
+        // swiftlint:disable:next implicitly_unwrapped_optional
+        var result: Result<T.Response, GitHubAPI.Error>!
+        let semaphore = DispatchSemaphore(value: 0)
+        send(request) {
+            result = $0
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return result
+    }
 }
 
 // MARK: - Request
 protocol Request: APIKit.Request where Response: Entity {
-    var token: String { get }
 }
 
 extension Request {
@@ -39,7 +44,7 @@ extension Request {
 
 extension Request {
     var headerFields: [String: String] {
-        ["Authorization": "token \(token)"]
+        ["Authorization": "token \(Authorization.shared.token)"]
     }
 }
 
@@ -51,11 +56,22 @@ extension Request {
     }
 }
 
+struct DecodableDataParser: DataParser {
+    var contentType: String? { "application/json" }
+
+    func parse(data: Data) throws -> Any { data }
+}
+
+extension Request {
+    var dataParser: DataParser { DecodableDataParser() }
+}
+
 extension Request {
     func response(from object: Any, urlResponse: HTTPURLResponse) throws -> Response {
         guard let data = object as? Data else {
             throw ResponseError.unexpectedObject(object)
         }
+        print(String(data: data, encoding: .utf8) ?? "")
         return try decoder.decode(Response.self, from: data)
     }
 }
@@ -66,25 +82,3 @@ extension GitHubAPI {
         case other(Swift.Error)
     }
 }
-
-// MARK: - Rx
-#if canImport(RxSwift)
-extension GitHubAPI: ReactiveCompatible {}
-
-extension Reactive where Base == GitHubAPI {
-    func send<R: Request>(_ request: R) -> Single<R.Response> {
-        return .create { [base] event in
-            base.send(request) { result in
-                switch result {
-                case let .success(entity):
-                    event(.success(entity))
-                case let .failure(error):
-                    event(.error(error))
-                }
-            }
-
-            return Disposables.create()
-        }
-    }
-}
-#endif

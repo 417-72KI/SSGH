@@ -1,4 +1,5 @@
 import Foundation
+import GitHubAPI
 
 public struct SSGHCore {
     let target: String
@@ -12,5 +13,8 @@ public struct SSGHCore {
 
 public extension SSGHCore {
     func execute() throws {
+        let api = GitHubAPI(token: gitHubToken)
+        let result = api.getUser(by: target)
+        print(result)
     }
 }
