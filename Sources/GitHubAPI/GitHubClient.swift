@@ -1,7 +1,7 @@
 import APIKit
 import Foundation
 
-public class GitHubAPI {
+public class GitHubClient {
     let domain = "https://github.com"
 
     public init(token: String) {
@@ -9,8 +9,8 @@ public class GitHubAPI {
     }
 }
 
-extension GitHubAPI {
-    func send<R: Request>(_ request: R, completionHandler: @escaping  (Result<R.Response, GitHubAPI.Error>) -> Void) {
+extension GitHubClient {
+    func send<R: Request>(_ request: R, completionHandler: @escaping  (Result<R.Response, GitHubClient.Error>) -> Void) {
         Session.send(request, callbackQueue: .sessionQueue) { result in
             switch result {
             case let .success(entity):
@@ -21,9 +21,9 @@ extension GitHubAPI {
         }
     }
 
-    func sendSync<T: Request>(_ request: T) -> Result<T.Response, GitHubAPI.Error> {
+    func sendSync<T: Request>(_ request: T) -> Result<T.Response, GitHubClient.Error> {
         // swiftlint:disable:next implicitly_unwrapped_optional
-        var result: Result<T.Response, GitHubAPI.Error>!
+        var result: Result<T.Response, GitHubClient.Error>!
         let semaphore = DispatchSemaphore(value: 0)
         send(request) {
             result = $0
@@ -77,8 +77,9 @@ extension Request {
 }
 
 // MARK: - Error
-extension GitHubAPI {
+extension GitHubClient {
     public enum Error: Swift.Error {
+        case userNotFound
         case other(Swift.Error)
     }
 }

@@ -13,7 +13,7 @@ public struct SSGHCore {
 
 public extension SSGHCore {
     func execute() throws {
-        let api = GitHubAPI(token: gitHubToken)
+        let api = GitHubClient(token: gitHubToken)
         let result = api.getUser(by: target)
         print(result)
     }

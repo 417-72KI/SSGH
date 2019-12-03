@@ -134,3 +134,5 @@ identifier_name:
   min_length: 2
 nesting:
   type_level: 3
+line_length:
+  warning: 150
