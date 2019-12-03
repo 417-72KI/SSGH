@@ -2,12 +2,30 @@
   "object": {
     "pins": [
       {
+        "package": "APIKit",
+        "repositoryURL": "https://github.com/ishkawa/APIKit.git",
+        "state": {
+          "branch": null,
+          "revision": "862a8f80dd117693750c6ddaba2fe6a85b061a9a",
+          "version": "5.0.0"
+        }
+      },
+      {
         "package": "Commander",
         "repositoryURL": "https://github.com/kylef/Commander.git",
         "state": {
           "branch": null,
           "revision": "4b6133c3071d521489a80c38fb92d7983f19d438",
           "version": "0.9.1"
+        }
+      },
+      {
+        "package": "RxSwift",
+        "repositoryURL": "https://github.com/ReactiveX/RxSwift.git",
+        "state": {
+          "branch": null,
+          "revision": "b3e888b4972d9bc76495dd74d30a8c7fad4b9395",
+          "version": "5.0.1"
         }
       },
       {

@@ -11,6 +11,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/kylef/Commander.git", .upToNextMajor(from: "0.9.0")),
+        .package(url: "https://github.com/ishkawa/APIKit.git", .upToNextMajor(from: "5.0.0")),
+        .package(url: "https://github.com/ReactiveX/RxSwift.git", .upToNextMajor(from: "5.0.1"))
     ],
     targets: [
         .target(
@@ -18,8 +20,11 @@ let package = Package(
             dependencies: ["Commander", "SSGHCore"]),
         .target(
             name: "SSGHCore",
-            dependencies: [
-            ]
+            dependencies: ["GitHubAPI", "RxSwift"]
+        ),
+        .target(
+            name: "GitHubAPI",
+            dependencies: ["APIKit", "RxSwift"]
         ),
         .testTarget(
             name: "SSGHCoreTests",
