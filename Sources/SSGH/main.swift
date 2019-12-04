@@ -14,7 +14,7 @@ enum Options {
         "github-token",
         default: nil,
         flag: "t",
-        description: "GitHub Token"
+        description: "GitHub Token to give stars. If not set, use `SSGH_TOKEN` in environment."
     )
 }
 
