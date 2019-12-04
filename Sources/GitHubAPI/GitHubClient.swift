@@ -11,7 +11,9 @@ public class GitHubClient {
 
 extension GitHubClient {
     func send<R: Request>(_ request: R, completionHandler: @escaping  (Result<R.Response, SessionTaskError>) -> Void) {
+        dumpDebug("\(String(describing: try? request.buildURLRequest()))")
         Session.send(request, callbackQueue: .sessionQueue) { result in
+            dumpDebug("\(result)")
             switch result {
             case let .success(entity):
                 completionHandler(.success(entity))
@@ -71,14 +73,12 @@ extension Request {
         guard let data = object as? Data else {
             throw ResponseError.unexpectedObject(object)
         }
-        // print(String(data: data, encoding: .utf8) ?? "")
         return try decoder.decode(Response.self, from: data)
     }
 }
 
 extension Request where Response == EmptyEntity {
     func response(from object: Any, urlResponse: HTTPURLResponse) throws -> Response {
-        // print(object)
         return EmptyEntity(response: urlResponse)
     }
 }

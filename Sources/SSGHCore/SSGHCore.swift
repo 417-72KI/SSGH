@@ -16,7 +16,6 @@ public extension SSGHCore {
         let api = GitHubClient(token: gitHubToken)
         dumpInfo("Fetching user data...")
         let user = try api.getUser(by: target).get()
-
         dumpInfo("Fetching repos...")
         let repos = try api.getRepos(for: user.login)
             .get()
@@ -28,7 +27,14 @@ public extension SSGHCore {
             dumpInfo("Star to \(repo.fullName)")
             return api.star(userId: user.login, repo: repo.name)
         }
-        .reduce(into: 0) { if case .success = $1 { $0 += 1 } }
+        .reduce(into: 0) {
+            switch $1 {
+            case .success:
+                $0 += 1
+            case let .failure(error):
+                dumpError(error)
+            }
+        }
 
         dumpInfo("\(starredRepoCount) repos starred!")
     }
