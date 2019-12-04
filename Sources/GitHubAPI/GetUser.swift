@@ -1,6 +1,5 @@
 import APIKit
 import Foundation
-import RxSwift
 
 extension GitHubClient {
     public func getUser(by userId: String) -> Result<User, GitHubClient.Error> {
