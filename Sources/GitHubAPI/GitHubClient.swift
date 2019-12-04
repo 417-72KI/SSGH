@@ -73,6 +73,7 @@ extension Request {
         guard let data = object as? Data else {
             throw ResponseError.unexpectedObject(object)
         }
+
         return try decoder.decode(Response.self, from: data)
     }
 }
