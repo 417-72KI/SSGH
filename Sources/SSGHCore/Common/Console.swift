@@ -1,6 +1,12 @@
 import Darwin
 import Foundation
 
+func dumpDebug(_ message: @autoclosure () -> String) {
+    #if DEBUG
+    fputs("\(tag)[Debug] \(message())\n", stdout)
+    #endif
+}
+
 public func dumpInfo(_ message: @autoclosure () -> String) {
     fputs("\(tag)[Info] \(message())\n", stdout)
 }

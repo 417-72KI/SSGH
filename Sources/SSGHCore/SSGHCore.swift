@@ -20,10 +20,9 @@ public extension SSGHCore {
         let repos = try api.getRepos(for: user.login)
             .get()
             .filter { !$0.fork }
-            .map { ($0, try api.isStarred(userId: user.login, repo: $0.name).get()) }
-            .filter { !$0.1 }
+            .filter { !(try api.isStarred(userId: user.login, repo: $0.name).get()) }
 
-        let starredRepoCount = repos.map { repo, _ -> Result<Void, GitHubClient.Error> in
+        let starredRepoCount = repos.map { repo -> Result<Void, GitHubClient.Error> in
             dumpInfo("Star to \(repo.fullName)")
             return api.star(userId: user.login, repo: repo.name)
         }
