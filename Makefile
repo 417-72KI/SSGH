@@ -1,7 +1,7 @@
 project_name = SSGH
 executable_name = ssgh
 
-.PHONY : clean build test release xcodeproj lint deploy
+.PHONY : dependencies clean build test release xcode
 
 default: clean build
 
@@ -33,14 +33,8 @@ build:
 test:
 	swift test
 
-# release:
-# 	rm -f .build/$(executable_name).zip
-# 	swift build -c release -Xswiftc -static-stdlib -Xswiftc -suppress-warnings
-# 	.build/release/$(executable_name) --version
-# 	zip -j .build/$(executable_name).zip .build/release/$(executable_name) LICENSE
-
-# lint:
-# 	pod spec lint --no-clean --allow-warnings
-
-# deploy:
-# 	pod trunk push $(project_name).podspec
+ release:
+ 	rm -f .build/$(executable_name).zip
+ 	swift build -c release -Xswiftc -static-stdlib -Xswiftc -suppress-warnings
+ 	.build/release/$(executable_name) --version
+ 	zip -j .build/$(executable_name).zip .build/release/$(executable_name) LICENSE
