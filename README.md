@@ -10,5 +10,17 @@ SSGH is a utility tool for gifting stars in GitHub.
 ## Installation
 WIP
 
+## Before use
+SSGH needs GitHub token
+
+Genarate page is here↓↓
+
+https://github.com/settings/tokens
+
+*repo* scope is required.
+
 ## Usage
-`ssgh {user-id-of-target}`
+```sh
+export SSGH_TOKEN='{generated-token}'
+ssgh {user-id-of-target}
+```
