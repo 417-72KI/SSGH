@@ -5,9 +5,9 @@ public struct Repo: Entity {
     let nodeId: String
     public let name: String
     public let fullName: String
+    public let fork: Bool
 
     let `private`: Bool
     let htmlUrl: String
     let description: String?
-    let fork: Bool
 }

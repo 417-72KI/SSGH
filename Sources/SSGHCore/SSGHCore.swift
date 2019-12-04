@@ -20,13 +20,15 @@ public extension SSGHCore {
         dumpInfo("Fetching repos...")
         let repos = try api.getRepos(for: user.login)
             .get()
+            .filter { !$0.fork }
             .map { ($0, try api.isStarred(userId: user.login, repo: $0.name).get()) }
-            .filter { $0.1 }
+            .filter { !$0.1 }
 
-        let starredRepoCount = repos.map { (repo, starred) -> Result<Void, GitHubClient.Error> in
+        let starredRepoCount = repos.map { repo, _ -> Result<Void, GitHubClient.Error> in
             dumpInfo("Star to \(repo.fullName)")
-            return api.unstar(userId: user.login, repo: repo.name)
-        }.reduce(into: 0) { if case .success = $1 { $0 += 1 } }
+            return api.star(userId: user.login, repo: repo.name)
+        }
+        .reduce(into: 0) { if case .success = $1 { $0 += 1 } }
 
         dumpInfo("\(starredRepoCount) repos starred!")
     }
