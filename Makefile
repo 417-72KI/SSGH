@@ -33,8 +33,8 @@ build:
 test:
 	swift test
 
- release:
- 	rm -f .build/$(executable_name).zip
- 	swift build -c release -Xswiftc -static-stdlib -Xswiftc -suppress-warnings
- 	.build/release/$(executable_name) --version
- 	zip -j .build/$(executable_name).zip .build/release/$(executable_name) LICENSE
+release:
+	rm -f .build/$(executable_name).zip
+	swift build -c release -Xswiftc -static-stdlib -Xswiftc -suppress-warnings
+	.build/release/$(executable_name) --version
+	zip -j .build/$(executable_name).zip .build/release/$(executable_name) LICENSE
