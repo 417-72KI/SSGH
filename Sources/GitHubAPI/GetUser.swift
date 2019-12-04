@@ -11,7 +11,7 @@ extension GitHubClient {
                     case let .unacceptableStatusCode(code) = responseError,
                     code == 404 { return .userNotFound(userId) }
                 return .other($0)
-        }
+            }
     }
 }
 

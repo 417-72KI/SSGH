@@ -14,7 +14,10 @@ public struct SSGHCore {
 public extension SSGHCore {
     func execute() throws {
         let api = GitHubClient(token: gitHubToken)
-        let result = api.getUser(by: target)
-        print(result)
+        _ = try api.getUser(by: target).get()
+
+        let repos = try api.getRepos(for: target).get()
+        try repos.map { ($0, try api.isStarred(userId: target, repo: $0.name).get()) }
+            .forEach { print($0) }
     }
 }

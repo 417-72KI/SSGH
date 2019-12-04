@@ -76,6 +76,13 @@ extension Request {
     }
 }
 
+extension Request where Response == EmptyEntity {
+    func response(from object: Any, urlResponse: HTTPURLResponse) throws -> Response {
+        print(object)
+        return EmptyEntity(response: urlResponse)
+    }
+}
+
 // MARK: - Error
 extension GitHubClient {
     public enum Error: Swift.Error {
