@@ -14,10 +14,20 @@ public struct SSGHCore {
 public extension SSGHCore {
     func execute() throws {
         let api = GitHubClient(token: gitHubToken)
-        _ = try api.getUser(by: target).get()
+        dumpInfo("Fetching user data...")
+        let user = try api.getUser(by: target).get()
 
-        let repos = try api.getRepos(for: target).get()
-        try repos.map { ($0, try api.isStarred(userId: target, repo: $0.name).get()) }
-            .forEach { print($0) }
+        dumpInfo("Fetching repos...")
+        let repos = try api.getRepos(for: user.login)
+            .get()
+            .map { ($0, try api.isStarred(userId: user.login, repo: $0.name).get()) }
+            .filter { $0.1 }
+
+        let starredRepoCount = repos.map { (repo, starred) -> Result<Void, GitHubClient.Error> in
+            dumpInfo("Star to \(repo.fullName)")
+            return api.unstar(userId: user.login, repo: repo.name)
+        }.reduce(into: 0) { if case .success = $1 { $0 += 1 } }
+
+        dumpInfo("\(starredRepoCount) repos starred!")
     }
 }

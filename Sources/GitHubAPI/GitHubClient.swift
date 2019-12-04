@@ -71,14 +71,14 @@ extension Request {
         guard let data = object as? Data else {
             throw ResponseError.unexpectedObject(object)
         }
-        print(String(data: data, encoding: .utf8) ?? "")
+        // print(String(data: data, encoding: .utf8) ?? "")
         return try decoder.decode(Response.self, from: data)
     }
 }
 
 extension Request where Response == EmptyEntity {
     func response(from object: Any, urlResponse: HTTPURLResponse) throws -> Response {
-        print(object)
+        // print(object)
         return EmptyEntity(response: urlResponse)
     }
 }
