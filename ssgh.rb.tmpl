@@ -1,0 +1,15 @@
+class Ssgh < Formula
+	desc "Deliver stars on your behalf"
+	homepage "https://github.com/417-72KI/SSGH"
+	version "{{TAG}}"
+	url "https://github.com/417-72KI/SSGH/releases/download/{{TAG}}/ssgh.zip"
+	sha256 "{{SHA256}}"
+
+	def install
+		bin.install 'ssgh'
+	end
+
+	test do
+    system "false"
+  end
+end
