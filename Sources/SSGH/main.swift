@@ -32,4 +32,4 @@ let main = command(
     }
 }
 
-main.run(ApplicationInfo.version)
+main.run(ApplicationInfo.version.description)
