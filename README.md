@@ -8,7 +8,12 @@ SSGH is a utility tool for gifting stars in GitHub.
 (WIP: description)
 
 ## Installation
-WIP
+### Homebrew
+
+```sh
+brew tap 417-72KI/SSGH
+brew install ssgh
+```
 
 ## Before use
 SSGH needs GitHub token
