@@ -79,3 +79,45 @@ extension Version: CustomStringConvertible {
         return description
     }
 }
+
+// MARK: - ExpressibleByStringLiteral
+extension Version: ExpressibleByStringLiteral {
+    public init(stringLiteral value: String) {
+        // swiftlint:disable:next line_length
+        let pattern = #"^v?(?<major>0|[1-9]\d*)(\.(?<minor>0|[1-9]\d*))?(\.(?<patch>0|[1-9]\d*))?(?<pre>-(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(\.(0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*)?(?<metadata>\+[0-9a-zA-Z-]+(\.[0-9a-zA-Z-]+)*)?$"#
+        guard let regex = try? NSRegularExpression(pattern: pattern) else {
+            fatalError("Invalid pattern: \(pattern)")
+        }
+        guard let result = regex.firstMatch(in: value, options: [], range: NSRange(location: 0, length: value.count)) else {
+            assertionFailure("Invalid value: \(value)")
+            self.init(1, 0, 0)
+            return
+        }
+        let ranges = (
+            major: result.range(withName: "major"),
+            minor: result.range(withName: "minor"),
+            patch: result.range(withName: "patch"),
+            preRelease: result.range(withName: "pre"),
+            buildMetadata: result.range(withName: "metadata")
+        )
+        precondition(ranges.major.length != 0)
+        let major = Int(value.substring(ranges.major))!
+        let minor: Int = {
+            guard ranges.minor.length != 0 else { return 0 }
+            return Int(value.substring(ranges.minor)) ?? 0
+        }()
+        let patch: Int = {
+            guard ranges.patch.length != 0 else { return 0 }
+            return Int(value.substring(ranges.patch)) ?? 0
+        }()
+        let preRelease: String? = {
+            guard ranges.preRelease.length != 0 else { return nil }
+            return String(value.substring(ranges.preRelease).dropFirst())
+        }()
+        let buildMetadata: String? = {
+            guard ranges.buildMetadata.length != 0 else { return nil }
+            return String(value.substring(ranges.buildMetadata).dropFirst())
+        }()
+        self.init(major, minor, patch, preRelease: preRelease, buildMetadata: buildMetadata)
+    }
+}
