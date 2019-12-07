@@ -21,4 +21,11 @@ class VersionTests: XCTestCase {
         XCTAssertEqual(Version(2, 8, 2, buildMetadata: "build234").description, "2.8.2+build234")
         XCTAssertEqual(Version(2, 8, 2, preRelease: "alpha.2.1.0").description, "2.8.2-alpha.2.1.0")
     }
+
+    func testCompare() {
+        XCTAssertTrue(Version(1, 4, 0) < "1.4.1")
+        XCTAssertTrue(Version(1, 5, 0) > "1.4.1")
+        XCTAssertTrue(Version(2, 0, 0) > "1.4.1")
+        XCTAssertTrue(Version(2, 0, 0, preRelease: "alpha") < "2.0.0")
+    }
 }
