@@ -14,6 +14,7 @@ public struct SSGHCore {
 public extension SSGHCore {
     func execute() throws {
         let api = GitHubClient(token: gitHubToken)
+        defer { confirmUpdate(with: api) }
         dumpInfo("Fetching user data...")
         let user = try api.getUser(by: target).get()
         dumpInfo("Fetching repos...")
@@ -49,5 +50,16 @@ public extension SSGHCore {
         }
 
         dumpInfo("\(starredRepoCount) repos starred!")
+    }
+}
+
+private extension SSGHCore {
+    func confirmUpdate(with githubClient: GitHubClient) {
+        guard case let .success(releases) = githubClient.getReleases(for: ApplicationInfo.author, repo: ApplicationInfo.name) else { return }
+        guard let latest = releases.map({ Version(stringLiteral: $0.tagName) }).max()
+            else { return }
+        if ApplicationInfo.version < latest {
+            dumpInfo("New version \(latest) is available!")
+        }
     }
 }
