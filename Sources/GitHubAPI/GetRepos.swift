@@ -18,6 +18,7 @@ extension GitHubClient {
 
             var method: HTTPMethod { .get }
             var path: String { "/users/\(owner)/repos" }
+            // swiftlint:disable:next discouraged_optional_collection
             var queryParameters: [String: Any]? { ["page": page] }
         }
     }
