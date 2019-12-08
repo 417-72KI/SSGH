@@ -28,8 +28,8 @@ let main = command(
         try SSGHCore(target: $1, gitHubToken: gitHubToken).execute()
     } catch {
         dumpError(error)
-        exit(1)
+        exit(EXIT_FAILURE)
     }
 }
 
-main.run(ApplicationInfo.version)
+main.run(ApplicationInfo.version.description)

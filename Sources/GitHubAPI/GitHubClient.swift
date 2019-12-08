@@ -73,7 +73,7 @@ extension Request {
         guard let data = object as? Data else {
             throw ResponseError.unexpectedObject(object)
         }
-
+        dumpDebug(String(data: data, encoding: .utf8) ?? "")
         return try decoder.decode(Response.self, from: data)
     }
 }
