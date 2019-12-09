@@ -39,7 +39,7 @@ FORMULA_URL="https://api.github.com/repos/417-72KI/homebrew-${EXECUTABLE_NAME}/c
 SHA=`curl GET $FORMULA_URL | jq -r '.sha'`
 echo "sha: \n$SHA"
 
-SHA256=$(shasum -a 256 .build/release/${EXECUTABLE_NAME} | cut -d ' ' -f 1)
+SHA256=$(shasum -a 256 .build/${EXECUTABLE_NAME}.zip | cut -d ' ' -f 1)
 CONTENT_ENCODED=`cat ${FORMULA_PATH}.tmpl | sed -e "s/{{TAG}}/${TAG}/" | sed -e "s/{{SHA256}}/$SHA256/" | openssl enc -e -base64 | tr -d '\n '`
 echo "content_encoded: \n$CONTENT_ENCODED"
 
