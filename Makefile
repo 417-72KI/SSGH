@@ -34,6 +34,4 @@ test:
 	swift test
 
 release:
-	rm -f .build/$(executable_name).zip
-	swift build -c release --static-swift-stdlib -Xswiftc -suppress-warnings
-	zip -j .build/$(executable_name).zip .build/release/$(executable_name) LICENSE
+	scripts/release.sh ${executable_name}
