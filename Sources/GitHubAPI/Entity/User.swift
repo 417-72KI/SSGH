@@ -6,3 +6,7 @@ public struct User: Entity {
     public let reposUrl: String
     public let starredUrl: String
 }
+
+extension User: CustomStringConvertible {
+    public var description: String { "@\(login)" }
+}
