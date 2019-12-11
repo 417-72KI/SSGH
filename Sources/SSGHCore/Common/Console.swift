@@ -23,6 +23,4 @@ public func dumpWarn(_ message: @autoclosure () -> String) {
     fputs("\(tag)[Warning] \(message())\n", stderr)
 }
 
-private var tag: String {
-    return "[\(ApplicationInfo.name)(\(ApplicationInfo.version))] "
-}
+private var tag: String { "[\(ApplicationInfo.name)(\(ApplicationInfo.version))] " }
