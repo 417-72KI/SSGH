@@ -3,42 +3,35 @@ import GitHubAPI
 
 public struct SSGHCore {
     let target: String
-    let gitHubToken: String
+    private let gitHubClient: GitHubClient
 
     public init(target: String, gitHubToken: String) {
         self.target = target
-        self.gitHubToken = gitHubToken
+        gitHubClient = .init(token: gitHubToken)
     }
 }
 
 public extension SSGHCore {
     func execute() throws {
-        let api = GitHubClient(token: gitHubToken)
-        defer { confirmUpdate(with: api) }
+        defer { confirmUpdate() }
         dumpInfo("Fetching user data...")
-        let user = try api.getUser(by: target).get()
-        dumpInfo("Fetching repos...")
+        let user = try gitHubClient.getUser(by: target).get()
+        try star(to: user)
+    }
+}
 
-        func fetchAllRepos() throws -> [Repo] {
-            var page: UInt = 1
-            var repos: [Repo] = []
-            while true {
-                let reposPerPage = try api.getRepos(for: user.login, page: page).get()
-                if reposPerPage.isEmpty { break }
-                repos += reposPerPage
-                page += 1
-            }
-            return repos
-        }
-
-        let repos = try fetchAllRepos()
+private extension SSGHCore {
+    func star(to user: User) throws {
+        
+        dumpInfo("Fetching repos for \(user)...")
+        let repos = try fetchAllRepos(of: user)
         let starrableRepos = try repos.filter { !$0.fork }
-            .filter { !(try api.isStarred(userId: user.login, repo: $0.name).get()) }
-        dumpDebug("\(starrableRepos.count) repos detected")
+            .filter { !(try gitHubClient.isStarred(userId: user.login, repo: $0.name).get()) }
+        dumpDebug("\(starrableRepos.count) repos of \(user) detected")
 
         let starredRepoCount = starrableRepos.map { repo -> Result<Void, GitHubClient.Error> in
             dumpInfo("Star to \(repo.fullName)")
-            return api.star(userId: user.login, repo: repo.name)
+            return gitHubClient.star(userId: user.login, repo: repo.name)
         }
         .reduce(into: 0) {
             switch $1 {
@@ -49,13 +42,25 @@ public extension SSGHCore {
             }
         }
 
-        dumpInfo("\(starredRepoCount) repos starred!")
+        dumpInfo("\(starredRepoCount) repos of \(user) starred!")
+    }
+
+    func fetchAllRepos(of user: User) throws -> [Repo] {
+        var page: UInt = 1
+        var repos: [Repo] = []
+        while true {
+            let reposPerPage = try gitHubClient.getRepos(for: user.login, page: page).get()
+            if reposPerPage.isEmpty { break }
+            repos += reposPerPage
+            page += 1
+        }
+        return repos
     }
 }
 
 private extension SSGHCore {
-    func confirmUpdate(with githubClient: GitHubClient) {
-        guard case let .success(releases) = githubClient.getReleases(for: ApplicationInfo.author, repo: ApplicationInfo.name) else { return }
+    func confirmUpdate() {
+        guard case let .success(releases) = gitHubClient.getReleases(for: ApplicationInfo.author, repo: ApplicationInfo.name) else { return }
         guard let latest = releases.map({ Version(stringLiteral: $0.tagName) }).max()
             else { return }
         if ApplicationInfo.version < latest {
