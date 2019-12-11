@@ -8,7 +8,7 @@ fi
 cd $(git rev-parse --show-toplevel)
 
 # TAG
-TAG=$(cat Sources/SSGHCore/Common/ApplicationInfo.swift | grep version | awk '{ print $NF }' | sed -E 's/\"(.*)\"/\1/')
+TAG=$(cat Sources/SSGHCore/Common/ApplicationInfo.swift | grep version | awk '{ print $NF }' | sed -E 's/Version\(\"(.*)\"\)/\1/')
 git tag ${TAG}
 git push origin ${TAG}
 

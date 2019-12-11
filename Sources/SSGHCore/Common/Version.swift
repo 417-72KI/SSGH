@@ -36,6 +36,13 @@ public struct Version {
     }
 }
 
+// MARK: - Convenience initializers
+public extension Version {
+    init(_ string: String) {
+        self.init(stringLiteral: string)
+    }
+}
+
 // MARK: - Public properties
 extension Version {
     /// A list of the version components, in order from most significant to
