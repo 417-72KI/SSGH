@@ -2,7 +2,7 @@ import Foundation
 import GitHubAPI
 
 public struct SSGHCore {
-    let target: String
+    private let target: String
     private let gitHubClient: GitHubClient
 
     public init(target: String, gitHubToken: String) {
@@ -22,7 +22,7 @@ public extension SSGHCore {
 
 private extension SSGHCore {
     func star(to user: User) throws {
-        
+
         dumpInfo("Fetching repos for \(user)...")
         let repos = try fetchAllRepos(of: user)
         let starrableRepos = try repos.filter { !$0.fork }
