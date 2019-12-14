@@ -11,7 +11,8 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/kylef/Commander.git", .upToNextMajor(from: "0.9.0")),
-        .package(url: "https://github.com/ishkawa/APIKit.git", .upToNextMajor(from: "5.0.0"))
+        .package(url: "https://github.com/ishkawa/APIKit.git", .upToNextMajor(from: "5.0.0")),
+        .package(url: "https://github.com/417-72KI/ParameterizedTestUtil.git", .upToNextMajor(from: "1.0.0"))
     ],
     targets: [
         .target(
@@ -27,7 +28,8 @@ let package = Package(
         ),
         .testTarget(
             name: "SSGHCoreTests",
-            dependencies: ["SSGHCore"]),
+            dependencies: ["SSGHCore", "ParameterizedTestUtil"]
+        )
     ],
     swiftLanguageVersions: [.v5]
 )

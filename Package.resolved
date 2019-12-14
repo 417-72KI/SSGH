@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "ParameterizedTestUtil",
+        "repositoryURL": "https://github.com/417-72KI/ParameterizedTestUtil.git",
+        "state": {
+          "branch": null,
+          "revision": "69a7b86f0813ffc89079ab8f2ea681fb7f028fe5",
+          "version": "1.0.0"
+        }
+      },
+      {
         "package": "Spectre",
         "repositoryURL": "https://github.com/kylef/Spectre.git",
         "state": {
