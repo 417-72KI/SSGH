@@ -36,7 +36,8 @@ class VersionTests: XCTestCase {
             expect(Version(1, 4, 0), lessThan: "1.4.1"),
             expect(Version(1, 5, 0), moreThan: "1.4.1"),
             expect("2.0.0", moreThan: Version(1, 4, 1)),
-            expect(Version(2, 0, 0, preRelease: "alpha"), lessThan: "2.0.0")
+            expect(Version(2, 0, 0, preRelease: "alpha"), lessThan: "2.0.0"),
+            expect("2.0.1-alpha", moreThan: Version(2, 0, 0))
         )
     }
 }
