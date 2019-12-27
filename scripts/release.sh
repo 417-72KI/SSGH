@@ -2,6 +2,11 @@
 
 set -eu
 
+if [ `git symbolic-ref --short HEAD` != 'master' ]; then
+    echo 'Release is enabled only in master.'
+    exit 1
+fi
+
 if ! type "github-release" > /dev/null; then
     echo '`github-release` not found. Install'
     go get github.com/aktau/github-release
