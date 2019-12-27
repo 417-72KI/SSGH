@@ -1,5 +1,5 @@
 # SSGH - ShootingStar for GitHub
-[![Build Status](https://travis-ci.com/417-72KI/SSGH.svg?branch=master)](https://travis-ci.com/417-72KI/SSGH)
+[![Actions Status](https://github.com/417-72KI/SSGH/workflows/Test/badge.svg)](https://github.com/417-72KI/SSGH/actions)
 [![GitHub release](https://img.shields.io/github/release/417-72KI/SSGH/all.svg)](https://github.com/417-72KI/SSGH/releases)
 [![GitHub license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/417-72KI/SSGH/master/LICENSE)
 
