@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+set -eu
+
 if ! type "github-release" > /dev/null; then
     echo '`github-release` not found. Install'
     go get github.com/aktau/github-release
