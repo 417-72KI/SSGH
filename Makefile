@@ -18,5 +18,8 @@ build:
 test:
 	swift test
 
+autocorrect:
+	scripts/autocorrect.sh
+
 release:
 	scripts/release.sh ${executable_name}
