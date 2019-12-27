@@ -1,9 +1,5 @@
 name: Danger
-on:
-  pull_request:
-    branches: 
-      - master
-      - hotfix
+on: pull_request
 jobs:
   danger:
     name: Danger
