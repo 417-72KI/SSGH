@@ -28,7 +28,7 @@ extension SSGH {
             try SSGHCore(
                 gitHubToken: gitHubToken,
                 dryRunMode: dryRunMode
-            ).execute(mode: .target(target))
+            ).execute(mode: . specifiedTargets(target))
         } catch {
             dumpError(error)
             Self.exit(withError: error)
