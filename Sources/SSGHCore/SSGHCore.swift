@@ -17,7 +17,7 @@ public extension SSGHCore {
     func execute(mode: Mode) throws {
         defer { confirmUpdate() }
         switch mode {
-        case let .target(target):
+        case let .specifiedTargets(target):
             dumpInfo("Fetching users...")
             try target.map { try gitHubClient.getUser(by: $0).get() }
                 .forEach(star(to:))
@@ -82,7 +82,7 @@ private extension SSGHCore {
 
 public extension SSGHCore {
     enum Mode {
-        case target([String])
+        case specifiedTargets([String])
         // TODO: Future support
         // case following
     }
