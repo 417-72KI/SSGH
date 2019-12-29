@@ -5,7 +5,7 @@ import SSGHCore
 @main
 struct SSGH: ParsableCommand {
     @Argument(help: "GitHub user name to give stars.")
-    var target: String
+    var targets: [String]
 
     @Option(name: [.customLong("github-token"), .customShort("t")],
             help: "GitHub Token to give stars. If not set, use `SSGH_TOKEN` in environment.")
@@ -28,7 +28,7 @@ extension SSGH {
             try SSGHCore(
                 gitHubToken: gitHubToken,
                 dryRunMode: dryRunMode
-            ).execute(mode: . specifiedTargets(target))
+            ).execute(mode: . specifiedTargets(targets))
         } catch {
             dumpError(error)
             Self.exit(withError: error)
