@@ -27,7 +27,7 @@ let main = command(
 
     do {
         try SSGHCore(gitHubToken: gitHubToken)
-            .execute(mode: .target(target))
+            .execute(mode: .specifiedTargets(target))
     } catch {
         dumpError(error)
         exit(EXIT_FAILURE)
