@@ -26,10 +26,9 @@ extension SSGH {
         let gitHubToken = try gitHubToken ?? (try Environment.getValue(forKey: .gitHubToken))
         do {
             try SSGHCore(
-                target: target,
                 gitHubToken: gitHubToken,
                 dryRunMode: dryRunMode
-            ).execute()
+            ).execute(mode: .target(target))
         } catch {
             dumpError(error)
             Self.exit(withError: error)
