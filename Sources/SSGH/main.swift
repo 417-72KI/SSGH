@@ -23,10 +23,11 @@ let main = command(
     Arguments.target
 ) {
     let gitHubToken = try $0 ?? (try Environment.getValue(forKey: .gitHubToken))
-    let target = $1
+    let target = [$1]
 
     do {
-        try SSGHCore(target: target, gitHubToken: gitHubToken).execute()
+        try SSGHCore(gitHubToken: gitHubToken)
+            .execute(mode: .target(target))
     } catch {
         dumpError(error)
         exit(EXIT_FAILURE)
