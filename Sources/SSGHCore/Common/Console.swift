@@ -31,6 +31,10 @@ public func dumpWarn(_ message: @autoclosure () -> String, file: StaticString = 
     dump(logType: .warn, message(), file: file, line: line)
 }
 
+public func dumpWarn(_ error: @autoclosure () -> Error, file: StaticString = #file, line: UInt = #line) {
+    dumpWarn("\(error())", file: file, line: line)
+}
+
 private func dump(
     logType: LogType,
     _ message: @autoclosure () -> String,
