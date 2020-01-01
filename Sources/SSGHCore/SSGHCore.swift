@@ -19,8 +19,14 @@ public extension SSGHCore {
         switch mode {
         case let .specifiedTargets(target):
             dumpInfo("Fetching users...")
-            try target.map { try gitHubClient.getUser(by: $0).get() }
-                .forEach(star(to:))
+            try target.compactMap {
+                do {
+                    return try gitHubClient.getUser(by: $0).get()
+                } catch {
+                    dumpWarn(error)
+                    return nil
+                }
+            }.forEach(star(to:))
         }
     }
 }
