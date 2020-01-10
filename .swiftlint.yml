@@ -3,6 +3,7 @@ included:
 excluded:
   - Tests
   - Package.swift
+  - Dangerfile.swift
 allow_zero_lintable_files: true
 opt_in_rules:
   # 一旦全部Opt-Inにする
