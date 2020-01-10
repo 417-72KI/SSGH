@@ -1,7 +1,5 @@
 included:
   - Sources
-excluded:
-  - 'Dangerfile.swift'
 opt_in_rules:
   - anyobject_protocol
   - array_init
