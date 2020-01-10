@@ -6,9 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Install
-        run: bundle install
       - name: Danger
-        uses: 417-72KI/danger-swiftlint
+        uses: 417-72KI/danger-swiftlint@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
