@@ -1,12 +1,8 @@
 import Danger
 
-extension Git {
-    var linesOfCode: Int {
-        createdFiles.count + modifiedFiles.count - deletedFiles.count
-    }
-}
-
 let danger = Danger()
+
+// fileImport: DangerfileExtensions/Git+Extension.swift
 
 SwiftLint.lint(inline: true)
 
