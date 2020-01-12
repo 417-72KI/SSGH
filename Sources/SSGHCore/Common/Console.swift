@@ -16,7 +16,7 @@ public func dumpError(_ message: @autoclosure () -> String) {
 }
 
 public func dumpError(_ error: @autoclosure () -> Error) {
-    dumpError("\(error())")
+    dumpError(error().localizedDescription)
 }
 
 public func dumpWarn(_ message: @autoclosure () -> String) {
@@ -24,7 +24,7 @@ public func dumpWarn(_ message: @autoclosure () -> String) {
 }
 
 public func dumpWarn(_ error: @autoclosure () -> Error) {
-    dumpWarn("\(error())")
+    dumpWarn(error().localizedDescription)
 }
 
 private var tag: String { "[\(ApplicationInfo.name)(\(ApplicationInfo.version))] " }
