@@ -20,9 +20,10 @@ public extension SSGHCore {
         case let .specifiedTargets(target):
             dumpInfo("Fetching users...")
             try target.compactMap {
-                do {
-                    return try gitHubClient.getUser(by: $0).get()
-                } catch {
+                switch gitHubClient.getUser(by: $0) {
+                case let .success(user):
+                    return user
+                case let .failure(error):
                     dumpWarn(error)
                     return nil
                 }
