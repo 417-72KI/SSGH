@@ -17,9 +17,10 @@ public extension SSGHCore {
     func execute(mode: Mode) throws {
         defer { confirmUpdate() }
         switch mode {
-        case let .specifiedTargets(target):
+        case let .specifiedTargets(targets):
+            if targets.isEmpty { throw Error.targetUnspecified }
             dumpInfo("Fetching users...")
-            try target.compactMap {
+            try targets.compactMap {
                 switch gitHubClient.getUser(by: $0) {
                 case let .success(user):
                     return user
