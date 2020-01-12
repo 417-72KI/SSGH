@@ -13,4 +13,4 @@ jobs:
       - name: Run Danger
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: danger-swift
+        run: danger-swift ci
