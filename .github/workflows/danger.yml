@@ -7,8 +7,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Install
-        run: bundle install
+        run: brew install danger/tap/danger-swift
       - name: Run Danger
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: danger
+        run: danger-swift
