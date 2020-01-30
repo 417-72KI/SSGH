@@ -1,4 +1,4 @@
-import Danger 
+import Danger
 
 extension Git {
     var linesOfCode: Int {
