@@ -11,8 +11,10 @@ let danger = Danger()
 SwiftLint.lint(inline: true)
 
 // Make it more obvious that a PR is a work in progress and shouldn't be merged yet
-if danger.github.pullRequest.title.lowercased().contains("[wip]") {
-    danger.warn("PR is classed as Work in Progress")
+if let github = danger.github {
+    if github.pullRequest.title.lowercased().contains("[wip]") {
+        danger.warn("PR is classed as Work in Progress")
+    }
 }
 
 // Warn when there is a big PR
