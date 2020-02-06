@@ -1,4 +1,5 @@
 import Foundation
+import OctoKit
 
 public struct Repo: Entity {
     public let id: Int
@@ -9,4 +10,16 @@ public struct Repo: Entity {
     let `private`: Bool
     let htmlUrl: String
     let description: String?
+}
+
+extension Repo {
+    init(_ repo: OctoKit.Repository) {
+        self.id = repo.id
+        self.name = repo.name ?? ""
+        self.fullName = repo.fullName ?? ""
+        self.fork = repo.isFork
+        self.private = repo.isPrivate
+        self.htmlUrl = repo.htmlURL ?? ""
+        self.description = repo.repositoryDescription
+    }
 }
