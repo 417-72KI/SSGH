@@ -13,6 +13,7 @@ let package = Package(
         .package(url: "https://github.com/kylef/Commander.git", .upToNextMajor(from: "0.9.0")),
         .package(url: "https://github.com/ishkawa/APIKit.git", .upToNextMajor(from: "5.0.0")),
         .package(url: "https://github.com/AliSoftware/OHHTTPStubs.git", .upToNextMajor(from: "9.0.0")),
+        .package(url: "https://github.com/nerdishbynature/octokit.swift", from: "0.10.0"),
         .package(url: "https://github.com/417-72KI/ParameterizedTestUtil.git", .upToNextMajor(from: "1.0.0"))
     ],
     targets: [
@@ -25,7 +26,7 @@ let package = Package(
         ),
         .target(
             name: "GitHubAPI",
-            dependencies: ["APIKit"]
+            dependencies: ["APIKit", "OctoKit"]
         ),
         .testTarget(
             name: "SSGHCoreTests",
