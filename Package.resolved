@@ -11,6 +11,15 @@
         }
       },
       {
+        "package": "OctoKit",
+        "repositoryURL": "https://github.com/nerdishbynature/octokit.swift",
+        "state": {
+          "branch": null,
+          "revision": "9521cdff919053868ab13cd08a228f7bc1bde2a9",
+          "version": "0.11.0"
+        }
+      },
+      {
         "package": "OHHTTPStubs",
         "repositoryURL": "https://github.com/AliSoftware/OHHTTPStubs.git",
         "state": {
@@ -26,6 +35,15 @@
           "branch": null,
           "revision": "8612413908048f6227ba5517c75fed8234481c94",
           "version": "1.0.0"
+        }
+      },
+      {
+        "package": "RequestKit",
+        "repositoryURL": "https://github.com/nerdishbynature/RequestKit.git",
+        "state": {
+          "branch": null,
+          "revision": "fd5e9e99aada7432170366c9e95967011ce13bad",
+          "version": "2.4.0"
         }
       },
       {
