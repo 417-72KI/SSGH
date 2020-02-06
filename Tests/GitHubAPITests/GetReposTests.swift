@@ -12,7 +12,7 @@ final class GetReposTests: XCTestCase {
         super.tearDown()
     }
 
-    func testGetRepos() throws {
+    func testGetRepos_success() throws {
         stubGetRequest(path: "/users/417-72KI/repos", responseData: [
             [
                "id": 225647455,
@@ -40,6 +40,18 @@ final class GetReposTests: XCTestCase {
             XCTAssertEqual(repos, expected)
         case let .failure(error):
             XCTFail(error.description)
+        }
+    }
+
+    func testGetRepos_userNotExist() throws {
+        errorStubGetRequest(path: "/users/41772KI/repos", statusCode: 404)
+
+        let result = client.getRepos(for: "41772KI")
+        XCTAssertThrowsError(try result.get()) {
+            guard case .userNotFound("41772KI") = ($0 as? GitHubClient.Error) else {
+                XCTFail("Unexpected error: \($0)")
+                return
+            }
         }
     }
 }
