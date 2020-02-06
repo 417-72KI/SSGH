@@ -1,15 +1,21 @@
 import APIKit
 import Foundation
+import OctoKit
 
 public class GitHubClient {
     let domain = "https://github.com"
 
+    let octoKit: Octokit
+
     public init(token: String) {
         Authorization.shared.token = token
+        octoKit = .init(.init(token))
     }
 }
 
+// MARK: - Old implementations
 extension GitHubClient {
+    @available(*, deprecated, message: "to be replaced by OctoKit")
     func send<R: Request>(_ request: R, completionHandler: @escaping  (Result<R.Response, SessionTaskError>) -> Void) {
         dumpDebug("\(String(describing: try? request.buildURLRequest()))")
         Session.send(request, callbackQueue: .sessionQueue) { result in
@@ -23,6 +29,7 @@ extension GitHubClient {
         }
     }
 
+    @available(*, deprecated, message: "to be replaced by OctoKit")
     func sendSync<T: Request>(_ request: T) -> Result<T.Response, SessionTaskError> {
         // swiftlint:disable:next implicitly_unwrapped_optional
         var result: Result<T.Response, SessionTaskError>!
@@ -37,6 +44,7 @@ extension GitHubClient {
 }
 
 // MARK: - Request
+@available(*, deprecated, message: "to be replaced by OctoKit")
 protocol Request: APIKit.Request where Response: Entity {
 }
 
@@ -58,6 +66,7 @@ extension Request {
     }
 }
 
+@available(*, deprecated, message: "to be replaced by OctoKit")
 struct DecodableDataParser: DataParser {
     var contentType: String? { "application/json" }
 

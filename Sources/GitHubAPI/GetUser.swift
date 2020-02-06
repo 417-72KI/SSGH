@@ -1,28 +1,21 @@
-import APIKit
 import Foundation
+import OctoKit
 
 extension GitHubClient {
-    public func getUser(by userId: String) -> Result<User, GitHubClient.Error> {
-        sendSync(Users.Get(userId: userId))
+    public func getUser(by userId: String) -> Result<User, Error> {
+        var result: Result<OctoKit.User, Swift.Error>!
+        let semaphore = DispatchSemaphore(value: 0)
+        octoKit.user(name: userId) {
+            result = $0.result
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return result.map(User.init)
             .mapError {
-                if case let .responseError(re) = $0,
-                    let responseError = re as? APIKit.ResponseError,
-                    case let .unacceptableStatusCode(code) = responseError,
-                    code == 404 { return .userNotFound(userId) }
+                if ($0 as NSError).code == 404 {
+                    return .userNotFound(userId)
+                }
                 return .other($0)
-            }
-    }
-}
-
-extension GitHubClient {
-    enum Users {
-        struct Get: Request {
-            typealias Response = User
-
-            let userId: String
-
-            var method: HTTPMethod { .get }
-            var path: String { "/users/\(userId)" }
         }
     }
 }
