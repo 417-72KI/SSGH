@@ -22,19 +22,19 @@ extension GitHubClient {
                 }
                 return .success(())
             }
-            .mapError { .other($0) }
+        .mapError { .other($0) }
     }
 
     public func unstar(userId: String, repo: String) -> Result<Void, GitHubClient.Error> {
-           sendSync(Starred.Delete(owner: userId, repo: repo))
-               .flatMap {
-                   guard $0.response.statusCode == 204 else {
-                       return .failure(SessionTaskError.responseError(ResponseError.unacceptableStatusCode($0.response.statusCode)))
-                   }
-                   return .success(())
-               }
-               .mapError { .other($0) }
-       }
+        sendSync(Starred.Delete(owner: userId, repo: repo))
+            .flatMap {
+                guard $0.response.statusCode == 204 else {
+                    return .failure(SessionTaskError.responseError(ResponseError.unacceptableStatusCode($0.response.statusCode)))
+                }
+                return .success(())
+            }
+        .mapError { .other($0) }
+    }
 }
 
 extension GitHubClient {
