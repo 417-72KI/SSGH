@@ -2,8 +2,20 @@
 
 set -eu
 
+APPLICATION_INFO_FILE='Sources/SSGHCore/Common/ApplicationInfo.swift'
+
 if [ `git symbolic-ref --short HEAD` != 'master' ]; then
     echo 'Release is enabled only in master.'
+    exit 1
+fi
+
+if [ "$(git status -s | grep "${APPLICATION_INFO_FILE}")" = '' ]; then
+    echo "\e[31m${APPLICATION_INFO_FILE} is not modified.\e[m"
+    exit 1
+fi
+
+if [ "$(git status -s | grep .swift | grep -v ApplicationInfo.swift)" != '' ]; then
+    echo "\e[31mUnexpected added/modified/deleted file.\e[m"
     exit 1
 fi
 
@@ -14,20 +26,23 @@ fi
 
 cd $(git rev-parse --show-toplevel)
 
-# TAG
-TAG=$(cat Sources/SSGHCore/Common/ApplicationInfo.swift | grep version | awk '{ print $NF }' | sed -E 's/Version\(\"(.*)\"\)/\1/')
-if [ "$(git status -s | grep ApplicationInfo.swift)" != '' ]; then
-    git commit -m "Bump version to ${TAG}" 'Sources/SSGHCore/Common/ApplicationInfo.swift'
+# Version
+TAG=$(cat "${APPLICATION_INFO_FILE}" | grep version | awk '{ print $NF }' | sed -E 's/Version\(\"(.*)\"\)/\1/')
+if [ "$(git tag | grep ${TAG})" != '' ]; then
+    echo "\e[31mTag: '${TAG}' already exists.\e[m"
+    exit 1
 fi
-git tag ${TAG}
-git push origin ${TAG}
 
 # Build
 EXECUTABLE_NAME=$1
 rm -f .build/${EXECUTABLE_NAME}.zip
 swift build -c release -Xswiftc -suppress-warnings
-
 zip -j .build/${EXECUTABLE_NAME}.zip .build/release/${EXECUTABLE_NAME} LICENSE
+
+# TAG
+git commit -m "Bump version to ${TAG}" "${APPLICATION_INFO_FILE}"
+git tag ${TAG}
+git push origin master "${TAG}"
 
 export GITHUB_TOKEN=$SSGH_TOKEN
 
