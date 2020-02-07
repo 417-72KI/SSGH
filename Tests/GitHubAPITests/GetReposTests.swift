@@ -15,13 +15,21 @@ final class GetReposTests: XCTestCase {
     func testGetRepos_success() throws {
         stubGetRequest(path: "/users/417-72KI/repos", responseData: [
             [
-               "id": 225647455,
-               "name": "SSGH",
-               "fullName": "417-72KI/SSGH",
-               "fork": false,
-               "private": false,
-               "htmlUrl": "https://github.com/417-72KI",
-               "description": "Deliver stars on your behalf"
+                "id": 225647455,
+                "name": "SSGH",
+                "full_name": "417-72KI/SSGH",
+                "owner": [
+                    "id": 417,
+                    "login" : "417-72KI",
+                    "public_repos": 46,
+                    "repos_url":"https://api.github.com/users/417-72KI/repos",
+                    "starred_url":"https://api.github.com/users/417-72KI/starred{/owner}{/repo}"
+                ],
+                "fork": false,
+                "private": false,
+                "size": 72,
+                "html_url": "https://github.com/417-72KI",
+                "description": "Deliver stars on your behalf"
             ]
         ])
 
