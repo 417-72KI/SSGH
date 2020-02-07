@@ -16,6 +16,9 @@ cd $(git rev-parse --show-toplevel)
 
 # TAG
 TAG=$(cat Sources/SSGHCore/Common/ApplicationInfo.swift | grep version | awk '{ print $NF }' | sed -E 's/Version\(\"(.*)\"\)/\1/')
+if [ "$(git status -s | grep ApplicationInfo.swift)" != '' ]; then
+    git commit -m "Bump version to ${TAG}" 'Sources/SSGHCore/Common/ApplicationInfo.swift'
+fi
 git tag ${TAG}
 git push origin ${TAG}
 
