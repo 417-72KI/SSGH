@@ -4,7 +4,13 @@ import Foundation
 extension GitHubClient {
     public func getRepos(for userId: String, page: UInt = 1) -> Result<[Repo], GitHubClient.Error> {
         sendSync(Repos.Get(owner: userId, page: page))
-            .mapError { .other($0) }
+            .mapError {
+                if case let .responseError(re) = $0,
+                    let responseError = re as? APIKit.ResponseError,
+                    case let .unacceptableStatusCode(code) = responseError,
+                    code == 404 { return .userNotFound(userId) }
+                return .other($0)
+            }
     }
 }
 
