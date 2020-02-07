@@ -34,7 +34,7 @@ final class GetReleasesTests: XCTestCase {
     }
 
     func testGetReleases_userNotExist() throws {
-        errorStubGetRequest(path: "/repos/41772KI/SSGH/releases", statusCode: 404)
+        stubGetRequest(path: "/repos/41772KI/SSGH/releases", statusCode: 404)
 
         let result = client.getReleases(for: "41772KI", repo: "SSGH")
         XCTAssertThrowsError(try result.get()) {
@@ -46,7 +46,7 @@ final class GetReleasesTests: XCTestCase {
     }
 
     func testGetReleases_repoNotExist() throws {
-        errorStubGetRequest(path: "/repos/417-72KI/SGH/releases", statusCode: 404)
+        stubGetRequest(path: "/repos/417-72KI/SGH/releases", statusCode: 404)
 
         let result = client.getReleases(for: "417-72KI", repo: "SGH")
         XCTAssertThrowsError(try result.get()) {

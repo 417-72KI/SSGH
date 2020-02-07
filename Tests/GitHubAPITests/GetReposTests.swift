@@ -39,7 +39,7 @@ final class GetReposTests: XCTestCase {
     }
 
     func testGetRepos_userNotExist() throws {
-        errorStubGetRequest(path: "/users/41772KI/repos", statusCode: 404)
+        stubGetRequest(path: "/users/41772KI/repos", statusCode: 404)
 
         let result = client.getRepos(for: "41772KI")
         XCTAssertThrowsError(try result.get()) {

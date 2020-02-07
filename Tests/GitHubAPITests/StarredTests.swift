@@ -13,13 +13,13 @@ final class StarredTests: XCTestCase {
     }
 
     func testIsStarred_true() throws {
-        errorStubGetRequest(path: "/user/starred/417-72KI/SSGH", statusCode: 204)
+        stubGetRequest(path: "/user/starred/417-72KI/SSGH", statusCode: 204)
 
         XCTAssertTrue(try client.isStarred(userId: "417-72KI", repo: "SSGH").get())
     }
 
     func testIsStarred_false() throws {
-        errorStubGetRequest(path: "/user/starred/417-72KI/SSGH", statusCode: 404)
+        stubGetRequest(path: "/user/starred/417-72KI/SSGH", statusCode: 404)
 
         XCTAssertFalse(try client.isStarred(userId: "417-72KI", repo: "SSGH").get())
     }

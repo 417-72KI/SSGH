@@ -3,8 +3,8 @@ import OHHTTPStubs
 import OHHTTPStubsSwift
 
 func stubGetRequest(host: String = "api.github.com",
-    path: String,
-    responseData: Any) {
+                    path: String,
+                    responseData: Any) {
     stub(condition: isHost(host) && isPath(path) && isMethodGET()) { _ in
         HTTPStubsResponse(jsonObject: responseData,
                           statusCode: 200,
@@ -12,9 +12,9 @@ func stubGetRequest(host: String = "api.github.com",
     }
 }
 
-func errorStubGetRequest(host: String = "api.github.com",
-                         path: String,
-                         statusCode: Int32) {
+func stubGetRequest(host: String = "api.github.com",
+                    path: String,
+                    statusCode: Int32) {
     stub(condition: isHost(host) && isPath(path) && isMethodGET()) { _ in
         HTTPStubsResponse(data: .init(), statusCode: statusCode, headers: [:])
     }

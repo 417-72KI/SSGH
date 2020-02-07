@@ -30,7 +30,7 @@ final class GetUserTests: XCTestCase {
     }
 
     func testGetUser_notExist() throws {
-        errorStubGetRequest(path: "/users/41772KI", statusCode: 404)
+        stubGetRequest(path: "/users/41772KI", statusCode: 404)
 
         let result = client.getUser(by: "41772KI")
         XCTAssertThrowsError(try result.get()) {
