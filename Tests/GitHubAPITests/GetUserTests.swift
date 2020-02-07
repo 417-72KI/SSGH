@@ -14,16 +14,13 @@ final class GetUserTests: XCTestCase {
 
     func testGetUser_success() throws {
         stubGetRequest(path: "/users/417-72KI", responseData: [
+            "id": 417,
             "login" : "417-72KI",
-            "public_repos": 46,
-            "repos_url":"https://api.github.com/users/417-72KI/repos",
-            "starred_url":"https://api.github.com/users/417-72KI/starred{/owner}{/repo}"
+            "public_repos": 46
         ])
 
         let expected = User(login: "417-72KI",
-                            publicRepos: 46,
-                            reposUrl: "https://api.github.com/users/417-72KI/repos",
-                            starredUrl: "https://api.github.com/users/417-72KI/starred{/owner}{/repo}")
+                            publicRepos: 46)
 
         let user = try client.getUser(by: "417-72KI").get()
         XCTAssertEqual(user, expected)
