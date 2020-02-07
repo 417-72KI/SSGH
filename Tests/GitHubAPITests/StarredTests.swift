@@ -23,4 +23,16 @@ final class StarredTests: XCTestCase {
 
         XCTAssertFalse(try client.isStarred(userId: "417-72KI", repo: "SSGH").get())
     }
+
+    func testStar_success() throws {
+        stubPutRequest(path: "/user/starred/417-72KI/SSGH", statusCode: 204)
+
+        XCTAssertNoThrow(try client.star(userId: "417-72KI", repo: "SSGH").get())
+    }
+
+    func testUnstar_success() throws {
+        stubDeleteRequest(path: "/user/starred/417-72KI/SSGH", statusCode: 204)
+
+        XCTAssertNoThrow(try client.unstar(userId: "417-72KI", repo: "SSGH").get())
+    }
 }

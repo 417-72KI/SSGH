@@ -20,6 +20,22 @@ func errorStubGetRequest(host: String = "api.github.com",
     }
 }
 
+func stubPutRequest(host: String = "api.github.com",
+                    path: String,
+                    statusCode: Int32) {
+    stub(condition: isHost(host) && isPath(path) && isMethodPUT()) { _ in
+        HTTPStubsResponse(data: .init(), statusCode: statusCode, headers: [:])
+    }
+}
+
+func stubDeleteRequest(host: String = "api.github.com",
+                       path: String,
+                       statusCode: Int32) {
+    stub(condition: isHost(host) && isPath(path) && isMethodDELETE()) { _ in
+        HTTPStubsResponse(data: .init(), statusCode: statusCode, headers: [:])
+    }
+}
+
 func clearStubs() {
     HTTPStubs.removeAllStubs()
 }
