@@ -29,13 +29,8 @@ final class GetReleasesTests: XCTestCase {
                                            draft: false)
 
         ]
-        let result = client.getReleases(for: "417-72KI", repo: "SSGH")
-        switch result {
-        case let .success(releases):
-            XCTAssertEqual(releases, expected)
-        case let .failure(error):
-            XCTFail(error.description)
-        }
+        let releases = try client.getReleases(for: "417-72KI", repo: "SSGH").get()
+        XCTAssertEqual(releases, expected)
     }
 
     func testGetReleases_userNotExist() throws {

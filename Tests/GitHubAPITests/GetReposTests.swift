@@ -34,13 +34,8 @@ final class GetReposTests: XCTestCase {
                  htmlUrl: "https://github.com/417-72KI",
                  description: "Deliver stars on your behalf")
         ]
-        let result = client.getRepos(for: "417-72KI")
-        switch result {
-        case let .success(repos):
-            XCTAssertEqual(repos, expected)
-        case let .failure(error):
-            XCTFail(error.description)
-        }
+        let repos = try client.getRepos(for: "417-72KI").get()
+        XCTAssertEqual(repos, expected)
     }
 
     func testGetRepos_userNotExist() throws {

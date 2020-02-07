@@ -25,13 +25,8 @@ final class GetUserTests: XCTestCase {
                             reposUrl: "https://api.github.com/users/417-72KI/repos",
                             starredUrl: "https://api.github.com/users/417-72KI/starred{/owner}{/repo}")
 
-        let result = client.getUser(by: "417-72KI")
-        switch result {
-        case let .success(user):
-            XCTAssertEqual(user, expected)
-        case let .failure(error):
-            XCTFail(error.description)
-        }
+        let user = try client.getUser(by: "417-72KI").get()
+        XCTAssertEqual(user, expected)
     }
 
     func testGetUser_notExist() throws {
