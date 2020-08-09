@@ -80,7 +80,7 @@ extension Request {
 
 extension Request where Response == EmptyEntity {
     func response(from object: Any, urlResponse: HTTPURLResponse) throws -> Response {
-        return EmptyEntity(response: urlResponse)
+        EmptyEntity(response: urlResponse)
     }
 }
 
