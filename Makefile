@@ -6,20 +6,20 @@ executable_name = ssgh
 default: clean build
 
 clean:
-	swift package clean
-	git clean -xf
+	@swift package clean
+	@git clean -xf
 
 dependencies:
-	swift package update
+	@swift package update
 
 build:
-	swift build
+	@swift build
 
 test:
-	swift test
+	@swift test
 
 autocorrect:
-	scripts/autocorrect.sh
+	@scripts/autocorrect.sh
 
 release:
-	scripts/release.sh ${executable_name}
+	@scripts/release.sh ${executable_name}
