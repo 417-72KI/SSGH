@@ -21,7 +21,7 @@ fi
 
 if ! type "github-release" > /dev/null; then
     echo '`github-release` not found. Install'
-    go get github.com/aktau/github-release
+    go get github.com/github-release/github-release
 fi
 
 cd $(git rev-parse --show-toplevel)
