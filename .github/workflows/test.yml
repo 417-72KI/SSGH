@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - '**.swift'
+      - '.github/workflows/test.yml'
 jobs:
   macOS:
     name: macOS
