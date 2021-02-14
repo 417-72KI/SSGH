@@ -3,8 +3,8 @@ import Foundation
 import SSGHCore
 
 enum Arguments {
-    static let target = Argument<String>(
-        "target",
+    static let targets = Argument<[String]>(
+        "targets",
         description: "GitHub user name to give stars."
     )
 }
@@ -20,13 +20,14 @@ enum Options {
 
 let main = command(
     Options.gitHubToken,
-    Arguments.target
+    Arguments.targets
 ) {
     let gitHubToken = try $0 ?? (try Environment.getValue(forKey: .gitHubToken))
-    let target = $1
+    let targets = $1
 
     do {
-        try SSGHCore(target: target, gitHubToken: gitHubToken).execute()
+        try SSGHCore(gitHubToken: gitHubToken)
+            .execute(mode: .specifiedTargets(targets))
     } catch {
         dumpError(error)
         exit(EXIT_FAILURE)

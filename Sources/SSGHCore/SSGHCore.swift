@@ -2,21 +2,30 @@ import Foundation
 import GitHubAPI
 
 public struct SSGHCore {
-    private let target: String
     private let gitHubClient: GitHubClient
 
-    public init(target: String, gitHubToken: String) {
-        self.target = target
+    public init(gitHubToken: String) {
         gitHubClient = .init(token: gitHubToken)
     }
 }
 
 public extension SSGHCore {
-    func execute() throws {
+    func execute(mode: Mode) throws {
         defer { confirmUpdate() }
-        dumpInfo("Fetching user data...")
-        let user = try gitHubClient.getUser(by: target).get()
-        try star(to: user)
+        switch mode {
+        case let .specifiedTargets(targets):
+            if targets.isEmpty { throw Error.targetUnspecified }
+            dumpInfo("Fetching users...")
+            try targets.compactMap {
+                switch gitHubClient.getUser(by: $0) {
+                case let .success(user):
+                    return user
+                case let .failure(error):
+                    dumpWarn(error)
+                    return nil
+                }
+            }.forEach(star(to:))
+        }
     }
 }
 
@@ -65,5 +74,13 @@ private extension SSGHCore {
         if ApplicationInfo.version < latest {
             dumpInfo("New version \(latest) is available!")
         }
+    }
+}
+
+public extension SSGHCore {
+    enum Mode {
+        case specifiedTargets([String])
+        // TODO: Future support
+        // case following
     }
 }
