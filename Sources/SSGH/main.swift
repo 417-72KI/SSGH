@@ -6,7 +6,8 @@ struct SSGH: ParsableCommand {
     @Argument(help: "GitHub user name to give stars.")
     var target: String
 
-    @Option(name: [.long, .customShort("t")], parsing: .next, help: "GitHub Token to give stars. If not set, use `SSGH_TOKEN` in environment.")
+    @Option(name: [.customLong("github-token"), .customShort("t")],
+            help: "GitHub Token to give stars. If not set, use `SSGH_TOKEN` in environment.")
     var gitHubToken: String?
 
     func run() throws {
