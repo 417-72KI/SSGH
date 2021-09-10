@@ -1,25 +1,29 @@
 project_name = SSGH
 executable_name = ssgh
 
+.SILENT:
 .PHONY : dependencies clean build test release xcode
 
 default: clean build
 
 clean:
-	@swift package clean
-	@git clean -xf
+	swift package clean
+	git clean -xf
 
 dependencies:
-	@swift package update
+	swift package update
 
 build:
-	@swift build
+	swift build
 
 test:
-	@swift test
+	swift test
+
+lint:
+	mint run SwiftLint swiftlint
 
 autocorrect:
-	@scripts/autocorrect.sh
+	scripts/autocorrect.sh
 
 release:
-	@scripts/release.sh ${executable_name}
+	scripts/release.sh ${executable_name}
