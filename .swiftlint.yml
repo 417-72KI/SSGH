@@ -136,6 +136,8 @@ disabled_rules:
   - file_types_order
   - force_unwrapping
   - function_default_parameter_at_end
+  - indentation_width
+  - let_var_whitespace
   - lower_acl_than_parent
   - missing_docs
   - no_extension_access_modifier
