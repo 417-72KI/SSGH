@@ -10,7 +10,6 @@ let package = Package(
         .executable(name: "ssgh", targets: ["SSGH"])
     ],
     dependencies: [
-        .package(url: "https://github.com/kylef/Commander.git", .upToNextMajor(from: "0.9.0")),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "0.5.0")),
         .package(url: "https://github.com/ishkawa/APIKit.git", .upToNextMajor(from: "5.0.0")),
         .package(url: "https://github.com/AliSoftware/OHHTTPStubs.git", .upToNextMajor(from: "9.0.0")),
@@ -19,7 +18,7 @@ let package = Package(
     targets: [
         .target(
             name: "SSGH",
-            dependencies: ["ArgumentParser", "Commander", "SSGHCore"]),
+            dependencies: ["ArgumentParser", "SSGHCore"]),
         .target(
             name: "SSGHCore",
             dependencies: ["GitHubAPI"]
