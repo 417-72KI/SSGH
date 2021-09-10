@@ -4,8 +4,8 @@ set -eu
 
 APPLICATION_INFO_FILE='Sources/SSGHCore/Common/ApplicationInfo.swift'
 
-if [ `git symbolic-ref --short HEAD` != 'master' ]; then
-    echo 'Release is enabled only in master.'
+if [ `git symbolic-ref --short HEAD` != 'main' ]; then
+    echo 'Release is enabled only in main.'
     exit 1
 fi
 
@@ -42,7 +42,7 @@ zip -j .build/${EXECUTABLE_NAME}.zip .build/release/${EXECUTABLE_NAME} LICENSE
 # TAG
 git commit -m "Bump version to ${TAG}" "${APPLICATION_INFO_FILE}"
 git tag ${TAG}
-git push origin master "${TAG}"
+git push origin main "${TAG}"
 
 export GITHUB_TOKEN=$SSGH_TOKEN
 
