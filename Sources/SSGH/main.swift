@@ -1,36 +1,24 @@
-import Commander
+import ArgumentParser
 import Foundation
 import SSGHCore
 
-enum Arguments {
-    static let target = Argument<String>(
-        "target",
-        description: "GitHub user name to give stars."
-    )
-}
+struct SSGH: ParsableCommand {
+    @Argument(help: "GitHub user name to give stars.")
+    var target: String
 
-enum Options {
-    static let gitHubToken = Option<String?>(
-        "github-token",
-        default: nil,
-        flag: "t",
-        description: "GitHub Token to give stars. If not set, use `SSGH_TOKEN` in environment."
-    )
-}
+    @Option(name: [.customLong("github-token"), .customShort("t")],
+            help: "GitHub Token to give stars. If not set, use `SSGH_TOKEN` in environment.")
+    var gitHubToken: String?
 
-let main = command(
-    Options.gitHubToken,
-    Arguments.target
-) {
-    let gitHubToken = try $0 ?? (try Environment.getValue(forKey: .gitHubToken))
-    let target = $1
-
-    do {
-        try SSGHCore(target: target, gitHubToken: gitHubToken).execute()
-    } catch {
-        dumpError(error)
-        exit(EXIT_FAILURE)
+    func run() throws {
+        let gitHubToken = try gitHubToken ?? (try Environment.getValue(forKey: .gitHubToken))
+        do {
+            try SSGHCore(target: target, gitHubToken: gitHubToken).execute()
+        } catch {
+            dumpError(error)
+            Self.exit(withError: error)
+        }
     }
 }
 
-main.run(ApplicationInfo.version.description)
+SSGH.main()
