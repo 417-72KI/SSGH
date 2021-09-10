@@ -26,7 +26,7 @@ private extension SSGHCore {
         let repos = try fetchAllRepos(of: user)
         let starrableRepos = try repos.filter { !$0.fork }
             .filter { !(try gitHubClient.isStarred(userId: user.login, repo: $0.name).get()) }
-        dumpDebug("\(starrableRepos.count) repos of \(user) detected")
+        dumpDebug("\(starrableRepos.count) \(starrableRepos.count == 1 ? "repo" : "repos") of \(user) detected")
 
         let starredRepoCount = starrableRepos.map { repo -> Result<Void, GitHubClient.Error> in
             dumpInfo("Star to \(repo.fullName)")
@@ -41,7 +41,7 @@ private extension SSGHCore {
             }
         }
 
-        dumpInfo("\(starredRepoCount) repos of \(user) starred!")
+        dumpInfo("\(starredRepoCount) \(starredRepoCount == 1 ? "repo" : "repos") of \(user) starred!")
     }
 
     func fetchAllRepos(of user: User) throws -> [Repo] {
