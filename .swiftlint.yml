@@ -1,5 +1,8 @@
 included:
   - Sources
+excluded:
+  - Tests
+  - Package.swift
 opt_in_rules:
   # 一旦全部Opt-Inにする
   # Command: `mint run Swiftlint swiftlint rules | awk -F "|" '$3 ~ "yes" { print $2 }' | tr -d ' ' | sed 's/^/  - /' | pbcopy`
