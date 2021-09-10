@@ -1,5 +1,5 @@
-import Foundation
 import ArgumentParser
+import Foundation
 import SSGHCore
 
 struct SSGH: ParsableCommand {
