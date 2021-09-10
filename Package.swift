@@ -11,6 +11,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/kylef/Commander.git", .upToNextMajor(from: "0.9.0")),
+        .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "0.5.0")),
         .package(url: "https://github.com/ishkawa/APIKit.git", .upToNextMajor(from: "5.0.0")),
         .package(url: "https://github.com/AliSoftware/OHHTTPStubs.git", .upToNextMajor(from: "9.0.0")),
         .package(url: "https://github.com/417-72KI/ParameterizedTestUtil.git", .upToNextMajor(from: "1.0.0"))
@@ -18,7 +19,7 @@ let package = Package(
     targets: [
         .target(
             name: "SSGH",
-            dependencies: ["Commander", "SSGHCore"]),
+            dependencies: ["ArgumentParser", "Commander", "SSGHCore"]),
         .target(
             name: "SSGHCore",
             dependencies: ["GitHubAPI"]
