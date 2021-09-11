@@ -1,26 +1,26 @@
 import Darwin
 import Foundation
 
-func dumpDebug(_ message: @autoclosure () -> String) {
+func dumpDebug(_ message: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
     #if DEBUG
-    fputs("\(tag)[Debug] \(message())\n", stdout)
+    dump(logType: .debug, message(), file: file, line: line)
     #endif
 }
 
-public func dumpInfo(_ message: @autoclosure () -> String) {
-    fputs("\(tag)[Info] \(message())\n", stdout)
+public func dumpInfo(_ message: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
+    dump(logType: .info, message(), file: file, line: line)
 }
 
-public func dumpError(_ message: @autoclosure () -> String) {
-    fputs("\(tag)[Error] \(message())\n", stderr)
+public func dumpError(_ message: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
+    dump(logType: .error, message(), file: file, line: line)
 }
 
-public func dumpError(_ error: @autoclosure () -> Error) {
-    dumpError("\(error())")
+public func dumpError(_ error: @autoclosure () -> Error, file: StaticString = #file, line: UInt = #line) {
+    dumpError("\(error())", file: file, line: line)
 }
 
-public func dumpWarn(_ message: @autoclosure () -> String) {
-    fputs("\(tag)[Warning] \(message())\n", stderr)
+public func dumpWarn(_ message: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
+    dump(logType: .warn, message(), file: file, line: line)
 }
 
 private func dump(logType: LogType,
