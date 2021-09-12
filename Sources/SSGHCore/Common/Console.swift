@@ -23,24 +23,27 @@ public func dumpWarn(_ message: @autoclosure () -> String, file: StaticString = 
     dump(logType: .warn, message(), file: file, line: line)
 }
 
-private func dump(logType: LogType,
-                  _ message: @autoclosure () -> String,
-                  file: StaticString,
-                  line: UInt) {
+private func dump(
+    logType: LogType,
+    _ message: @autoclosure () -> String,
+    file: StaticString,
+    line: UInt
+) {
     #if DEBUG
     let fileAndLine = " [\(String(describing: file).lastPathComponent):L\(line)]"
     #else
     let fileAndLine = ""
     #endif
 
-    let message = String(format: "%@%@[%@]%@ %@%@\n",
-                         logType.color.rawValue,
-                         tag,
-                         logType.rawValue.uppercased(),
-                         fileAndLine,
-                         message(),
-                         ConsoleColor.reset.rawValue
-                         )
+    let message = String(
+        format: "%@%@[%@]%@ %@%@\n",
+        logType.color.rawValue,
+        tag,
+        logType.rawValue.uppercased(),
+        fileAndLine,
+        message(),
+        ConsoleColor.reset.rawValue
+    )
     fputs(message, logType.dumpTarget)
 }
 
