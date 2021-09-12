@@ -66,10 +66,13 @@ private extension SSGHCore {
 private extension SSGHCore {
     func confirmUpdate() {
         guard case let .success(releases) = gitHubClient.getReleases(for: ApplicationInfo.author, repo: ApplicationInfo.name) else { return }
-        guard let latest = releases.map({ Version(stringLiteral: $0.tagName) }).max()
-            else { return }
+        guard let latest = releases
+                .filter({ !$0.prerelease })
+                .map({ Version(stringLiteral: $0.tagName) })
+                .max() else { return }
+        dumpDebug(latest)
         if ApplicationInfo.version < latest {
-            dumpInfo("New version \(latest) is available!")
+            dumpWarn("New version \(latest) is available!")
         }
     }
 }

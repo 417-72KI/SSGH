@@ -7,6 +7,10 @@ func dumpDebug(_ message: @autoclosure () -> String, file: StaticString = #file,
     #endif
 }
 
+func dumpDebug(_ message: @autoclosure () -> Any, file: StaticString = #file, line: UInt = #line) {
+    dumpDebug(String(describing: message()), file: file, line: line)
+}
+
 public func dumpInfo(_ message: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
     dump(logType: .info, message(), file: file, line: line)
 }
