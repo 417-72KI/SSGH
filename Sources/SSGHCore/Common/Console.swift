@@ -27,10 +27,17 @@ private func dump(logType: LogType,
                   _ message: @autoclosure () -> String,
                   file: StaticString,
                   line: UInt) {
-    let message = String(format: "%@%@[%@] %@%@\n",
+    #if DEBUG
+    let fileAndLine = " [\(String(describing: file).lastPathComponent):L\(line)]"
+    #else
+    let fileAndLine = ""
+    #endif
+
+    let message = String(format: "%@%@[%@]%@ %@%@\n",
                          logType.color.rawValue,
                          tag,
                          logType.rawValue.uppercased(),
+                         fileAndLine,
                          message(),
                          ConsoleColor.reset.rawValue
                          )
