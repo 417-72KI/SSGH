@@ -4,10 +4,12 @@ import GitHubAPI
 public struct SSGHCore {
     private let target: String
     private let gitHubClient: GitHubClient
+    private let dryRunMode: Bool
 
-    public init(target: String, gitHubToken: String) {
+    public init(target: String, gitHubToken: String, dryRunMode: Bool = false) {
         self.target = target
         gitHubClient = .init(token: gitHubToken)
+        self.dryRunMode = dryRunMode
     }
 }
 
@@ -29,7 +31,11 @@ private extension SSGHCore {
         dumpDebug("\(starrableRepos.count) \(starrableRepos.count == 1 ? "repo" : "repos") of \(user) detected")
 
         let starredRepoCount = starrableRepos.map { repo -> Result<Void, GitHubClient.Error> in
-            dumpInfo("Star to \(repo.fullName)")
+            dumpInfo("Starring \(repo.fullName)")
+            if dryRunMode {
+                dumpWarn("Dry-run mode. Simulate starring \"\(repo.fullName)\"")
+                return .success(())
+            }
             return gitHubClient.star(userId: user.login, repo: repo.name)
         }
         .reduce(into: 0) {
