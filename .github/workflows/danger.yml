@@ -3,7 +3,7 @@ on:
   pull_request:
     types: [opened, synchronize, edited]
 concurrency: 
-  group: ${{ github.ref }}
+  group: ${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true
 jobs:
   danger:
