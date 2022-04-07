@@ -15,6 +15,12 @@ jobs:
       DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: .build
+          key: ${{ runner.os }}-swift-package-${{ hashFiles('Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-swift-package
       - name: test
         run: set -o pipefail && swift test
   # linux:
@@ -24,5 +30,11 @@ jobs:
   #     image: swift:5.5
   #   steps:
   #     - uses: actions/checkout@v3
+  #     - uses: actions/cache@v3
+  #       with:
+  #         path: .build
+  #         key: ${{ runner.os }}-swift-package-${{ hashFiles('Package.resolved') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-swift-package
   #     - name: test
   #       run: swift test --enable-test-discovery
