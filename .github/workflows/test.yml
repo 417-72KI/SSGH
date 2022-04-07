@@ -25,4 +25,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: test
-        run: set -o pipefail && swift test --enable-test-discovery
+        run: swift test --enable-test-discovery
