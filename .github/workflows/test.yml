@@ -4,6 +4,9 @@ on:
     paths:
       - '**.swift'
       - '.github/workflows/test.yml'
+concurrency: 
+  group: ${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   macOS:
     name: macOS
