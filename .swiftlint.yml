@@ -3,6 +3,7 @@ included:
 excluded:
   - Tests
   - Package.swift
+allow_zero_lintable_files: true
 opt_in_rules:
   # 一旦全部Opt-Inにする
   # Command: `mint run Swiftlint swiftlint rules | awk -F "|" '$3 ~ "yes" { print $2 }' | tr -d ' ' | sed 's/^/  - /' | pbcopy`

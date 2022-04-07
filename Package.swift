@@ -1,4 +1,4 @@
-// swift-tools-version:5.1
+// swift-tools-version:5.5
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -10,15 +10,19 @@ let package = Package(
         .executable(name: "ssgh", targets: ["SSGH"])
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "0.5.0")),
+        .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "1.1.1")),
         .package(url: "https://github.com/ishkawa/APIKit.git", .upToNextMajor(from: "5.0.0")),
         .package(url: "https://github.com/AliSoftware/OHHTTPStubs.git", .upToNextMajor(from: "9.0.0")),
         .package(url: "https://github.com/417-72KI/ParameterizedTestUtil.git", .upToNextMajor(from: "1.0.0"))
     ],
     targets: [
-        .target(
+        .executableTarget(
             name: "SSGH",
-            dependencies: ["ArgumentParser", "SSGHCore"]),
+            dependencies: [
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "SSGHCore"
+            ]
+        ),
         .target(
             name: "SSGHCore",
             dependencies: ["GitHubAPI"]
@@ -29,11 +33,17 @@ let package = Package(
         ),
         .testTarget(
             name: "SSGHCoreTests",
-            dependencies: ["SSGHCore", "ParameterizedTestUtil"]
+            dependencies: [
+                "SSGHCore",
+                "ParameterizedTestUtil"
+            ]
         ),
         .testTarget(
             name: "GitHubAPITests",
-            dependencies: ["GitHubAPI", "OHHTTPStubsSwift"]
+            dependencies: [
+                "GitHubAPI",
+                .product(name: "OHHTTPStubsSwift", package: "OHHTTPStubs"),
+            ]
         )
     ],
     swiftLanguageVersions: [.v5]
