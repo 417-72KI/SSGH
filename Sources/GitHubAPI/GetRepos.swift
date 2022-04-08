@@ -6,7 +6,7 @@ extension GitHubClient {
         var result: Result<[OctoKit.Repository], Swift.Error>!
         let semaphore = DispatchSemaphore(value: 0)
         octoKit.repositories(owner: userId, page: "\(page)") {
-            result = $0.result
+            result = $0
             semaphore.signal()
         }
         semaphore.wait()
