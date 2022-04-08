@@ -1,72 +1,44 @@
-import APIKit
 import Foundation
+import OctoKit
 
 extension GitHubClient {
     public func isStarred(userId: String, repo: String) -> Result<Bool, GitHubClient.Error> {
-        sendSync(Starred.Get(owner: userId, repo: repo))
-            .map { $0.response.statusCode == 204 }
-            .flatMapError {
-                if case let .responseError(re) = $0,
-                    let responseError = re as? APIKit.ResponseError,
-                    case let .unacceptableStatusCode(code) = responseError,
-                    code == 404 { return .success(false) }
-                return .failure(.other($0))
-            }
+        var result: Result<Bool, Swift.Error>!
+        let semaphore = DispatchSemaphore(value: 0)
+        octoKit.star(owner: userId, repository: repo) {
+            result = $0
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return result
+            .mapError(GitHubClient.Error.other)
     }
 
     public func star(userId: String, repo: String) -> Result<Void, GitHubClient.Error> {
-        sendSync(Starred.Put(owner: userId, repo: repo))
-            .flatMap {
-                guard $0.response.statusCode == 204 else {
-                    return .failure(SessionTaskError.responseError(ResponseError.unacceptableStatusCode($0.response.statusCode)))
-                }
-                return .success(())
-            }
-        .mapError { .other($0) }
+        var error: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        octoKit.putStar(owner: userId, repository: repo) {
+            error = $0
+            semaphore.signal()
+        }
+        semaphore.wait()
+        if let error = error {
+            return .failure(.other(error))
+        }
+        return .success(())
     }
 
     public func unstar(userId: String, repo: String) -> Result<Void, GitHubClient.Error> {
-        sendSync(Starred.Delete(owner: userId, repo: repo))
-            .flatMap {
-                guard $0.response.statusCode == 204 else {
-                    return .failure(SessionTaskError.responseError(ResponseError.unacceptableStatusCode($0.response.statusCode)))
-                }
-                return .success(())
-            }
-        .mapError { .other($0) }
-    }
-}
-
-extension GitHubClient {
-    enum Starred {
-        struct Get: Request {
-            typealias Response = EmptyEntity
-
-            let owner: String
-            let repo: String
-
-            var method: HTTPMethod { .get }
-            var path: String { "/user/starred/\(owner)/\(repo)" }
+        var error: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        octoKit.deleteStar(owner: userId, repository: repo) {
+            error = $0
+            semaphore.signal()
         }
-
-        struct Put: Request {
-            typealias Response = EmptyEntity
-
-            let owner: String
-            let repo: String
-
-            var method: HTTPMethod { .put }
-            var path: String { "/user/starred/\(owner)/\(repo)" }
+        semaphore.wait()
+        if let error = error {
+            return .failure(.other(error))
         }
-
-        struct Delete: Request {
-            typealias Response = EmptyEntity
-
-            let owner: String
-            let repo: String
-
-            var method: HTTPMethod { .delete }
-            var path: String { "/user/starred/\(owner)/\(repo)" }
-        }
+        return .success(())
     }
 }
