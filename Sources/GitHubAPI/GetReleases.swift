@@ -3,6 +3,7 @@ import OctoKit
 
 extension GitHubClient {
     public func getReleases(for userId: String, repo: String) -> Result<[Release], GitHubClient.Error> {
+        // swiftlint:disable:next implicitly_unwrapped_optional
         var result: Result<[OctoKit.Release], Swift.Error>!
         let semaphore = DispatchSemaphore(value: 0)
         octoKit.listReleases(owner: userId, repository: repo) {

@@ -3,6 +3,7 @@ import OctoKit
 
 extension GitHubClient {
     public func isStarred(userId: String, repo: String) -> Result<Bool, GitHubClient.Error> {
+        // swiftlint:disable:next implicitly_unwrapped_optional
         var result: Result<Bool, Swift.Error>!
         let semaphore = DispatchSemaphore(value: 0)
         octoKit.star(owner: userId, repository: repo) {

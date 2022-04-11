@@ -3,6 +3,7 @@ import OctoKit
 
 extension GitHubClient {
     public func getRepos(for userId: String, page: UInt = 1) -> Result<[Repo], GitHubClient.Error> {
+        // swiftlint:disable:next implicitly_unwrapped_optional
         var result: Result<[OctoKit.Repository], Swift.Error>!
         let semaphore = DispatchSemaphore(value: 0)
         octoKit.repositories(owner: userId, page: "\(page)") {
@@ -15,7 +16,7 @@ extension GitHubClient {
                 if ($0 as NSError).code == 404 {
                     return .userNotFound(userId) }
                 return .other($0)
-        }
+            }
     }
 }
 

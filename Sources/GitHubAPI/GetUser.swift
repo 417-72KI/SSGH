@@ -3,6 +3,7 @@ import OctoKit
 
 extension GitHubClient {
     public func getUser(by userId: String) -> Result<User, Error> {
+        // swiftlint:disable:next implicitly_unwrapped_optional
         var result: Result<OctoKit.User, Swift.Error>!
         let semaphore = DispatchSemaphore(value: 0)
         octoKit.user(name: userId) {
@@ -16,7 +17,7 @@ extension GitHubClient {
                     return .userNotFound(userId)
                 }
                 return .other($0)
-        }
+            }
     }
 }
 
