@@ -22,7 +22,21 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-swift-package
       - name: test
-        run: set -o pipefail && swift test
+        run: |
+          set -o pipefail && xcrun --sdk macosx \
+          xcodebuild \
+          -enableCodeCoverage YES \
+          -scheme "SSGH" \
+          -destination "platform=macOS" \
+          -clonedSourcePackagesDirPath '.build/SourcePackages' \
+          -resultBundlePath 'test_output/SSGH.xcresult' \
+          clean test | xcpretty
+      - uses: kishikawakatsumi/xcresulttool@v1
+        with:
+          path: test_output/SSGH.xcresult
+          show-passed-tests: false
+          show-code-coverage: false
+        if: success() || failure()
   # linux:
   #   name: Linux
   #   runs-on: ubuntu-latest
