@@ -1,11 +1,9 @@
 import Foundation
 
 #if compiler(>=5.5.2) && canImport(_Concurrency)
-protocol Entity: Decodable, Hashable, Sendable {
-}
+protocol Entity: Decodable, Hashable, Sendable {}
 #else
-protocol Entity: Decodable, Hashable {
-}
+protocol Entity: Decodable, Hashable {}
 #endif
 
 extension Array: Entity where Element: Entity {
@@ -14,7 +12,7 @@ extension Array: Entity where Element: Entity {
 extension Dictionary: Entity where Key == String, Value: Entity {
 }
 
-struct EmptyEntity: Entity, @unchecked Sendable {
+struct EmptyEntity: Entity {
     let response: HTTPURLResponse
 
     init(response: HTTPURLResponse) {
@@ -25,3 +23,7 @@ struct EmptyEntity: Entity, @unchecked Sendable {
         throw DecodingError.typeMismatch(EmptyEntity.self, .init(codingPath: [], debugDescription: ""))
     }
 }
+
+#if compiler(>=5.5.2) && canImport(_Concurrency)
+extension EmptyEntity: @unchecked Sendable {}
+#endif
