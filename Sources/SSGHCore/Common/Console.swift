@@ -1,4 +1,8 @@
+#if os(macOS)
 import Darwin
+#elseif os(Linux)
+import Glibc
+#endif
 import Foundation
 
 func dumpDebug(_ message: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
@@ -81,10 +85,7 @@ private enum ConsoleColor: String {
     case green = "\u{001B}[0;32m"
     case yellow = "\u{001B}[0;33m"
     case white = "\u{001B}[0;39m"
-}
-
-extension ConsoleColor {
-    static var reset: Self { .white }
+    case reset = "\u{001B}[0;m"
 }
 
 // MARK: -
