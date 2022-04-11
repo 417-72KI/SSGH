@@ -1,28 +1,44 @@
-import APIKit
 import Foundation
+import OctoKit
 
 extension GitHubClient {
-    public func getUser(by userId: String) -> Result<User, GitHubClient.Error> {
-        sendSync(Users.Get(userId: userId))
+    public func getUser(by userId: String) -> Result<User, Error> {
+        // swiftlint:disable:next implicitly_unwrapped_optional
+        var result: Result<OctoKit.User, Swift.Error>!
+        let semaphore = DispatchSemaphore(value: 0)
+        octoKit.user(name: userId) {
+            result = $0
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return result.map(User.init)
             .mapError {
-                if case let .responseError(re) = $0,
-                    let responseError = re as? APIKit.ResponseError,
-                    case let .unacceptableStatusCode(code) = responseError,
-                    code == 404 { return .userNotFound(userId) }
+                if ($0 as NSError).code == 404 {
+                    return .userNotFound(userId)
+                }
                 return .other($0)
             }
     }
 }
 
+#if compiler(>=5.5.2) && canImport(_Concurrency)
 extension GitHubClient {
-    enum Users {
-        struct Get: Request {
-            typealias Response = User
-
-            let userId: String
-
-            var method: HTTPMethod { .get }
-            var path: String { "/users/\(userId)" }
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    public func getUser(by userId: String) async throws -> User {
+        try await withCheckedThrowingContinuation { continuation in
+            octoKit.user(name: userId) {
+                switch $0 {
+                case let .success(result):
+                    continuation.resume(returning: User(result))
+                case let .failure(error):
+                    if (error as NSError).code == 404 {
+                        continuation.resume(throwing: Error.userNotFound(userId))
+                    } else {
+                        continuation.resume(throwing: Error.other(error))
+                    }
+                }
+            }
         }
     }
 }
+#endif

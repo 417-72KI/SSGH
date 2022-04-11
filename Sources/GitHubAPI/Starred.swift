@@ -1,72 +1,89 @@
-import APIKit
 import Foundation
+import OctoKit
 
 extension GitHubClient {
     public func isStarred(userId: String, repo: String) -> Result<Bool, GitHubClient.Error> {
-        sendSync(Starred.Get(owner: userId, repo: repo))
-            .map { $0.response.statusCode == 204 }
-            .flatMapError {
-                if case let .responseError(re) = $0,
-                    let responseError = re as? APIKit.ResponseError,
-                    case let .unacceptableStatusCode(code) = responseError,
-                    code == 404 { return .success(false) }
-                return .failure(.other($0))
-            }
+        // swiftlint:disable:next implicitly_unwrapped_optional
+        var result: Result<Bool, Swift.Error>!
+        let semaphore = DispatchSemaphore(value: 0)
+        octoKit.star(owner: userId, repository: repo) {
+            result = $0
+            semaphore.signal()
+        }
+        semaphore.wait()
+        return result
+            .mapError(GitHubClient.Error.other)
     }
 
     public func star(userId: String, repo: String) -> Result<Void, GitHubClient.Error> {
-        sendSync(Starred.Put(owner: userId, repo: repo))
-            .flatMap {
-                guard $0.response.statusCode == 204 else {
-                    return .failure(SessionTaskError.responseError(ResponseError.unacceptableStatusCode($0.response.statusCode)))
-                }
-                return .success(())
-            }
-        .mapError { .other($0) }
+        var error: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        octoKit.putStar(owner: userId, repository: repo) {
+            error = $0
+            semaphore.signal()
+        }
+        semaphore.wait()
+        if let error = error {
+            return .failure(.other(error))
+        }
+        return .success(())
     }
 
     public func unstar(userId: String, repo: String) -> Result<Void, GitHubClient.Error> {
-        sendSync(Starred.Delete(owner: userId, repo: repo))
-            .flatMap {
-                guard $0.response.statusCode == 204 else {
-                    return .failure(SessionTaskError.responseError(ResponseError.unacceptableStatusCode($0.response.statusCode)))
-                }
-                return .success(())
-            }
-        .mapError { .other($0) }
+        var error: Swift.Error?
+        let semaphore = DispatchSemaphore(value: 0)
+        octoKit.deleteStar(owner: userId, repository: repo) {
+            error = $0
+            semaphore.signal()
+        }
+        semaphore.wait()
+        if let error = error {
+            return .failure(.other(error))
+        }
+        return .success(())
     }
 }
 
+#if compiler(>=5.5.2) && canImport(_Concurrency)
 extension GitHubClient {
-    enum Starred {
-        struct Get: Request {
-            typealias Response = EmptyEntity
-
-            let owner: String
-            let repo: String
-
-            var method: HTTPMethod { .get }
-            var path: String { "/user/starred/\(owner)/\(repo)" }
-        }
-
-        struct Put: Request {
-            typealias Response = EmptyEntity
-
-            let owner: String
-            let repo: String
-
-            var method: HTTPMethod { .put }
-            var path: String { "/user/starred/\(owner)/\(repo)" }
-        }
-
-        struct Delete: Request {
-            typealias Response = EmptyEntity
-
-            let owner: String
-            let repo: String
-
-            var method: HTTPMethod { .delete }
-            var path: String { "/user/starred/\(owner)/\(repo)" }
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    public func isStarred(userId: String, repo: String) async throws -> Bool {
+        try await withCheckedThrowingContinuation { continuation in
+            octoKit.star(owner: userId, repository: repo) {
+                switch $0 {
+                case let .success(result):
+                    continuation.resume(returning: result)
+                case let .failure(error):
+                    continuation.resume(throwing: Error.other(error))
+                }
+            }
         }
     }
+
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    public func star(userId: String, repo: String) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            octoKit.putStar(owner: userId, repository: repo) {
+                if let error = $0 {
+                    continuation.resume(throwing: Error.other(error))
+                } else {
+                    continuation.resume()
+                }
+            }
+        } as Void
+    }
+
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    public func unstar(userId: String, repo: String) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            octoKit.deleteStar(owner: userId, repository: repo) {
+                if let error = $0 {
+                    continuation.resume(throwing: Error.other(error))
+                } else {
+                    continuation.resume()
+                }
+            }
+        } as Void
+    }
 }
+#endif
