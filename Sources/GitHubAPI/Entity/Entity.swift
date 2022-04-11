@@ -1,7 +1,12 @@
 import Foundation
 
+#if compiler(>=5.5.2) && canImport(_Concurrency)
+protocol Entity: Decodable, Hashable, Sendable {
+}
+#else
 protocol Entity: Decodable, Hashable {
 }
+#endif
 
 extension Array: Entity where Element: Entity {
 }
@@ -9,7 +14,7 @@ extension Array: Entity where Element: Entity {
 extension Dictionary: Entity where Key == String, Value: Entity {
 }
 
-struct EmptyEntity: Entity {
+struct EmptyEntity: Entity, @unchecked Sendable {
     let response: HTTPURLResponse
 
     init(response: HTTPURLResponse) {

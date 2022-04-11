@@ -1,7 +1,10 @@
 import Foundation
+#if canImport(FoundationNetWorking)
+import FoundationNetWorking
+#endif
 import OctoKit
 
-public struct Release: Entity {
+public struct Release: Entity, @unchecked Sendable {
     public let url: URL
     public let name: String
     public let tagName: String
