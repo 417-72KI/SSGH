@@ -13,14 +13,10 @@ final class GetUserTests: XCTestCase {
     }
 
     func testGetUser_success() throws {
-        stubGetRequest(path: "/users/417-72KI", responseData: [
-            "id": 417,
-            "login" : "417-72KI",
-            "public_repos": 46
-        ])
+        stubGetRequest(path: "/users/417-72KI", responseFileName: "get_user.json")
 
         let expected = User(login: "417-72KI",
-                            publicRepos: 46)
+                            publicRepos: 80)
 
         let user = try client.getUser(by: "417-72KI").get()
         XCTAssertEqual(user, expected)
@@ -37,4 +33,30 @@ final class GetUserTests: XCTestCase {
             }
         }
     }
+
+    // MARK: - async/await
+    #if compiler(>=5.5.2) && canImport(_Concurrency)
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    func testGetUser_success_async() async throws {
+        stubGetRequest(path: "/users/417-72KI", responseFileName: "get_user.json")
+        
+        let expected = User(login: "417-72KI",
+                            publicRepos: 80)
+        
+        let user = try await client.getUser(by: "417-72KI")
+        XCTAssertEqual(user, expected)
+    }
+    
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    func testGetUser_notExist_async() async throws {
+        stubGetRequest(path: "/users/41772KI", statusCode: 404)
+        
+        await XCTAssertThrowsErrorAsync(try await client.getUser(by: "41772KI")) {
+            guard case .userNotFound("41772KI") = ($0 as? GitHubClient.Error) else {
+                XCTFail("Unexpected error: \($0)")
+                return
+            }
+        }
+    }
+    #endif
 }

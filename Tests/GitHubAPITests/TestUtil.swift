@@ -1,6 +1,12 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 import OHHTTPStubs
 import OHHTTPStubsSwift
+import XCTest
+
+// MARK: - Stub
 
 func stubGetRequest(host: String = "api.github.com",
                     path: String,
@@ -9,6 +15,19 @@ func stubGetRequest(host: String = "api.github.com",
         HTTPStubsResponse(jsonObject: responseData,
                           statusCode: 200,
                           headers: ["Content-Type": "application/json"])
+    }
+}
+
+func stubGetRequest(host: String = "api.github.com",
+                    path: String,
+                    responseFileName: String) {
+    stub(condition: isHost(host) && isPath(path) && isMethodGET()) { _ in
+        guard let path = OHPathForFileInBundle("Resources/stub/\(responseFileName)", .module) else {
+            return HTTPStubsResponse(error: URLError(.fileDoesNotExist))
+        }
+        return HTTPStubsResponse(fileAtPath: path,
+                                 statusCode: 200,
+                                 headers: ["Content-Type": "application/json"])
     }
 }
 
@@ -39,3 +58,36 @@ func stubDeleteRequest(host: String = "api.github.com",
 func clearStubs() {
     HTTPStubs.removeAllStubs()
 }
+
+// MARK: - Concurrency
+#if compiler(>=5.5.2) && canImport(_Concurrency)
+extension XCTest {
+    func XCTAssertThrowsErrorAsync<T: Sendable>(
+        _ expression: @autoclosure () async throws -> T,
+        _ message: @autoclosure () -> String = "",
+        file: StaticString = #filePath,
+        line: UInt = #line,
+        _ errorHandler: (_ error: Error) -> Void = { _ in }
+    ) async {
+        do {
+            _ = try await expression()
+            XCTFail(message(), file: file, line: line)
+        } catch {
+            errorHandler(error)
+        }
+    }
+
+    func XCTAssertNoThrowAsync<T: Sendable>(
+        _ expression: @autoclosure () async throws -> T,
+        _ message: @autoclosure () -> String = "",
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async {
+        do {
+            _ = try await expression()
+        } catch {
+            XCTFail(message(), file: file, line: line)
+        }
+    }
+}
+#endif

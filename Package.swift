@@ -45,7 +45,8 @@ let package = Package(
             dependencies: [
                 "GitHubAPI",
                 .product(name: "OHHTTPStubsSwift", package: "OHHTTPStubs")
-            ]
+            ],
+            resources: [.copy("Resources")]
         )
     ],
     swiftLanguageVersions: [.v5]
