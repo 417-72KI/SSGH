@@ -14,58 +14,56 @@ public extension SSGHCore {
 }
 
 public extension SSGHCore {
-    func execute(mode: Mode) throws {
+    func execute(mode: Mode) async throws {
         switch mode {
         case let .specifiedTargets(targets):
             if targets.isEmpty { throw Error.targetUnspecified }
             dumpInfo("Fetching users...")
-            try targets.compactMap {
-                switch gitHubClient.getUser(by: $0) {
-                case let .success(user):
-                    return user
-                case let .failure(error):
+
+            for target in targets {
+                do {
+                    let user = try await gitHubClient.getUser(by: target)
+                    try await star(to: user)
+                } catch {
                     dumpWarn(error)
-                    return nil
                 }
             }
-            .forEach(star(to:))
         }
     }
 }
 
 private extension SSGHCore {
-    func star(to user: User) throws {
+    func star(to user: User) async throws {
         dumpInfo("Fetching repos for \(user)...")
-        let repos = try fetchAllRepos(of: user)
-        let starrableRepos = try repos.filter { !$0.fork }
-            .filter { !(try gitHubClient.isStarred(userId: user.login, repo: $0.name).get()) }
+        let repos = try await fetchAllRepos(of: user)
+        let starrableRepos = try await repos.filter { !$0.fork }
+            .asyncFilter { !(try await gitHubClient.isStarred(userId: user.login, repo: $0.name)) }
         dumpDebug("\(starrableRepos.count) \(starrableRepos.count == 1 ? "repo" : "repos") of \(user) detected")
 
-        let starredRepoCount = starrableRepos.map { repo -> Result<Void, GitHubAPIError> in
+        let starredRepoCount = await starrableRepos.asyncFilter { repo in
             dumpInfo("Starring \(repo.fullName)")
             if dryRunMode {
                 dumpWarn("Dry-run mode. Simulate starring \"\(repo.fullName)\"")
-                return .success(())
+                return true
             }
-            return gitHubClient.star(userId: user.login, repo: repo.name)
-        }
-        .reduce(into: 0) {
-            switch $1 {
-            case .success:
-                $0 += 1
-            case let .failure(error):
+            do {
+                try await gitHubClient.star(userId: user.login, repo: repo.name)
+                return true
+            } catch {
                 dumpError(error)
+                return false
             }
         }
+        .count
 
         dumpInfo("\(starredRepoCount) \(starredRepoCount == 1 ? "repo" : "repos") of \(user) starred!")
     }
 
-    func fetchAllRepos(of user: User) throws -> [Repo] {
+    func fetchAllRepos(of user: User) async throws -> [Repo] {
         var page: UInt = 1
         var repos: [Repo] = []
         while true {
-            let reposPerPage = try gitHubClient.getRepos(for: user.login, page: page).get()
+            let reposPerPage = try await gitHubClient.getRepos(for: user.login, page: page)
             if reposPerPage.isEmpty { break }
             repos += reposPerPage
             page += 1

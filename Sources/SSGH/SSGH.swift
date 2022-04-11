@@ -29,7 +29,7 @@ extension SSGH {
             dryRunMode: dryRunMode
         )
         do {
-            try core.execute(mode: .specifiedTargets(targets))
+            try await core.execute(mode: .specifiedTargets(targets))
             await confirmUpdate(core)
         } catch {
             dumpError(error)
