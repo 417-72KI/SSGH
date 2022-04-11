@@ -60,6 +60,7 @@ func clearStubs() {
 }
 
 // MARK: - Concurrency
+#if compiler(>=5.5.2) && canImport(_Concurrency)
 extension XCTest {
     func XCTAssertThrowsErrorAsync<T: Sendable>(
         _ expression: @autoclosure () async throws -> T,
@@ -89,3 +90,4 @@ extension XCTest {
         }
     }
 }
+#endif
