@@ -21,7 +21,6 @@ extension GitHubClient {
     }
 }
 
-#if compiler(>=5.5.2) && canImport(_Concurrency)
 extension GitHubClient {
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func getUser(by userId: String) async throws -> User {
@@ -41,4 +40,3 @@ extension GitHubClient {
         }
     }
 }
-#endif

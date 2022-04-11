@@ -35,7 +35,6 @@ final class GetUserTests: XCTestCase {
     }
 
     // MARK: - async/await
-    #if compiler(>=5.5.2) && canImport(_Concurrency)
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testGetUser_success_async() async throws {
         stubGetRequest(path: "/users/417-72KI", responseFileName: "get_user.json")
@@ -58,5 +57,4 @@ final class GetUserTests: XCTestCase {
             }
         }
     }
-    #endif
 }
