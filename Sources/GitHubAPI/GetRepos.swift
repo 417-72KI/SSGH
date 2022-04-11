@@ -18,3 +18,25 @@ extension GitHubClient {
         }
     }
 }
+
+#if compiler(>=5.5.2) && canImport(_Concurrency)
+extension GitHubClient {
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    public func getRepos(for userId: String, page: UInt = 1) async throws -> [Repo] {
+        try await withCheckedThrowingContinuation { continuation in
+            octoKit.repositories(owner: userId, page: "\(page)") {
+                switch $0 {
+                case let .success(result):
+                    continuation.resume(returning: result.map(Repo.init))
+                case let .failure(error):
+                    if (error as NSError).code == 404 {
+                        continuation.resume(throwing: Error.userNotFound(userId))
+                    } else {
+                        continuation.resume(throwing: Error.other(error))
+                    }
+                }
+            }
+        }
+    }
+}
+#endif
