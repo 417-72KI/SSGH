@@ -24,14 +24,27 @@ extension SSGH {
 extension SSGH {
     func run() async throws {
         let gitHubToken = try gitHubToken ?? (try Environment.getValue(forKey: .gitHubToken))
+        let core = SSGHCore(
+            gitHubToken: gitHubToken,
+            dryRunMode: dryRunMode
+        )
         do {
-            try SSGHCore(
-                gitHubToken: gitHubToken,
-                dryRunMode: dryRunMode
-            ).execute(mode: . specifiedTargets(targets))
+            try core.execute(mode: .specifiedTargets(targets))
+            await confirmUpdate(core)
         } catch {
             dumpError(error)
+            await confirmUpdate(core)
             Self.exit(withError: error)
+        }
+    }
+}
+
+private extension SSGH {
+    func confirmUpdate(_ core: SSGHCore) async {
+        guard let latest = await core.fetchLatest() else { return }
+        dumpDebug(latest)
+        if ApplicationInfo.version < latest {
+            dumpWarn("New version \(latest) is available!")
         }
     }
 }

@@ -15,7 +15,6 @@ public extension SSGHCore {
 
 public extension SSGHCore {
     func execute(mode: Mode) throws {
-        defer { confirmUpdate() }
         switch mode {
         case let .specifiedTargets(targets):
             if targets.isEmpty { throw Error.targetUnspecified }
@@ -75,16 +74,20 @@ private extension SSGHCore {
     }
 }
 
-private extension SSGHCore {
-    func confirmUpdate() {
-        guard case let .success(releases) = gitHubClient.getReleases(for: ApplicationInfo.author, repo: ApplicationInfo.name) else { return }
-        guard let latest = releases
+// FIXME: Extract (to version manager?)
+public extension SSGHCore {
+    func fetchLatest() async -> Version? {
+        do {
+            let releases = try await gitHubClient.getReleases(for: ApplicationInfo.author, repo: ApplicationInfo.name)
+            guard let latest = releases
                 .filter({ !$0.prerelease })
-                .map({ Version(stringLiteral: $0.tagName) })
-                .max() else { return }
-        dumpDebug(latest)
-        if ApplicationInfo.version < latest {
-            dumpWarn("New version \(latest) is available!")
+                .map(\.tagName)
+                .map(Version.init(stringLiteral:))
+                .max() else { return nil }
+            return latest
+        } catch {
+            dumpWarn(error.localizedDescription)
+            return nil
         }
     }
 }
