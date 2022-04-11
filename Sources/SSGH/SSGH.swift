@@ -3,7 +3,7 @@ import Foundation
 import SSGHCore
 
 @main
-struct SSGH: ParsableCommand {
+struct SSGH: AsyncParsableCommand {
     @Argument(help: "GitHub user name to give stars.")
     var targets: [String]
 
@@ -22,7 +22,7 @@ extension SSGH {
 }
 
 extension SSGH {
-    func run() throws {
+    func run() async throws {
         let gitHubToken = try gitHubToken ?? (try Environment.getValue(forKey: .gitHubToken))
         do {
             try SSGHCore(
