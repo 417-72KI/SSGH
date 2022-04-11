@@ -11,7 +11,6 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "1.1.1")),
-        .package(url: "https://github.com/ishkawa/APIKit.git", .upToNextMajor(from: "5.0.0")),
         .package(url: "https://github.com/AliSoftware/OHHTTPStubs.git", .upToNextMajor(from: "9.0.0")),
         // .package(name: "OctoKit", url: "https://github.com/nerdishbynature/octokit.swift", from: "0.11.0"),
         .package(name: "OctoKit", url: "https://github.com/417-72KI/octokit.swift", revision: "02ac971"),
@@ -31,7 +30,7 @@ let package = Package(
         ),
         .target(
             name: "GitHubAPI",
-            dependencies: ["APIKit", "OctoKit"]
+            dependencies: ["OctoKit"]
         ),
         .testTarget(
             name: "SSGHCoreTests",

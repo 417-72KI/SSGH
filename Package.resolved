@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "APIKit",
-        "repositoryURL": "https://github.com/ishkawa/APIKit.git",
-        "state": {
-          "branch": null,
-          "revision": "c8f5320d84c4c34c0fd965da3c7957819a1ccdd4",
-          "version": "5.2.0"
-        }
-      },
-      {
         "package": "OctoKit",
         "repositoryURL": "https://github.com/417-72KI/octokit.swift",
         "state": {
@@ -39,7 +30,7 @@
       },
       {
         "package": "RequestKit",
-        "repositoryURL": "https://github.com/nerdishbynature/RequestKit.git",
+        "repositoryURL": "https://github.com/nerdishbynature/requestkit",
         "state": {
           "branch": null,
           "revision": "e266fd8ac7d71caf4422ffc56ad98ff368329fde",
