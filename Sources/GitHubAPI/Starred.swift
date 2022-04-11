@@ -62,7 +62,7 @@ extension GitHubClient {
 
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func star(userId: String, repo: String) async throws {
-        return try await withCheckedThrowingContinuation { continuation in
+        try await withCheckedThrowingContinuation { continuation in
             octoKit.putStar(owner: userId, repository: repo) {
                 if let error = $0 {
                     continuation.resume(throwing: Error.other(error))
@@ -70,12 +70,12 @@ extension GitHubClient {
                     continuation.resume()
                 }
             }
-        }
+        } as Void
     }
 
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func unstar(userId: String, repo: String) async throws {
-        return try await withCheckedThrowingContinuation { continuation in
+        try await withCheckedThrowingContinuation { continuation in
             octoKit.deleteStar(owner: userId, repository: repo) {
                 if let error = $0 {
                     continuation.resume(throwing: Error.other(error))
@@ -83,7 +83,7 @@ extension GitHubClient {
                     continuation.resume()
                 }
             }
-        }
+        } as Void
     }
 }
 #endif
