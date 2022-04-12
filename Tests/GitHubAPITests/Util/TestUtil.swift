@@ -2,71 +2,10 @@ import Foundation
 #if canImport(FoundationNetworking)
 import FoundationNetworking
 #endif
-import OHHTTPStubs
-import OHHTTPStubsSwift
 import RequestKit
 import XCTest
 
 // MARK: - Stub
-
-@available(*, deprecated, message: "Will be removed. Use `StubURLSession` instead.")
-func stubGetRequest(host: String = "api.github.com",
-                    path: String,
-                    responseData: Any) {
-    stub(condition: isHost(host) && isPath(path) && isMethodGET()) { _ in
-        HTTPStubsResponse(jsonObject: responseData,
-                          statusCode: 200,
-                          headers: ["Content-Type": "application/json"])
-    }
-}
-
-@available(*, deprecated, message: "Will be removed. Use `StubURLSession` instead.")
-func stubGetRequest(host: String = "api.github.com",
-                    path: String,
-                    responseFileName: String) {
-    stub(condition: isHost(host) && isPath(path) && isMethodGET()) { _ in
-        guard let path = OHPathForFileInBundle("Resources/stub/\(responseFileName)", .module) else {
-            return HTTPStubsResponse(error: URLError(.fileDoesNotExist))
-        }
-        return HTTPStubsResponse(fileAtPath: path,
-                                 statusCode: 200,
-                                 headers: ["Content-Type": "application/json"])
-    }
-}
-
-@available(*, deprecated, message: "Will be removed. Use `StubURLSession` instead.")
-func stubGetRequest(host: String = "api.github.com",
-                    path: String,
-                    statusCode: Int32) {
-    stub(condition: isHost(host) && isPath(path) && isMethodGET()) { _ in
-        HTTPStubsResponse(data: .init(), statusCode: statusCode, headers: [:])
-    }
-}
-
-@available(*, deprecated, message: "Will be removed. Use `StubURLSession` instead.")
-func stubPutRequest(host: String = "api.github.com",
-                    path: String,
-                    statusCode: Int32) {
-    stub(condition: isHost(host) && isPath(path) && isMethodPUT()) { _ in
-        HTTPStubsResponse(data: .init(), statusCode: statusCode, headers: [:])
-    }
-}
-
-@available(*, deprecated, message: "Will be removed. Use `StubURLSession` instead.")
-func stubDeleteRequest(host: String = "api.github.com",
-                       path: String,
-                       statusCode: Int32) {
-    stub(condition: isHost(host) && isPath(path) && isMethodDELETE()) { _ in
-        HTTPStubsResponse(data: .init(), statusCode: statusCode, headers: [:])
-    }
-}
-
-@available(*, deprecated, message: "Will be removed. Use `StubURLSession` instead.")
-func clearStubs() {
-    HTTPStubs.removeAllStubs()
-}
-
-// MARK: -
 final class StubURLSession: RequestKitURLSession {
     let expectedURL: URL
     let expectedHTTPMethod: HTTPMethod
