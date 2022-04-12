@@ -9,6 +9,7 @@ import XCTest
 
 // MARK: - Stub
 
+@available(*, deprecated, message: "Will be removed. Use `StubURLSession` instead.")
 func stubGetRequest(host: String = "api.github.com",
                     path: String,
                     responseData: Any) {
@@ -19,6 +20,7 @@ func stubGetRequest(host: String = "api.github.com",
     }
 }
 
+@available(*, deprecated, message: "Will be removed. Use `StubURLSession` instead.")
 func stubGetRequest(host: String = "api.github.com",
                     path: String,
                     responseFileName: String) {
@@ -32,6 +34,7 @@ func stubGetRequest(host: String = "api.github.com",
     }
 }
 
+@available(*, deprecated, message: "Will be removed. Use `StubURLSession` instead.")
 func stubGetRequest(host: String = "api.github.com",
                     path: String,
                     statusCode: Int32) {
@@ -40,6 +43,7 @@ func stubGetRequest(host: String = "api.github.com",
     }
 }
 
+@available(*, deprecated, message: "Will be removed. Use `StubURLSession` instead.")
 func stubPutRequest(host: String = "api.github.com",
                     path: String,
                     statusCode: Int32) {
@@ -48,6 +52,7 @@ func stubPutRequest(host: String = "api.github.com",
     }
 }
 
+@available(*, deprecated, message: "Will be removed. Use `StubURLSession` instead.")
 func stubDeleteRequest(host: String = "api.github.com",
                        path: String,
                        statusCode: Int32) {
@@ -56,6 +61,7 @@ func stubDeleteRequest(host: String = "api.github.com",
     }
 }
 
+@available(*, deprecated, message: "Will be removed. Use `StubURLSession` instead.")
 func clearStubs() {
     HTTPStubs.removeAllStubs()
 }
