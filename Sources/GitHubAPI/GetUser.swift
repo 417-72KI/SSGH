@@ -6,7 +6,7 @@ extension GitHubClient {
         // swiftlint:disable:next implicitly_unwrapped_optional
         var result: Result<OctoKit.User, Swift.Error>!
         let semaphore = DispatchSemaphore(value: 0)
-        octoKit.user(name: userId) {
+        octoKit.user(session, name: userId) {
             result = $0
             semaphore.signal()
         }
@@ -26,7 +26,7 @@ extension GitHubClient {
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func getUser(by userId: String) async throws -> User {
         try await withCheckedThrowingContinuation { continuation in
-            octoKit.user(name: userId) {
+            octoKit.user(session, name: userId) {
                 switch $0 {
                 case let .success(result):
                     continuation.resume(returning: User(result))
