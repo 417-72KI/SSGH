@@ -2,13 +2,15 @@ import Foundation
 import GitHubAPI
 
 public struct SSGHCore {
-    private let target: String
-    private let gitHubClient: GitHubClient
-    private let dryRunMode: Bool
+    let target: String
+    let gitHubClient: GitHubClient
+    let dryRunMode: Bool
+}
 
-    public init(target: String, gitHubToken: String, dryRunMode: Bool = false) {
+public extension SSGHCore {
+    init(target: String, gitHubToken: String, dryRunMode: Bool = false) {
         self.target = target
-        gitHubClient = .init(token: gitHubToken)
+        gitHubClient = defaultGitHubClient(token: gitHubToken)
         self.dryRunMode = dryRunMode
     }
 }

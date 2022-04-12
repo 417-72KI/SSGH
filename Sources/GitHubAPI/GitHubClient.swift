@@ -38,13 +38,17 @@ public extension GitHubClient {
     #endif
 }
 
-public class GitHubClientImpl: GitHubClient {
+public func defaultGitHubClient(token: String, session: RequestKitURLSession = URLSession.shared) -> GitHubClient {
+    GitHubClientImpl(token: token, session: session)
+}
+
+class GitHubClientImpl: GitHubClient {
     let domain = "https://github.com"
 
     let octoKit: Octokit
     let session: RequestKitURLSession
 
-    public init(token: String, session: RequestKitURLSession = URLSession.shared) {
+    init(token: String, session: RequestKitURLSession) {
         octoKit = .init(.init(token))
         self.session = session
     }
