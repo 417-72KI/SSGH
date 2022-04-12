@@ -2,7 +2,7 @@ import Foundation
 import OctoKit
 import RequestKit
 
-public protocol IGitHubClient {
+public protocol GitHubClient {
     func getUser(by userId: String) -> Result<User, GitHubAPIError>
     func getRepos(for userId: String, page: UInt) -> Result<[Repo], GitHubAPIError>
     func getReleases(for userId: String, repo: String) -> Result<[Release], GitHubAPIError>
@@ -26,7 +26,7 @@ public protocol IGitHubClient {
     #endif
 }
 
-public extension IGitHubClient {
+public extension GitHubClient {
     func getRepos(for userId: String) -> Result<[Repo], GitHubAPIError> {
         getRepos(for: userId, page: 1)
     }
@@ -38,7 +38,7 @@ public extension IGitHubClient {
     #endif
 }
 
-public class GitHubClient: IGitHubClient {
+public class GitHubClientImpl: GitHubClient {
     let domain = "https://github.com"
 
     let octoKit: Octokit

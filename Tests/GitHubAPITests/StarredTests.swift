@@ -11,7 +11,7 @@ final class StarredTests: XCTestCase {
                                          statusCode: 204)
         XCTAssertFalse(stubSession.wasCalled)
 
-        let isStarred = try GitHubClient(token: "this-is-stub", session: stubSession)
+        let isStarred = try GitHubClientImpl(token: "this-is-stub", session: stubSession)
             .isStarred(userId: "417-72KI", repo: "SSGH")
             .get()
         XCTAssertTrue(isStarred)
@@ -24,7 +24,7 @@ final class StarredTests: XCTestCase {
                                          statusCode: 404)
         XCTAssertFalse(stubSession.wasCalled)
 
-        let isStarred = try GitHubClient(token: "this-is-stub", session: stubSession)
+        let isStarred = try GitHubClientImpl(token: "this-is-stub", session: stubSession)
             .isStarred(userId: "417-72KI", repo: "SSGH")
             .get()
         XCTAssertFalse(isStarred)
@@ -38,7 +38,7 @@ final class StarredTests: XCTestCase {
         XCTAssertFalse(stubSession.wasCalled)
 
         XCTAssertNoThrow(
-            try GitHubClient(token: "this-is-stub", session: stubSession)
+            try GitHubClientImpl(token: "this-is-stub", session: stubSession)
                 .star(userId: "417-72KI", repo: "SSGH")
                 .get()
         )
@@ -52,7 +52,7 @@ final class StarredTests: XCTestCase {
         XCTAssertFalse(stubSession.wasCalled)
 
         XCTAssertNoThrow(
-            try GitHubClient(token: "this-is-stub", session: stubSession)
+            try GitHubClientImpl(token: "this-is-stub", session: stubSession)
                 .unstar(userId: "417-72KI", repo: "SSGH")
                 .get()
         )
@@ -68,7 +68,7 @@ final class StarredTests: XCTestCase {
                                          statusCode: 204)
         XCTAssertFalse(stubSession.wasCalled)
 
-        let result = try await GitHubClient(token: "this-is-stub", session: stubSession)
+        let result = try await GitHubClientImpl(token: "this-is-stub", session: stubSession)
             .isStarred(userId: "417-72KI", repo: "SSGH")
         XCTAssertTrue(result)
         XCTAssertTrue(stubSession.wasCalled)
@@ -81,7 +81,7 @@ final class StarredTests: XCTestCase {
                                          statusCode: 404)
         XCTAssertFalse(stubSession.wasCalled)
 
-        let result = try await GitHubClient(token: "this-is-stub", session: stubSession)
+        let result = try await GitHubClientImpl(token: "this-is-stub", session: stubSession)
             .isStarred(userId: "417-72KI", repo: "SSGH")
         XCTAssertFalse(result)
         XCTAssertTrue(stubSession.wasCalled)
@@ -95,7 +95,7 @@ final class StarredTests: XCTestCase {
         XCTAssertFalse(stubSession.wasCalled)
 
         await XCTAssertNoThrowAsync(
-            try await GitHubClient(token: "this-is-stub", session: stubSession)
+            try await GitHubClientImpl(token: "this-is-stub", session: stubSession)
                 .star(userId: "417-72KI", repo: "SSGH")
         )
         XCTAssertTrue(stubSession.wasCalled)
@@ -109,7 +109,7 @@ final class StarredTests: XCTestCase {
         XCTAssertFalse(stubSession.wasCalled)
 
         await XCTAssertNoThrowAsync(
-            try await GitHubClient(token: "this-is-stub", session: stubSession)
+            try await GitHubClientImpl(token: "this-is-stub", session: stubSession)
                                         .unstar(userId: "417-72KI", repo: "SSGH")
         )
         XCTAssertTrue(stubSession.wasCalled)

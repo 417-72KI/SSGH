@@ -1,7 +1,7 @@
 import Foundation
 import OctoKit
 
-extension GitHubClient {
+extension GitHubClientImpl {
     public func getUser(by userId: String) -> Result<User, GitHubAPIError> {
         // swiftlint:disable:next implicitly_unwrapped_optional
         var result: Result<OctoKit.User, Swift.Error>!
@@ -22,7 +22,7 @@ extension GitHubClient {
 }
 
 #if compiler(>=5.5.2) && canImport(_Concurrency)
-extension GitHubClient {
+extension GitHubClientImpl {
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func getUser(by userId: String) async throws -> User {
         try await withCheckedThrowingContinuation { continuation in

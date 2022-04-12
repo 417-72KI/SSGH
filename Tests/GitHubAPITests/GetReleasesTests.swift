@@ -18,7 +18,7 @@ final class GetReleasesTests: XCTestCase {
                                            draft: false)
 
         ]
-        let releases = try GitHubClient(token: "this-is-stub", session: stubSession)
+        let releases = try GitHubClientImpl(token: "this-is-stub", session: stubSession)
             .getReleases(for: "417-72KI", repo: "SSGH")
             .get()
         XCTAssertEqual(releases, expected)
@@ -31,7 +31,7 @@ final class GetReleasesTests: XCTestCase {
                                          statusCode: 404)
         XCTAssertFalse(stubSession.wasCalled)
 
-        let result = GitHubClient(token: "this-is-stub", session: stubSession)
+        let result = GitHubClientImpl(token: "this-is-stub", session: stubSession)
             .getReleases(for: "41772KI", repo: "SSGH")
         XCTAssertThrowsError(try result.get()) {
             XCTAssertEqual($0 as? GitHubAPIError, .repoNotFound("41772KI/SSGH"))
@@ -44,7 +44,7 @@ final class GetReleasesTests: XCTestCase {
                                          statusCode: 404)
         XCTAssertFalse(stubSession.wasCalled)
 
-        let result = GitHubClient(token: "this-is-stub", session: stubSession)
+        let result = GitHubClientImpl(token: "this-is-stub", session: stubSession)
             .getReleases(for: "417-72KI", repo: "SGH")
         XCTAssertThrowsError(try result.get()) {
             XCTAssertEqual($0 as? GitHubAPIError, .repoNotFound("417-72KI/SGH"))
@@ -68,7 +68,7 @@ final class GetReleasesTests: XCTestCase {
                                            draft: false)
 
         ]
-        let releases = try await GitHubClient(token: "this-is-stub", session: stubSession)
+        let releases = try await GitHubClientImpl(token: "this-is-stub", session: stubSession)
             .getReleases(for: "417-72KI", repo: "SSGH")
         XCTAssertEqual(releases, expected)
         XCTAssertTrue(stubSession.wasCalled)
@@ -82,7 +82,7 @@ final class GetReleasesTests: XCTestCase {
         XCTAssertFalse(stubSession.wasCalled)
 
         await XCTAssertThrowsErrorAsync(
-            try await GitHubClient(token: "this-is-stub", session: stubSession)
+            try await GitHubClientImpl(token: "this-is-stub", session: stubSession)
                 .getReleases(for: "41772KI", repo: "SSGH")
         ) {
             XCTAssertEqual($0 as? GitHubAPIError, .repoNotFound("41772KI/SSGH"))
@@ -98,7 +98,7 @@ final class GetReleasesTests: XCTestCase {
         XCTAssertFalse(stubSession.wasCalled)
 
         await XCTAssertThrowsErrorAsync(
-            try await GitHubClient(token: "this-is-stub", session: stubSession)
+            try await GitHubClientImpl(token: "this-is-stub", session: stubSession)
                 .getReleases(for: "417-72KI", repo: "SGH")
         ) {
             XCTAssertEqual($0 as? GitHubAPIError, .repoNotFound("417-72KI/SGH"))
