@@ -6,8 +6,7 @@ import XCTest
 
 final class GetReleasesTests: XCTestCase {
     func testGetReleases_success() throws {
-        let stubSession = StubURLSession(testRun: testRun,
-                                         path: "/repos/417-72KI/SSGH/releases",
+        let stubSession = StubURLSession(path: "/repos/417-72KI/SSGH/releases",
                                          method: .get,
                                          jsonFile: "get_releases")
         XCTAssertFalse(stubSession.wasCalled)
@@ -27,8 +26,7 @@ final class GetReleasesTests: XCTestCase {
     }
 
     func testGetReleases_userNotExist() throws {
-        let stubSession = StubURLSession(testRun: testRun,
-                                         path: "/repos/41772KI/SSGH/releases",
+        let stubSession = StubURLSession(path: "/repos/41772KI/SSGH/releases",
                                          method: .get,
                                          statusCode: 404)
         XCTAssertFalse(stubSession.wasCalled)
@@ -41,8 +39,7 @@ final class GetReleasesTests: XCTestCase {
     }
 
     func testGetReleases_repoNotExist() throws {
-        let stubSession = StubURLSession(testRun: testRun,
-                                         path: "/repos/417-72KI/SGH/releases",
+        let stubSession = StubURLSession(path: "/repos/417-72KI/SGH/releases",
                                          method: .get,
                                          statusCode: 404)
         XCTAssertFalse(stubSession.wasCalled)
@@ -59,8 +56,7 @@ final class GetReleasesTests: XCTestCase {
     #if compiler(>=5.5.2) && canImport(_Concurrency)
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testGetReleases_success_async() async throws {
-        let stubSession = StubURLSession(testRun: testRun,
-                                         path: "/repos/417-72KI/SSGH/releases",
+        let stubSession = StubURLSession(path: "/repos/417-72KI/SSGH/releases",
                                          method: .get,
                                          jsonFile: "get_releases")
         XCTAssertFalse(stubSession.wasCalled)
@@ -80,8 +76,7 @@ final class GetReleasesTests: XCTestCase {
 
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testGetReleases_userNotExist_async() async throws {
-        let stubSession = StubURLSession(testRun: testRun,
-                                         path: "/repos/41772KI/SSGH/releases",
+        let stubSession = StubURLSession(path: "/repos/41772KI/SSGH/releases",
                                          method: .get,
                                          statusCode: 404)
         XCTAssertFalse(stubSession.wasCalled)
@@ -97,8 +92,7 @@ final class GetReleasesTests: XCTestCase {
 
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testGetReleases_repoNotExist_async() async throws {
-        let stubSession = StubURLSession(testRun: testRun,
-                                         path: "/repos/417-72KI/SGH/releases",
+        let stubSession = StubURLSession(path: "/repos/417-72KI/SGH/releases",
                                          method: .get,
                                          statusCode: 404)
         XCTAssertFalse(stubSession.wasCalled)

@@ -6,8 +6,7 @@ import XCTest
 
 final class GetUserTests: XCTestCase {
     func testGetUser_success() throws {
-        let stubSession = StubURLSession(testRun: testRun,
-                                         path: "/users/417-72KI",
+        let stubSession = StubURLSession(path: "/users/417-72KI",
                                          method: .get,
                                          jsonFile: "get_user")
         XCTAssertFalse(stubSession.wasCalled)
@@ -23,8 +22,7 @@ final class GetUserTests: XCTestCase {
     }
 
     func testGetUser_notExist() throws {
-        let stubSession = StubURLSession(testRun: testRun,
-                                         path: "/users/41772KI",
+        let stubSession = StubURLSession(path: "/users/41772KI",
                                          method: .get,
                                          statusCode: 404)
         XCTAssertFalse(stubSession.wasCalled)
@@ -41,8 +39,7 @@ final class GetUserTests: XCTestCase {
     #if compiler(>=5.5.2) && canImport(_Concurrency)
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testGetUser_success_async() async throws {
-        let stubSession = StubURLSession(testRun: testRun,
-                                         path: "/users/417-72KI",
+        let stubSession = StubURLSession(path: "/users/417-72KI",
                                          method: .get,
                                          jsonFile: "get_user")
         XCTAssertFalse(stubSession.wasCalled)
@@ -58,8 +55,7 @@ final class GetUserTests: XCTestCase {
     
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testGetUser_notExist_async() async throws {
-        let stubSession = StubURLSession(testRun: testRun,
-                                         path: "/users/41772KI",
+        let stubSession = StubURLSession(path: "/users/41772KI",
                                          method: .get,
                                          statusCode: 404)
         XCTAssertFalse(stubSession.wasCalled)
