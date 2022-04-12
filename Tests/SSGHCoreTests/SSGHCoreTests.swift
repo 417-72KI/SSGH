@@ -11,20 +11,20 @@ final class SSGHCoreTests: XCTestCase {
         client = StubClient()
     }
 
-    func testExecute() throws {
+    func testExecute() async throws {
         let core = SSGHCore(gitHubClient: client,
                             dryRunMode: false)
         XCTAssertEqual(client.starredRepos, [])
-        try core.execute(mode: .specifiedTargets(["417-72KI", "octocat"]))
+        try await core.execute(mode: .specifiedTargets(["417-72KI", "octocat"]))
 
         XCTAssertEqual(client.starredRepos, Set(client.repos.values.flatMap { $0 }))
     }
 
-    func testExecuteWithDryRunMode() throws {
+    func testExecuteWithDryRunMode() async throws {
         let core = SSGHCore(gitHubClient: client,
                             dryRunMode: true)
         XCTAssertEqual(client.starredRepos, [])
-        try core.execute(mode: .specifiedTargets(["417-72KI", "octocat"]))
+        try await core.execute(mode: .specifiedTargets(["417-72KI", "octocat"]))
 
         XCTAssertEqual(client.starredRepos, [])
     }
@@ -120,32 +120,50 @@ extension StubClient {
 extension StubClient {
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func getUser(by userId: String) async throws -> User {
-        fatalError("TODO: Unimplemented")
+        switch getUser(by: userId) as Result {
+        case let .success(result): return result
+        case let .failure(error): throw error
+        }
     }
 
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func getRepos(for userId: String, page: UInt) async throws -> [Repo] {
-        fatalError("TODO: Unimplemented")
+        switch getRepos(for: userId, page: page) as Result {
+        case let .success(result): return result
+        case let .failure(error): throw error
+        }
     }
 
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func getReleases(for userId: String, repo: String) async throws -> [Release] {
-        fatalError("TODO: Unimplemented")
+        switch getReleases(for: userId, repo: repo) as Result {
+        case let .success(result): return result
+        case let .failure(error): throw error
+        }
     }
 
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func isStarred(userId: String, repo: String) async throws -> Bool {
-        fatalError("TODO: Unimplemented")
+        switch isStarred(userId: userId, repo: repo) as Result {
+        case let .success(result): return result
+        case let .failure(error): throw error
+        }
     }
 
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func star(userId: String, repo: String) async throws {
-        fatalError("TODO: Unimplemented")
+        switch star(userId: userId, repo: repo) as Result {
+        case let .success(result): return result
+        case let .failure(error): throw error
+        }
     }
 
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func unstar(userId: String, repo: String) async throws {
-        fatalError("TODO: Unimplemented")
+        switch unstar(userId: userId, repo: repo) as Result {
+        case let .success(result): return result
+        case let .failure(error): throw error
+        }
     }
 }
 #endif
