@@ -2,13 +2,15 @@ import Foundation
 import GitHubAPI
 
 public struct SSGHCore {
-    private let target: String
-    private let gitHubClient: GitHubClient
-    private let dryRunMode: Bool
+    let target: String
+    let gitHubClient: GitHubClient
+    let dryRunMode: Bool
+}
 
-    public init(target: String, gitHubToken: String, dryRunMode: Bool = false) {
+public extension SSGHCore {
+    init(target: String, gitHubToken: String, dryRunMode: Bool = false) {
         self.target = target
-        gitHubClient = .init(token: gitHubToken)
+        gitHubClient = defaultGitHubClient(token: gitHubToken)
         self.dryRunMode = dryRunMode
     }
 }
@@ -30,7 +32,7 @@ private extension SSGHCore {
             .filter { !(try gitHubClient.isStarred(userId: user.login, repo: $0.name).get()) }
         dumpDebug("\(starrableRepos.count) \(starrableRepos.count == 1 ? "repo" : "repos") of \(user) detected")
 
-        let starredRepoCount = starrableRepos.map { repo -> Result<Void, GitHubClient.Error> in
+        let starredRepoCount = starrableRepos.map { repo -> Result<Void, GitHubAPIError> in
             dumpInfo("Starring \(repo.fullName)")
             if dryRunMode {
                 dumpWarn("Dry-run mode. Simulate starring \"\(repo.fullName)\"")

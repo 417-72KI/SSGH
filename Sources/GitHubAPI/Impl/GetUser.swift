@@ -1,8 +1,8 @@
 import Foundation
 import OctoKit
 
-extension GitHubClient {
-    public func getUser(by userId: String) -> Result<User, Error> {
+extension GitHubClientImpl {
+    public func getUser(by userId: String) -> Result<User, GitHubAPIError> {
         // swiftlint:disable:next implicitly_unwrapped_optional
         var result: Result<OctoKit.User, Swift.Error>!
         let semaphore = DispatchSemaphore(value: 0)
@@ -22,7 +22,7 @@ extension GitHubClient {
 }
 
 #if compiler(>=5.5.2) && canImport(_Concurrency)
-extension GitHubClient {
+extension GitHubClientImpl {
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func getUser(by userId: String) async throws -> User {
         try await withCheckedThrowingContinuation { continuation in
@@ -32,9 +32,9 @@ extension GitHubClient {
                     continuation.resume(returning: User(result))
                 case let .failure(error):
                     if (error as NSError).code == 404 {
-                        continuation.resume(throwing: Error.userNotFound(userId))
+                        continuation.resume(throwing: GitHubAPIError.userNotFound(userId))
                     } else {
-                        continuation.resume(throwing: Error.other(error))
+                        continuation.resume(throwing: GitHubAPIError.other(error))
                     }
                 }
             }

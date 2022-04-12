@@ -1,8 +1,8 @@
 import Foundation
 @testable import GitHubAPI
 
-extension GitHubClient.Error: Equatable {
-    public static func == (lhs: GitHubClient.Error, rhs: GitHubClient.Error) -> Bool {
+extension GitHubAPIError: Equatable {
+    public static func == (lhs: GitHubAPIError, rhs: GitHubAPIError) -> Bool {
         switch (lhs, rhs) {
         case let (.userNotFound(lhs), .userNotFound(rhs)):
             return lhs == rhs

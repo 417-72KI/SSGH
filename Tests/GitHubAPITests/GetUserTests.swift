@@ -14,7 +14,7 @@ final class GetUserTests: XCTestCase {
         let expected = User(login: "417-72KI",
                             publicRepos: 80)
 
-        let user = try GitHubClient(token: "this-is-stub", session: stubSession)
+        let user = try GitHubClientImpl(token: "this-is-stub", session: stubSession)
             .getUser(by: "417-72KI")
             .get()
         XCTAssertEqual(user, expected)
@@ -27,10 +27,10 @@ final class GetUserTests: XCTestCase {
                                          statusCode: 404)
         XCTAssertFalse(stubSession.wasCalled)
 
-        let result = GitHubClient(token: "this-is-stub", session: stubSession)
+        let result = GitHubClientImpl(token: "this-is-stub", session: stubSession)
             .getUser(by: "41772KI")
         XCTAssertThrowsError(try result.get()) {
-            XCTAssertEqual($0 as? GitHubClient.Error, .userNotFound("41772KI"))
+            XCTAssertEqual($0 as? GitHubAPIError, .userNotFound("41772KI"))
         }
         XCTAssertTrue(stubSession.wasCalled)
     }
@@ -47,7 +47,7 @@ final class GetUserTests: XCTestCase {
         let expected = User(login: "417-72KI",
                             publicRepos: 80)
         
-        let user = try await GitHubClient(token: "this-is-stub", session: stubSession)
+        let user = try await GitHubClientImpl(token: "this-is-stub", session: stubSession)
             .getUser(by: "417-72KI")
         XCTAssertEqual(user, expected)
         XCTAssertTrue(stubSession.wasCalled)
@@ -61,10 +61,10 @@ final class GetUserTests: XCTestCase {
         XCTAssertFalse(stubSession.wasCalled)
 
         await XCTAssertThrowsErrorAsync(
-            try await GitHubClient(token: "this-is-stub", session: stubSession)
+            try await GitHubClientImpl(token: "this-is-stub", session: stubSession)
                 .getUser(by: "41772KI")
         ) {
-            XCTAssertEqual($0 as? GitHubClient.Error, .userNotFound("41772KI"))
+            XCTAssertEqual($0 as? GitHubAPIError, .userNotFound("41772KI"))
         }
         XCTAssertTrue(stubSession.wasCalled)
     }

@@ -1,37 +1,37 @@
 import Foundation
-import OctoKit
-import RequestKit
 
-public class GitHubClient {
-    let domain = "https://github.com"
+public protocol GitHubClient {
+    func getUser(by userId: String) -> Result<User, GitHubAPIError>
+    func getRepos(for userId: String, page: UInt) -> Result<[Repo], GitHubAPIError>
+    func getReleases(for userId: String, repo: String) -> Result<[Release], GitHubAPIError>
+    func isStarred(userId: String, repo: String) -> Result<Bool, GitHubAPIError>
+    func star(userId: String, repo: String) -> Result<Void, GitHubAPIError>
+    func unstar(userId: String, repo: String) -> Result<Void, GitHubAPIError>
 
-    let octoKit: Octokit
-    let session: RequestKitURLSession
-
-    public init(token: String, session: RequestKitURLSession = URLSession.shared) {
-        octoKit = .init(.init(token))
-        self.session = session
-    }
+    #if compiler(>=5.5.2) && canImport(_Concurrency)
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    func getUser(by userId: String) async throws -> User
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    func getRepos(for userId: String, page: UInt) async throws -> [Repo]
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    func getReleases(for userId: String, repo: String) async throws -> [Release]
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    func isStarred(userId: String, repo: String) async throws -> Bool
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    func star(userId: String, repo: String) async throws
+    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+    func unstar(userId: String, repo: String) async throws
+    #endif
 }
 
-// MARK: - Error
-extension GitHubClient {
-    public enum Error: Swift.Error {
-        case userNotFound(String)
-        case repoNotFound(String)
-        case other(Swift.Error)
+public extension GitHubClient {
+    func getRepos(for userId: String) -> Result<[Repo], GitHubAPIError> {
+        getRepos(for: userId, page: 1)
     }
-}
 
-extension GitHubClient.Error: CustomStringConvertible {
-    public var description: String {
-        switch self {
-        case let .userNotFound(userId):
-            return "User(\(userId)) not found."
-        case let .repoNotFound(repo):
-            return "Repo(\(repo)) not found"
-        case let .other(error):
-            return "Unexpected error. Origin: \(error)."
-        }
+    #if compiler(>=5.5.2) && canImport(_Concurrency)
+    func getRepos(for userId: String) async throws -> [Repo] {
+        try await getRepos(for: userId, page: 1)
     }
+    #endif
 }

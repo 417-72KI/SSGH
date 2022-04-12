@@ -1,8 +1,8 @@
 import Foundation
 import OctoKit
 
-extension GitHubClient {
-    public func isStarred(userId: String, repo: String) -> Result<Bool, GitHubClient.Error> {
+extension GitHubClientImpl {
+    public func isStarred(userId: String, repo: String) -> Result<Bool, GitHubAPIError> {
         // swiftlint:disable:next implicitly_unwrapped_optional
         var result: Result<Bool, Swift.Error>!
         let semaphore = DispatchSemaphore(value: 0)
@@ -12,10 +12,10 @@ extension GitHubClient {
         }
         semaphore.wait()
         return result
-            .mapError(GitHubClient.Error.other)
+            .mapError(GitHubAPIError.other)
     }
 
-    public func star(userId: String, repo: String) -> Result<Void, GitHubClient.Error> {
+    public func star(userId: String, repo: String) -> Result<Void, GitHubAPIError> {
         var error: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
         octoKit.putStar(session, owner: userId, repository: repo) {
@@ -29,7 +29,7 @@ extension GitHubClient {
         return .success(())
     }
 
-    public func unstar(userId: String, repo: String) -> Result<Void, GitHubClient.Error> {
+    public func unstar(userId: String, repo: String) -> Result<Void, GitHubAPIError> {
         var error: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
         octoKit.deleteStar(session, owner: userId, repository: repo) {
@@ -45,7 +45,7 @@ extension GitHubClient {
 }
 
 #if compiler(>=5.5.2) && canImport(_Concurrency)
-extension GitHubClient {
+extension GitHubClientImpl {
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func isStarred(userId: String, repo: String) async throws -> Bool {
         try await withCheckedThrowingContinuation { continuation in
@@ -54,7 +54,7 @@ extension GitHubClient {
                 case let .success(result):
                     continuation.resume(returning: result)
                 case let .failure(error):
-                    continuation.resume(throwing: Error.other(error))
+                    continuation.resume(throwing: GitHubAPIError.other(error))
                 }
             }
         }
@@ -65,7 +65,7 @@ extension GitHubClient {
         try await withCheckedThrowingContinuation { continuation in
             octoKit.putStar(session, owner: userId, repository: repo) {
                 if let error = $0 {
-                    continuation.resume(throwing: Error.other(error))
+                    continuation.resume(throwing: GitHubAPIError.other(error))
                 } else {
                     continuation.resume()
                 }
@@ -78,7 +78,7 @@ extension GitHubClient {
         try await withCheckedThrowingContinuation { continuation in
             octoKit.deleteStar(session, owner: userId, repository: repo) {
                 if let error = $0 {
-                    continuation.resume(throwing: Error.other(error))
+                    continuation.resume(throwing: GitHubAPIError.other(error))
                 } else {
                     continuation.resume()
                 }

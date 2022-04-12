@@ -20,7 +20,7 @@ final class GetReposTests: XCTestCase {
                  htmlUrl: "https://github.com/417-72KI/SSGH",
                  description: "Deliver stars on your behalf")
         ]
-        let repos = try GitHubClient(token: "this-is-stub", session: stubSession)
+        let repos = try GitHubClientImpl(token: "this-is-stub", session: stubSession)
             .getRepos(for: "417-72KI")
             .get()
         XCTAssertEqual(repos, expected)
@@ -33,10 +33,10 @@ final class GetReposTests: XCTestCase {
                                          statusCode: 404)
         XCTAssertFalse(stubSession.wasCalled)
 
-        let result = GitHubClient(token: "this-is-stub", session: stubSession)
+        let result = GitHubClientImpl(token: "this-is-stub", session: stubSession)
             .getRepos(for: "41772KI")
         XCTAssertThrowsError(try result.get()) {
-            XCTAssertEqual($0 as? GitHubClient.Error, .userNotFound("41772KI"))
+            XCTAssertEqual($0 as? GitHubAPIError, .userNotFound("41772KI"))
         }
         XCTAssertTrue(stubSession.wasCalled)
     }
@@ -59,7 +59,7 @@ final class GetReposTests: XCTestCase {
                  htmlUrl: "https://github.com/417-72KI/SSGH",
                  description: "Deliver stars on your behalf")
         ]
-        let repos = try await GitHubClient(token: "this-is-stub", session: stubSession)
+        let repos = try await GitHubClientImpl(token: "this-is-stub", session: stubSession)
             .getRepos(for: "417-72KI")
         XCTAssertEqual(repos, expected)
         XCTAssertTrue(stubSession.wasCalled)
@@ -73,10 +73,10 @@ final class GetReposTests: XCTestCase {
         XCTAssertFalse(stubSession.wasCalled)
 
         await XCTAssertThrowsErrorAsync(
-            try await GitHubClient(token: "this-is-stub", session: stubSession)
+            try await GitHubClientImpl(token: "this-is-stub", session: stubSession)
                 .getRepos(for: "41772KI")
         ) {
-            XCTAssertEqual($0 as? GitHubClient.Error, .userNotFound("41772KI"))
+            XCTAssertEqual($0 as? GitHubAPIError, .userNotFound("41772KI"))
         }
         XCTAssertTrue(stubSession.wasCalled)
     }
