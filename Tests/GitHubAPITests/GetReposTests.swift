@@ -7,7 +7,7 @@ import XCTest
 final class GetReposTests: XCTestCase {
     func testGetRepos_success() throws {
         let stubSession = StubURLSession(path: "/users/417-72KI/repos",
-                                         method: "GET",
+                                         method: .get,
                                          jsonFile: "get_repos")
         XCTAssertFalse(stubSession.wasCalled)
 
@@ -29,7 +29,7 @@ final class GetReposTests: XCTestCase {
 
     func testGetRepos_userNotExist() throws {
         let stubSession = StubURLSession(path: "/users/41772KI/repos",
-                                         method: "GET",
+                                         method: .get,
                                          statusCode: 404)
         XCTAssertFalse(stubSession.wasCalled)
 
@@ -46,7 +46,7 @@ final class GetReposTests: XCTestCase {
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testGetRepos_success_async() async throws {
         let stubSession = StubURLSession(path: "/users/417-72KI/repos",
-                                         method: "GET",
+                                         method: .get,
                                          jsonFile: "get_repos")
         XCTAssertFalse(stubSession.wasCalled)
 
@@ -68,7 +68,7 @@ final class GetReposTests: XCTestCase {
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testGetRepos_userNotExist_async() async throws {
         let stubSession = StubURLSession(path: "/users/41772KI/repos",
-                                         method: "GET",
+                                         method: .get,
                                          statusCode: 404)
         XCTAssertFalse(stubSession.wasCalled)
 

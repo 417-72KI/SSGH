@@ -69,7 +69,7 @@ func clearStubs() {
 // MARK: -
 final class StubURLSession: RequestKitURLSession {
     let expectedURL: URL
-    let expectedHTTPMethod: String
+    let expectedHTTPMethod: HTTPMethod
     let responseData: Data?
     let statusCode: Int
     let file: StaticString
@@ -78,7 +78,7 @@ final class StubURLSession: RequestKitURLSession {
 
     init(host: String = "api.github.com",
          path: String,
-         method: String,
+         method: HTTPMethod,
          responseData: Data? = nil,
          statusCode: Int = 200,
          file: StaticString = #file,
@@ -101,7 +101,7 @@ final class StubURLSession: RequestKitURLSession {
 extension StubURLSession {
     convenience init(host: String = "api.github.com",
                      path: String,
-                     method: String,
+                     method: HTTPMethod,
                      jsonFile: String,
                      statusCode: Int = 200,
                      file: StaticString = #file,
@@ -121,13 +121,23 @@ extension StubURLSession {
 }
 
 extension StubURLSession {
+    enum HTTPMethod: String {
+        case get = "GET"
+        case post = "POST"
+        case put = "PUT"
+        case delete = "DELETE"
+        case patch = "PATCH"
+    }
+}
+
+extension StubURLSession {
     func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol {
         defer { wasCalled = true }
         do {
             let url = try XCTUnwrap(request.url, file: file, line: line)
             XCTAssertEqual(url.host, expectedURL.host)
             XCTAssertEqual(url.path, expectedURL.path)
-            XCTAssertEqual(request.httpMethod, expectedHTTPMethod)
+            XCTAssertEqual(request.httpMethod.map(HTTPMethod.init), expectedHTTPMethod)
             let response = HTTPURLResponse(url: url,
                                            statusCode: statusCode,
                                            httpVersion: "http/1.1",
@@ -145,7 +155,7 @@ extension StubURLSession {
         do {
             let url = try XCTUnwrap(request.url, file: file, line: line)
             XCTAssertEqual(url, expectedURL)
-            XCTAssertEqual(request.httpMethod, expectedHTTPMethod)
+            XCTAssertEqual(request.httpMethod.map(HTTPMethod.init), expectedHTTPMethod)
             let response = HTTPURLResponse(url: url,
                                            statusCode: statusCode,
                                            httpVersion: "http/1.1",
@@ -163,7 +173,7 @@ extension StubURLSession {
 
         let url = try XCTUnwrap(request.url, file: file, line: line)
         XCTAssertEqual(url, expectedURL)
-        XCTAssertEqual(request.httpMethod, expectedHTTPMethod)
+        XCTAssertEqual(request.httpMethod.map(HTTPMethod.init), expectedHTTPMethod)
         let data = try XCTUnwrap(responseData, file: file, line: line)
         let response = try XCTUnwrap(
             HTTPURLResponse(
@@ -183,7 +193,7 @@ extension StubURLSession {
 
         let url = try XCTUnwrap(request.url, file: file, line: line)
         XCTAssertEqual(url, expectedURL)
-        XCTAssertEqual(request.httpMethod, expectedHTTPMethod)
+        XCTAssertEqual(request.httpMethod.map(HTTPMethod.init), expectedHTTPMethod)
         let data = try XCTUnwrap(responseData, file: file, line: line)
         let response = try XCTUnwrap(
             HTTPURLResponse(
