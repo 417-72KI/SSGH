@@ -5,67 +5,114 @@ import XCTest
 @testable import struct GitHubAPI.User
 
 final class StarredTests: XCTestCase {
-    let client = GitHubClient(token: "this-is-stub")
-
-    override func tearDown() {
-        clearStubs()
-        super.tearDown()
-    }
-
     func testIsStarred_true() throws {
-        stubGetRequest(path: "/user/starred/417-72KI/SSGH", statusCode: 204)
+        let stubSession = StubURLSession(path: "/user/starred/417-72KI/SSGH",
+                                         method: .get,
+                                         statusCode: 204)
+        XCTAssertFalse(stubSession.wasCalled)
 
-        XCTAssertTrue(try client.isStarred(userId: "417-72KI", repo: "SSGH").get())
+        let isStarred = try GitHubClient(token: "this-is-stub", session: stubSession)
+            .isStarred(userId: "417-72KI", repo: "SSGH")
+            .get()
+        XCTAssertTrue(isStarred)
+        XCTAssertTrue(stubSession.wasCalled)
     }
 
     func testIsStarred_false() throws {
-        stubGetRequest(path: "/user/starred/417-72KI/SSGH", statusCode: 404)
+        let stubSession = StubURLSession(path: "/user/starred/417-72KI/SSGH",
+                                         method: .get,
+                                         statusCode: 404)
+        XCTAssertFalse(stubSession.wasCalled)
 
-        XCTAssertFalse(try client.isStarred(userId: "417-72KI", repo: "SSGH").get())
+        let isStarred = try GitHubClient(token: "this-is-stub", session: stubSession)
+            .isStarred(userId: "417-72KI", repo: "SSGH")
+            .get()
+        XCTAssertFalse(isStarred)
+        XCTAssertTrue(stubSession.wasCalled)
     }
 
     func testStar_success() throws {
-        stubPutRequest(path: "/user/starred/417-72KI/SSGH", statusCode: 204)
+        let stubSession = StubURLSession(path: "/user/starred/417-72KI/SSGH",
+                                         method: .put,
+                                         statusCode: 204)
+        XCTAssertFalse(stubSession.wasCalled)
 
-        XCTAssertNoThrow(try client.star(userId: "417-72KI", repo: "SSGH").get())
+        XCTAssertNoThrow(
+            try GitHubClient(token: "this-is-stub", session: stubSession)
+                .star(userId: "417-72KI", repo: "SSGH")
+                .get()
+        )
+        XCTAssertTrue(stubSession.wasCalled)
     }
 
     func testUnstar_success() throws {
-        stubDeleteRequest(path: "/user/starred/417-72KI/SSGH", statusCode: 204)
+        let stubSession = StubURLSession(path: "/user/starred/417-72KI/SSGH",
+                                         method: .delete,
+                                         statusCode: 204)
+        XCTAssertFalse(stubSession.wasCalled)
 
-        XCTAssertNoThrow(try client.unstar(userId: "417-72KI", repo: "SSGH").get())
+        XCTAssertNoThrow(
+            try GitHubClient(token: "this-is-stub", session: stubSession)
+                .unstar(userId: "417-72KI", repo: "SSGH")
+                .get()
+        )
+        XCTAssertTrue(stubSession.wasCalled)
     }
 
     // MARK: - async/await
     #if compiler(>=5.5.2) && canImport(_Concurrency)
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testIsStarred_true_async() async throws {
-        stubGetRequest(path: "/user/starred/417-72KI/SSGH", statusCode: 204)
+        let stubSession = StubURLSession(path: "/user/starred/417-72KI/SSGH",
+                                         method: .get,
+                                         statusCode: 204)
+        XCTAssertFalse(stubSession.wasCalled)
 
-        let result = try await client.isStarred(userId: "417-72KI", repo: "SSGH")
+        let result = try await GitHubClient(token: "this-is-stub", session: stubSession)
+            .isStarred(userId: "417-72KI", repo: "SSGH")
         XCTAssertTrue(result)
+        XCTAssertTrue(stubSession.wasCalled)
     }
 
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testIsStarred_false_async() async throws {
-        stubGetRequest(path: "/user/starred/417-72KI/SSGH", statusCode: 404)
+        let stubSession = StubURLSession(path: "/user/starred/417-72KI/SSGH",
+                                         method: .get,
+                                         statusCode: 404)
+        XCTAssertFalse(stubSession.wasCalled)
 
-        let result = try await client.isStarred(userId: "417-72KI", repo: "SSGH")
+        let result = try await GitHubClient(token: "this-is-stub", session: stubSession)
+            .isStarred(userId: "417-72KI", repo: "SSGH")
         XCTAssertFalse(result)
+        XCTAssertTrue(stubSession.wasCalled)
     }
 
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testStar_success_async() async throws {
-        stubPutRequest(path: "/user/starred/417-72KI/SSGH", statusCode: 204)
+        let stubSession = StubURLSession(path: "/user/starred/417-72KI/SSGH",
+                                         method: .put,
+                                         statusCode: 204)
+        XCTAssertFalse(stubSession.wasCalled)
 
-        await XCTAssertNoThrowAsync(try await client.star(userId: "417-72KI", repo: "SSGH"))
+        await XCTAssertNoThrowAsync(
+            try await GitHubClient(token: "this-is-stub", session: stubSession)
+                .star(userId: "417-72KI", repo: "SSGH")
+        )
+        XCTAssertTrue(stubSession.wasCalled)
     }
 
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testUnstar_success_async() async throws {
-        stubDeleteRequest(path: "/user/starred/417-72KI/SSGH", statusCode: 204)
+        let stubSession = StubURLSession(path: "/user/starred/417-72KI/SSGH",
+                                         method: .delete,
+                                         statusCode: 204)
+        XCTAssertFalse(stubSession.wasCalled)
 
-        await XCTAssertNoThrowAsync(try await client.unstar(userId: "417-72KI", repo: "SSGH"))
+        await XCTAssertNoThrowAsync(
+            try await GitHubClient(token: "this-is-stub", session: stubSession)
+                                        .unstar(userId: "417-72KI", repo: "SSGH")
+        )
+        XCTAssertTrue(stubSession.wasCalled)
     }
     #endif
 }
