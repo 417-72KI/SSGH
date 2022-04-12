@@ -6,7 +6,7 @@ extension GitHubClient {
         // swiftlint:disable:next implicitly_unwrapped_optional
         var result: Result<[OctoKit.Repository], Swift.Error>!
         let semaphore = DispatchSemaphore(value: 0)
-        octoKit.repositories(owner: userId, page: "\(page)") {
+        octoKit.repositories(session, owner: userId, page: "\(page)") {
             result = $0
             semaphore.signal()
         }
@@ -25,7 +25,7 @@ extension GitHubClient {
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func getRepos(for userId: String, page: UInt = 1) async throws -> [Repo] {
         try await withCheckedThrowingContinuation { continuation in
-            octoKit.repositories(owner: userId, page: "\(page)") {
+            octoKit.repositories(session, owner: userId, page: "\(page)") {
                 switch $0 {
                 case let .success(result):
                     continuation.resume(returning: result.map(Repo.init))

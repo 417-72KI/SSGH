@@ -6,7 +6,7 @@ extension GitHubClient {
         // swiftlint:disable:next implicitly_unwrapped_optional
         var result: Result<[OctoKit.Release], Swift.Error>!
         let semaphore = DispatchSemaphore(value: 0)
-        octoKit.listReleases(owner: userId, repository: repo) {
+        octoKit.listReleases(session, owner: userId, repository: repo) {
             result = $0
             semaphore.signal()
         }
@@ -24,7 +24,7 @@ extension GitHubClient {
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func getReleases(for userId: String, repo: String) async throws -> [Release] {
         try await withCheckedThrowingContinuation { continuation in
-            octoKit.listReleases(owner: userId, repository: repo) {
+            octoKit.listReleases(session, owner: userId, repository: repo) {
                 switch $0 {
                 case let .success(result):
                     continuation.resume(returning: result.map(Release.init))
