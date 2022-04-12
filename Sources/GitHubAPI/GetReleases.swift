@@ -2,7 +2,7 @@ import Foundation
 import OctoKit
 
 extension GitHubClient {
-    public func getReleases(for userId: String, repo: String) -> Result<[Release], GitHubClient.Error> {
+    public func getReleases(for userId: String, repo: String) -> Result<[Release], GitHubAPIError> {
         // swiftlint:disable:next implicitly_unwrapped_optional
         var result: Result<[OctoKit.Release], Swift.Error>!
         let semaphore = DispatchSemaphore(value: 0)
@@ -30,9 +30,9 @@ extension GitHubClient {
                     continuation.resume(returning: result.map(Release.init))
                 case let .failure(error):
                     if (error as NSError).code == 404 {
-                        continuation.resume(throwing: Error.repoNotFound("\(userId)/\(repo)"))
+                        continuation.resume(throwing: GitHubAPIError.repoNotFound("\(userId)/\(repo)"))
                     } else {
-                        continuation.resume(throwing: Error.other(error))
+                        continuation.resume(throwing: GitHubAPIError.other(error))
                     }
                 }
             }

@@ -30,7 +30,7 @@ final class GetUserTests: XCTestCase {
         let result = GitHubClient(token: "this-is-stub", session: stubSession)
             .getUser(by: "41772KI")
         XCTAssertThrowsError(try result.get()) {
-            XCTAssertEqual($0 as? GitHubClient.Error, .userNotFound("41772KI"))
+            XCTAssertEqual($0 as? GitHubAPIError, .userNotFound("41772KI"))
         }
         XCTAssertTrue(stubSession.wasCalled)
     }
@@ -64,7 +64,7 @@ final class GetUserTests: XCTestCase {
             try await GitHubClient(token: "this-is-stub", session: stubSession)
                 .getUser(by: "41772KI")
         ) {
-            XCTAssertEqual($0 as? GitHubClient.Error, .userNotFound("41772KI"))
+            XCTAssertEqual($0 as? GitHubAPIError, .userNotFound("41772KI"))
         }
         XCTAssertTrue(stubSession.wasCalled)
     }

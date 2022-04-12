@@ -34,7 +34,7 @@ final class GetReleasesTests: XCTestCase {
         let result = GitHubClient(token: "this-is-stub", session: stubSession)
             .getReleases(for: "41772KI", repo: "SSGH")
         XCTAssertThrowsError(try result.get()) {
-            XCTAssertEqual($0 as? GitHubClient.Error, .repoNotFound("41772KI/SSGH"))
+            XCTAssertEqual($0 as? GitHubAPIError, .repoNotFound("41772KI/SSGH"))
         }
     }
 
@@ -47,7 +47,7 @@ final class GetReleasesTests: XCTestCase {
         let result = GitHubClient(token: "this-is-stub", session: stubSession)
             .getReleases(for: "417-72KI", repo: "SGH")
         XCTAssertThrowsError(try result.get()) {
-            XCTAssertEqual($0 as? GitHubClient.Error, .repoNotFound("417-72KI/SGH"))
+            XCTAssertEqual($0 as? GitHubAPIError, .repoNotFound("417-72KI/SGH"))
         }
         XCTAssertTrue(stubSession.wasCalled)
     }
@@ -85,7 +85,7 @@ final class GetReleasesTests: XCTestCase {
             try await GitHubClient(token: "this-is-stub", session: stubSession)
                 .getReleases(for: "41772KI", repo: "SSGH")
         ) {
-            XCTAssertEqual($0 as? GitHubClient.Error, .repoNotFound("41772KI/SSGH"))
+            XCTAssertEqual($0 as? GitHubAPIError, .repoNotFound("41772KI/SSGH"))
         }
         XCTAssertTrue(stubSession.wasCalled)
     }
@@ -101,7 +101,7 @@ final class GetReleasesTests: XCTestCase {
             try await GitHubClient(token: "this-is-stub", session: stubSession)
                 .getReleases(for: "417-72KI", repo: "SGH")
         ) {
-            XCTAssertEqual($0 as? GitHubClient.Error, .repoNotFound("417-72KI/SGH"))
+            XCTAssertEqual($0 as? GitHubAPIError, .repoNotFound("417-72KI/SGH"))
         }
     }
     #endif

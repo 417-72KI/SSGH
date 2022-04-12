@@ -36,7 +36,7 @@ final class GetReposTests: XCTestCase {
         let result = GitHubClient(token: "this-is-stub", session: stubSession)
             .getRepos(for: "41772KI")
         XCTAssertThrowsError(try result.get()) {
-            XCTAssertEqual($0 as? GitHubClient.Error, .userNotFound("41772KI"))
+            XCTAssertEqual($0 as? GitHubAPIError, .userNotFound("41772KI"))
         }
         XCTAssertTrue(stubSession.wasCalled)
     }
@@ -76,7 +76,7 @@ final class GetReposTests: XCTestCase {
             try await GitHubClient(token: "this-is-stub", session: stubSession)
                 .getRepos(for: "41772KI")
         ) {
-            XCTAssertEqual($0 as? GitHubClient.Error, .userNotFound("41772KI"))
+            XCTAssertEqual($0 as? GitHubAPIError, .userNotFound("41772KI"))
         }
         XCTAssertTrue(stubSession.wasCalled)
     }
