@@ -1,6 +1,4 @@
 import Foundation
-import OctoKit
-import RequestKit
 
 public protocol GitHubClient {
     func getUser(by userId: String) -> Result<User, GitHubAPIError>
