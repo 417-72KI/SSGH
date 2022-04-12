@@ -128,6 +128,21 @@ extension StubURLSession {
         case delete = "DELETE"
         case patch = "PATCH"
     }
+
+    enum StubError: LocalizedError {
+        case unexpectedRequest(expected: (HTTPMethod, URL), actual: (HTTPMethod, URL))
+
+        var errorDescription: String? {
+            switch self {
+            case let .unexpectedRequest(expected, actual):
+                return """
+                    Unexpected request.
+                        Expected: \(expected.0.rawValue) \(expected.1)
+                        Actual: \(actual.0.rawValue) \(actual.1)
+                    """
+            }
+        }
+    }
 }
 
 extension StubURLSession {
@@ -135,9 +150,15 @@ extension StubURLSession {
         defer { wasCalled = true }
         do {
             let url = try XCTUnwrap(request.url, file: file, line: line)
-            XCTAssertEqual(url.host, expectedURL.host)
-            XCTAssertEqual(url.path, expectedURL.path)
-            XCTAssertEqual(request.httpMethod.map(HTTPMethod.init), expectedHTTPMethod)
+            let httpMethod = try XCTUnwrap(request.httpMethod.flatMap(HTTPMethod.init), file: file, line: line)
+            guard url.host == expectedURL.host,
+                  url.path == expectedURL.path,
+                  httpMethod == expectedHTTPMethod else {
+                      throw StubError.unexpectedRequest(
+                        expected: (expectedHTTPMethod, expectedURL),
+                        actual: (httpMethod, url)
+                      )
+                  }
             let response = HTTPURLResponse(url: url,
                                            statusCode: statusCode,
                                            httpVersion: "http/1.1",
@@ -154,8 +175,15 @@ extension StubURLSession {
         defer { wasCalled = true }
         do {
             let url = try XCTUnwrap(request.url, file: file, line: line)
-            XCTAssertEqual(url, expectedURL)
-            XCTAssertEqual(request.httpMethod.map(HTTPMethod.init), expectedHTTPMethod)
+            let httpMethod = try XCTUnwrap(request.httpMethod.flatMap(HTTPMethod.init), file: file, line: line)
+            guard url.host == expectedURL.host,
+                  url.path == expectedURL.path,
+                  httpMethod == expectedHTTPMethod else {
+                      throw StubError.unexpectedRequest(
+                        expected: (expectedHTTPMethod, expectedURL),
+                        actual: (httpMethod, url)
+                      )
+                  }
             let response = HTTPURLResponse(url: url,
                                            statusCode: statusCode,
                                            httpVersion: "http/1.1",
@@ -172,8 +200,15 @@ extension StubURLSession {
         defer { wasCalled = true }
 
         let url = try XCTUnwrap(request.url, file: file, line: line)
-        XCTAssertEqual(url, expectedURL)
-        XCTAssertEqual(request.httpMethod.map(HTTPMethod.init), expectedHTTPMethod)
+        let httpMethod = try XCTUnwrap(request.httpMethod.flatMap(HTTPMethod.init), file: file, line: line)
+        guard url.host == expectedURL.host,
+              url.path == expectedURL.path,
+              httpMethod == expectedHTTPMethod else {
+                  throw StubError.unexpectedRequest(
+                    expected: (expectedHTTPMethod, expectedURL),
+                    actual: (httpMethod, url)
+                  )
+              }
         let data = try XCTUnwrap(responseData, file: file, line: line)
         let response = try XCTUnwrap(
             HTTPURLResponse(
@@ -192,8 +227,15 @@ extension StubURLSession {
         defer { wasCalled = true }
 
         let url = try XCTUnwrap(request.url, file: file, line: line)
-        XCTAssertEqual(url, expectedURL)
-        XCTAssertEqual(request.httpMethod.map(HTTPMethod.init), expectedHTTPMethod)
+        let httpMethod = try XCTUnwrap(request.httpMethod.flatMap(HTTPMethod.init), file: file, line: line)
+        guard url.host == expectedURL.host,
+              url.path == expectedURL.path,
+              httpMethod == expectedHTTPMethod else {
+                  throw StubError.unexpectedRequest(
+                    expected: (expectedHTTPMethod, expectedURL),
+                    actual: (httpMethod, url)
+                  )
+              }
         let data = try XCTUnwrap(responseData, file: file, line: line)
         let response = try XCTUnwrap(
             HTTPURLResponse(
