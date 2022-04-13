@@ -4,15 +4,28 @@ on:
     paths:
       - '**.swift'
       - '.github/workflows/test.yml'
+      - 'versions.json'
 concurrency: 
   group: ${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true
 jobs:
+  generate-matrix:
+    name: Generate matrix
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - id: set-matrix
+        run: |
+          matrix=$(cat versions.json | jq -rc .)
+          echo "::set-output name=matrix::$matrix"
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
   macOS:
     name: macOS
+    needs: generate-matrix
     runs-on: macOS-11
     env:
-      DEVELOPER_DIR: /Applications/Xcode_13.2.1.app/Contents/Developer
+      DEVELOPER_DIR: /Applications/Xcode_${{ fromJson(needs.generate-matrix.outputs.matrix).xcode_version }}.app/Contents/Developer
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
@@ -41,11 +54,12 @@ jobs:
         if: success() || failure()
   linux:
     name: Linux
+    needs: generate-matrix
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        swift_version: [5.5.2, 5.5.3]
+        swift_version: ${{ fromJson(needs.generate-matrix.outputs.matrix).swift_version }}
     container:
       image: swift:${{ matrix.swift_version }}
     steps:
