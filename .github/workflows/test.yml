@@ -60,4 +60,4 @@ jobs:
       - name: build
         run: swift build
       - name: test
-        run: swift test --enable-test-discovery
+        run: swift package clean && swift test --enable-test-discovery
