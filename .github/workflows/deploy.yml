@@ -44,7 +44,7 @@ jobs:
       - name: Upload zip
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.EXECUTABLE_NAME }}-macos-v${{ env.EXECUTABLE_VERSION }}
+          name: ${{ env.EXECUTABLE_NAME }}-macos-v${{ env.EXECUTABLE_VERSION }}.zip
           path: .build/${{ env.EXECUTABLE_NAME }}-macos-v${{ env.EXECUTABLE_VERSION }}.zip
           if-no-files-found: error
           retention-days: 7        
@@ -75,7 +75,7 @@ jobs:
       - name: Upload zip
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.EXECUTABLE_NAME }}-linux-v${{ env.EXECUTABLE_VERSION }}
+          name: ${{ env.EXECUTABLE_NAME }}-linux-v${{ env.EXECUTABLE_VERSION }}.zip
           path: .build/${{ env.EXECUTABLE_NAME }}-linux-v${{ env.EXECUTABLE_VERSION }}.zip
           if-no-files-found: error
           retention-days: 7        
