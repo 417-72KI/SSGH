@@ -27,7 +27,7 @@ jobs:
           set -o pipefail && xcrun --sdk macosx \
           xcodebuild \
           -enableCodeCoverage YES \
-          -scheme "SSGH" \
+          -scheme "$(xcrun --sdk macosx xcodebuild -list -json | jq -r '.workspace.schemes[0]' 2>/dev/null)" \
           -destination "platform=macOS" \
           -clonedSourcePackagesDirPath 'Packages' \
           -resultBundlePath 'test_output/SSGH.xcresult' \
