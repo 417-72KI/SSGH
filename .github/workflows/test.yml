@@ -18,9 +18,9 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: .build
-          key: ${{ runner.os }}-swift-package-${{ hashFiles('Package.resolved') }}
+          key: ${{ runner.os }}-swift-${{ hashFiles('Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-swift-package
+            ${{ runner.os }}-swift
             ${{ runner.os }}-
       - name: test
         run: |
@@ -53,9 +53,10 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: .build
-          key: ${{ runner.os }}-swift-package-${{ hashFiles('Package.resolved') }}
+          key: ${{ runner.os }}-swift-${{ matrix.swift_version }}-${{ hashFiles('Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-swift-package
+            ${{ runner.os }}-swift-${{ matrix.swift_version }}
+            ${{ runner.os }}-swift
             ${{ runner.os }}-
       - name: build
         run: swift build
