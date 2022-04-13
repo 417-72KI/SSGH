@@ -1,7 +1,7 @@
 name: Deploy
 on:
   push:
-    # tags: '*'
+    tags: '*'
 env:
   EXECUTABLE_NAME: ssgh
   EXECUTABLE_VERSION: ${{ github.ref_name }}
@@ -88,11 +88,11 @@ jobs:
     steps:
       - uses: actions/download-artifact@v3
       - name: Create release
-        if: success() # && startsWith(github.ref, 'refs/tags/')
+        if: success() && startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ github.ref_name }}
           files: |
             macos/${{ env.EXECUTABLE_NAME }}-macos-v${{ env.EXECUTABLE_VERSION }}.zip
             linux/${{ env.EXECUTABLE_NAME }}-linux-v${{ env.EXECUTABLE_VERSION }}.zip
-          draft: true
+          draft: false
