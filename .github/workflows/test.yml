@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
         with:
-          path: .build
+          path: Packages
           key: ${{ runner.os }}-swift-package-${{ hashFiles('Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-swift-package
@@ -29,7 +29,7 @@ jobs:
           -enableCodeCoverage YES \
           -scheme "SSGH" \
           -destination "platform=macOS" \
-          -clonedSourcePackagesDirPath '.build/SourcePackages' \
+          -clonedSourcePackagesDirPath 'Packages' \
           -resultBundlePath 'test_output/SSGH.xcresult' \
           clean test | xcpretty
       - uses: kishikawakatsumi/xcresulttool@v1
