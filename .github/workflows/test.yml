@@ -21,6 +21,7 @@ jobs:
           key: ${{ runner.os }}-swift-package-${{ hashFiles('Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-swift-package
+            ${{ runner.os }}-
       - name: test
         run: |
           set -o pipefail && xcrun --sdk macosx \
@@ -54,6 +55,7 @@ jobs:
           key: ${{ runner.os }}-swift-package-${{ hashFiles('Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-swift-package
+            ${{ runner.os }}-
       - name: build
         run: swift build
       - name: test
