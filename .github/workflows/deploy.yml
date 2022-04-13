@@ -87,14 +87,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
-        with:
-          path: .build
       - name: Create release
         if: success() # && startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ github.ref_name }}
           files: |
-            .build/${{ env.EXECUTABLE_NAME }}-macos-v${{ env.EXECUTABLE_VERSION }}.zip
-            .build/${{ env.EXECUTABLE_NAME }}-linux-v${{ env.EXECUTABLE_VERSION }}.zip
+            ${{ env.EXECUTABLE_NAME }}-macos-v${{ env.EXECUTABLE_VERSION }}.zip
+            ${{ env.EXECUTABLE_NAME }}-linux-v${{ env.EXECUTABLE_VERSION }}.zip
           draft: true
