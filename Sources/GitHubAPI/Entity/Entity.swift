@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 #if compiler(>=5.5.2) && canImport(_Concurrency)
 protocol Entity: Decodable, Hashable, Sendable {}

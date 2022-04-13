@@ -1,6 +1,6 @@
 import Foundation
-#if canImport(FoundationNetWorking)
-import FoundationNetWorking
+#if canImport(FoundationNetworking)
+import FoundationNetworking
 #endif
 import OctoKit
 
