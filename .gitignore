@@ -1,6 +1,6 @@
 
-# Created by https://www.gitignore.io/api/swift,swiftpm
-# Edit at https://www.gitignore.io/?templates=swift,swiftpm
+# Created by https://www.gitignore.io/api/swift
+# Edit at https://www.gitignore.io/api?templates=swift
 
 ### Swift ###
 # Xcode
@@ -86,10 +86,4 @@ fastlane/test_output
 
 iOSInjectionProject/
 
-### SwiftPM ###
-Packages
-xcuserdata
-*.xcodeproj
-
-
-# End of https://www.gitignore.io/api/swift,swiftpm
+# End of https://www.gitignore.io/api/swift
