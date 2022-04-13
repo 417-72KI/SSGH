@@ -3,19 +3,20 @@
 set -eu
 
 EXECUTABLE_NAME=$1
-APPLICATION_INFO_FILE='Sources/SSGHCore/Common/ApplicationInfo.swift'
+APPLICATION_INFO_FILE_NAME='ApplicationInfo.swift'
+APPLICATION_INFO_FILE_PATH="$(find Sources -name "${APPLICATION_INFO_FILE_NAME}")"
 
 if [ `git symbolic-ref --short HEAD` != 'main' ]; then
     echo 'Release is enabled only in main.'
     exit 1
 fi
 
-if [ "$(git status -s | grep "${APPLICATION_INFO_FILE}")" = '' ]; then
-    echo "\e[31m${APPLICATION_INFO_FILE} is not modified.\e[m"
+if [ "$(git status -s | grep "${APPLICATION_INFO_FILE_PATH}")" = '' ]; then
+    echo "\e[31m${APPLICATION_INFO_FILE_PATH} is not modified.\e[m"
     exit 1
 fi
 
-if [ "$(git status -s | grep .swift | grep -v ApplicationInfo.swift)" != '' ]; then
+if [ "$(git status -s | grep .swift | grep -v ${APPLICATION_INFO_FILE_NAME})" != '' ]; then
     echo "\e[31mUnexpected added/modified/deleted file.\e[m"
     exit 1
 fi
@@ -35,7 +36,7 @@ if [ "$(git tag | grep ${TAG})" != '' ]; then
 fi
 
 # TAG
-git commit -m "Bump version to ${TAG}" "${APPLICATION_INFO_FILE}"
+git commit -m "Bump version to ${TAG}" "${APPLICATION_INFO_FILE_PATH}"
 git push origin main
 
 # Release
