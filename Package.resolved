@@ -3,10 +3,10 @@
     "pins": [
       {
         "package": "OctoKit",
-        "repositoryURL": "https://github.com/417-72KI/octokit.swift",
+        "repositoryURL": "https://github.com/nerdishbynature/octokit.swift",
         "state": {
-          "branch": "02ac971",
-          "revision": "02ac971464ab1a4bed0993af26459cc3c6c3f92f",
+          "branch": "8f78b18",
+          "revision": "8f78b18b3278a378d9a96bd7b832ce4091378c5c",
           "version": null
         }
       },
