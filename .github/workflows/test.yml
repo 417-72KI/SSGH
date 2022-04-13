@@ -40,8 +40,12 @@ jobs:
   linux:
     name: Linux
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        swift_version: [5.5.2, 5.5.3]
     container:
-      image: swift:5.5.2
+      image: swift:${{ matrix.swift_version }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
