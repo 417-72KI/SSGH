@@ -18,17 +18,19 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: .build
-          key: ${{ runner.os }}-swift-package-${{ hashFiles('Package.resolved') }}
+          key: ${{ runner.os }}-swift-${{ hashFiles('Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-swift-package
+            ${{ runner.os }}-swift
+            ${{ runner.os }}-
       - name: test
         run: |
+          swift package clean
           set -o pipefail && xcrun --sdk macosx \
           xcodebuild \
           -enableCodeCoverage YES \
-          -scheme "SSGH" \
+          -scheme "$(xcrun --sdk macosx xcodebuild -list -json | jq -r '.workspace.schemes[0]' 2>/dev/null)" \
           -destination "platform=macOS" \
-          -clonedSourcePackagesDirPath '.build/SourcePackages' \
+          -clonedSourcePackagesDirPath '.build' \
           -resultBundlePath 'test_output/SSGH.xcresult' \
           clean test | xcpretty
       - uses: kishikawakatsumi/xcresulttool@v1
@@ -51,10 +53,12 @@ jobs:
       - uses: actions/cache@v3
         with:
           path: .build
-          key: ${{ runner.os }}-swift-package-${{ hashFiles('Package.resolved') }}
+          key: ${{ runner.os }}-swift-${{ matrix.swift_version }}-${{ hashFiles('Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-swift-package
+            ${{ runner.os }}-swift-${{ matrix.swift_version }}
+            ${{ runner.os }}-swift
+            ${{ runner.os }}-
       - name: build
         run: swift build
       - name: test
-        run: swift test --enable-test-discovery
+        run: swift package clean && swift test --enable-test-discovery
