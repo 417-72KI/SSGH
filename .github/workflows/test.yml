@@ -50,5 +50,7 @@ jobs:
           key: ${{ runner.os }}-swift-package-${{ hashFiles('Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-swift-package
+      - name: build
+        run: swift build
       - name: test
         run: swift test --enable-test-discovery
