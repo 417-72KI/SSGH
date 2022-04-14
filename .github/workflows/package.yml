@@ -7,6 +7,7 @@ on:
 jobs:
   resolve-package:
     name: Resolve package
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
