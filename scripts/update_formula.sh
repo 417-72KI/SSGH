@@ -48,16 +48,16 @@ do
 done
 
 if [ $ACCEPTED -eq 1 ]; then
-    curl -i -X PUT $FORMULA_URL \
+    curl -sS -X PUT $FORMULA_URL \
        -H "Content-Type:application/json" \
        -H "Authorization:token $GITHUB_TOKEN" \
-       -d \
-    "{
+       -d "{
       \"path\":\"$FORMULA_PATH\",
       \"sha\":\"$SHA\",
       \"content\":\"$CONTENT_ENCODED\",
       \"message\":\"$COMMIT_MESSAGE\"
-    }"
+    }" \
+    | jq .
 else
     echo '\e[31mAborted.\e[m'
 fi
