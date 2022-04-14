@@ -27,3 +27,6 @@ autocorrect:
 
 release:
 	scripts/release.sh ${executable_name}
+
+formula:
+	scripts/update_formula.sh ${executable_name}
