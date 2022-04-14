@@ -1,9 +1,8 @@
 name: Package
 on:
   push:
-    branches: main
+    branches: renovate/*
     paths: Package.swift
-  workflow_dispatch:
 jobs:
   resolve-package:
     name: Resolve package
