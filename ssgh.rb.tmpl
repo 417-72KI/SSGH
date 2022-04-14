@@ -2,8 +2,16 @@ class Ssgh < Formula
 	desc "Deliver stars on your behalf"
 	homepage "https://github.com/417-72KI/SSGH"
 	version "{{TAG}}"
-	url "https://github.com/417-72KI/SSGH/releases/download/{{TAG}}/ssgh.zip"
-	sha256 "{{SHA256}}"
+	license "MIT"
+	head "https://github.com/417-72KI/SSGH.git", branch: "main"
+ 
+	on_macos do
+		url "https://github.com/417-72KI/SSGH/releases/download/{{TAG}}/ssgh-macos-{{TAG}}.zip"
+		sha256 "{{SHA256}}"
+	end
+	on_linux do
+	
+	end
 
 	def install
 		bin.install 'ssgh'
