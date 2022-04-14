@@ -2,9 +2,6 @@ name: Deploy
 on:
   push:
     tags: '*'
-  pull_request:
-    paths:
-      - .github/workflows/deploy.yml
   workflow_dispatch:
 env:
   EXECUTABLE_NAME: ssgh
