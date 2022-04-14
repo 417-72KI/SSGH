@@ -39,9 +39,10 @@ jobs:
         run: |
           set -e
           SWIFT_BUILD_FLAGS='-c release -Xswiftc -suppress-warnings --arch arm64 --arch x86_64'
+          EXECUTABLE_PATH="$(swift build $SWIFT_BUILD_FLAGS --show-bin-path)/${EXECUTABLE_NAME}"
           swift build $SWIFT_BUILD_FLAGS 
-          $(swift build $SWIFT_BUILD_FLAGS --show-bin-path) --version
-          zip -j ".build/${EXECUTABLE_NAME}-macos-v${EXECUTABLE_VERSION}.zip" "$(swift build $SWIFT_BUILD_FLAGS --show-bin-path)" LICENSE
+          "$EXECUTABLE_PATH" --version
+          zip -j ".build/${EXECUTABLE_NAME}-macos-v${EXECUTABLE_VERSION}.zip" "$EXECUTABLE_PATH" LICENSE
       - name: Upload zip
         uses: actions/upload-artifact@v3
         with:
@@ -68,8 +69,10 @@ jobs:
         run: |
           set -e
           SWIFT_BUILD_FLAGS='-c release -Xswiftc -suppress-warnings'
+          EXECUTABLE_PATH="$(swift build $SWIFT_BUILD_FLAGS --show-bin-path)/${EXECUTABLE_NAME}"
+          echo "EXECUTABLE_PATH=$EXECUTABLE_PATH" >> $GITHUB_ENV
           swift build $SWIFT_BUILD_FLAGS
-          $(swift build $SWIFT_BUILD_FLAGS --show-bin-path) --version
+          "$EXECUTABLE_PATH" --version
       - name: Create zip
         run: |
           apt-get -qq update && apt-get -qq install -y zip
