@@ -12,21 +12,19 @@ final class SSGHCoreTests: XCTestCase {
     }
 
     func testExecute() throws {
-        let core = SSGHCore(target: "417-72KI",
-                            gitHubClient: client,
+        let core = SSGHCore(gitHubClient: client,
                             dryRunMode: false)
         XCTAssertEqual(client.starredRepos, [])
-        try core.execute()
+        try core.execute(mode: .specifiedTargets(["417-72KI", "octocat"]))
 
-        XCTAssertEqual(client.starredRepos, Set(client.repos["417-72KI"] ?? []))
+        XCTAssertEqual(client.starredRepos, Set(client.repos.values.flatMap { $0 }))
     }
 
     func testExecuteWithDryRunMode() throws {
-        let core = SSGHCore(target: "417-72KI",
-                            gitHubClient: client,
+        let core = SSGHCore(gitHubClient: client,
                             dryRunMode: true)
         XCTAssertEqual(client.starredRepos, [])
-        try core.execute()
+        try core.execute(mode: .specifiedTargets(["417-72KI", "octocat"]))
 
         XCTAssertEqual(client.starredRepos, [])
     }
