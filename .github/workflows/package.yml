@@ -3,6 +3,7 @@ on:
   push:
     branches: main
     paths: Package.swift
+  workflow_dispatch:
 jobs:
   resolve-package:
     name: Resolve package
