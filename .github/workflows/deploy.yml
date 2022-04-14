@@ -1,7 +1,7 @@
 name: Deploy
 on:
   push:
-    tags: '*'
+    # tags: '*'
 env:
   EXECUTABLE_NAME: ssgh
   EXECUTABLE_VERSION: ${{ github.ref_name }}
@@ -38,9 +38,10 @@ jobs:
           DEVELOPER_DIR: /Applications/Xcode_${{ needs.generate-matrix.outputs.xcode-version }}.app/Contents/Developer
         run: |
           set -e
-          swift build -c release -Xswiftc -suppress-warnings
-          .build/release/${EXECUTABLE_NAME} --version
-          zip -j .build/${EXECUTABLE_NAME}-macos-v${EXECUTABLE_VERSION}.zip .build/release/${EXECUTABLE_NAME} LICENSE
+          SWIFT_BUILD_FLAGS='-c release -Xswiftc -suppress-warnings --arch arm64 --arch x86_64'
+          swift build $SWIFT_BUILD_FLAGS 
+          $(swift build $SWIFT_BUILD_FLAGS --show-bin-path) --version
+          zip -j ".build/${EXECUTABLE_NAME}-macos-v${EXECUTABLE_VERSION}.zip" "$(swift build $SWIFT_BUILD_FLAGS --show-bin-path)" LICENSE
       - name: Upload zip
         uses: actions/upload-artifact@v3
         with:
@@ -66,8 +67,9 @@ jobs:
       - name: Build
         run: |
           set -e
-          swift build -c release -Xswiftc -suppress-warnings
-          .build/release/${EXECUTABLE_NAME} --version
+          SWIFT_BUILD_FLAGS='-c release -Xswiftc -suppress-warnings'
+          swift build $SWIFT_BUILD_FLAGS
+          $(swift build $SWIFT_BUILD_FLAGS --show-bin-path) --version
       - name: Create zip
         run: |
           apt-get -qq update && apt-get -qq install -y zip
