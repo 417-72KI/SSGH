@@ -1,0 +1,29 @@
+name: Package
+on:
+  push:
+    branches: main
+    paths: Package.swift
+jobs:
+  resolve-package:
+    name: Resolve package
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          path: .build
+          key: ${{ runner.os }}-swift-${{ hashFiles('Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-swift
+            ${{ runner.os }}-
+      - name: Resolve dependencies
+        id: resolve
+        run: |
+          swift package resolve
+          echo "::set-output name=count::$(git diff --name-only | grep -E '^Package.resolved$' | wc -l)"
+      - name: Commit Package.resolved
+        if: steps.resolve.outputs.count > 0
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -m "Update Package.resolved" Package.resolved
+          git push
