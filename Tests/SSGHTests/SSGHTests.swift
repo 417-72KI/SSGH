@@ -13,8 +13,23 @@ final class SSGHTests: XCTestCase {
             XCTAssertNoThrow(try process.run())
             process.waitUntilExit()
             XCTAssertEqual(ExitCode(process.terminationStatus), .success)
-            let version = try XCTUnwrap(String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)?.trimmingCharacters(in: .newlines))
+            let version = try XCTUnwrap(pipe.readString())
             XCTAssertEqual(Version(version), ApplicationInfo.version)
+        }
+
+        try context("no target") {
+            let pipe = Pipe()
+            let errorPipe = Pipe()
+            let process = process(
+                withArguments: [],
+                pipe: pipe,
+                errorPipe: errorPipe
+            )
+            XCTAssertNoThrow(try process.run())
+            process.waitUntilExit()
+            XCTAssertEqual(ExitCode(process.terminationStatus), .validationFailure)
+            let error = try XCTUnwrap(errorPipe.readString()?.split(separator: "\n").first)
+            XCTAssertEqual(error, "Error: Missing expected argument '<targets> ...'")
         }
     }
 }
@@ -39,6 +54,7 @@ private extension SSGHTests {
 private extension SSGHTests {
     func process(withArguments arguments: [String],
                  pipe: Pipe? = nil,
+                 errorPipe: Pipe? = nil,
                  handler: ((Process) -> Void)? = nil) -> Process {
         let binary = productsDirectory.appendingPathComponent("ssgh")
         print("binary: \(binary)")
@@ -50,6 +66,10 @@ private extension SSGHTests {
         print("environment: \(process.environment ?? [:])")
         if let pipe = pipe {
             process.standardOutput = pipe
+            process.standardError = pipe
+        }
+        if let errorPipe = errorPipe {
+            process.standardError = errorPipe
         }
         return process
     }
