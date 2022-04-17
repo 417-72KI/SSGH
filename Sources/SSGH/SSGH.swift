@@ -11,7 +11,7 @@ struct SSGH: ParsableCommand {
             help: "GitHub Token to give stars. If not set, use `SSGH_TOKEN` in environment.")
     var gitHubToken: String?
 
-    @Flag(name: .short, help: "dry-run mode. Only fetch lists to give stars.")
+    @Flag(name: [.customLong("dry-run"), .short], help: "dry-run mode. Only fetch lists to give stars.")
     var dryRunMode = false
 }
 
