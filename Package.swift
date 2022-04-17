@@ -32,6 +32,10 @@ let package = Package(
             dependencies: ["OctoKit"]
         ),
         .testTarget(
+            name: "SSGHTests",
+            dependencies: ["SSGH"]
+        ),
+        .testTarget(
             name: "SSGHCoreTests",
             dependencies: [
                 "SSGHCore",
