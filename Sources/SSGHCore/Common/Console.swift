@@ -24,11 +24,15 @@ public func dumpError(_ message: @autoclosure () -> String, file: StaticString =
 }
 
 public func dumpError(_ error: @autoclosure () -> Error, file: StaticString = #file, line: UInt = #line) {
-    dumpError("\(error())", file: file, line: line)
+    dumpError(error().localizedDescription, file: file, line: line)
 }
 
 public func dumpWarn(_ message: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
     dump(logType: .warn, message(), file: file, line: line)
+}
+
+public func dumpWarn(_ error: @autoclosure () -> Error, file: StaticString = #file, line: UInt = #line) {
+    dumpWarn(error().localizedDescription, file: file, line: line)
 }
 
 private func dump(
