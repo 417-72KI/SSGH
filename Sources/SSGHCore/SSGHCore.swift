@@ -28,7 +28,8 @@ public extension SSGHCore {
                     dumpWarn(error)
                     return nil
                 }
-            }.forEach(star(to:))
+            }
+            .forEach(star(to:))
         }
     }
 }
