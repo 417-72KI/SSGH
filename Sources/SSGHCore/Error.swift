@@ -11,8 +11,6 @@ extension SSGHCore.Error: LocalizedError {
         switch self {
         case .targetUnspecified:
             return "Specify at least one target."
-        @unknown default:
-            return nil
         }
     }
 }
