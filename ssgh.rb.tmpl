@@ -2,23 +2,30 @@ class Ssgh < Formula
   desc "Deliver stars on your behalf"
   homepage "https://github.com/417-72KI/SSGH"
   version "{{TAG}}"
+
+  on_macos do
+    url "https://github.com/417-72KI/SSGH/archive/#{version}.tar.gz"
+    sha256 "{{SHA256_SOURCE}}"
+    depends_on :xcode => ["13.2", :build]
+  end
+  on_linux do
+    url "https://github.com/417-72KI/SSGH/releases/download/#{version}/ssgh-linux-v#{version}.zip"
+    sha256 "{{SHA256_LINUX}}"
+  end
   license "MIT"
   head "https://github.com/417-72KI/SSGH.git", branch: "main"
 
-  on_macos do
-      url "https://github.com/417-72KI/SSGH/releases/download/{{TAG}}/ssgh-macos-v{{TAG}}.zip"
-      sha256 "{{SHA256_MACOS}}"
-  end
-  on_linux do
-      url "https://github.com/417-72KI/SSGH/releases/download/{{TAG}}/ssgh-linux-v{{TAG}}.zip"
-      sha256 "{{SHA256_LINUX}}"
-  end
 
   def install
+    if OS.mac?
+      system 'swift', 'build', '--disable-sandbox', '-c', 'release', '-Xswiftc', '-suppress-warnings'
+      bin.install '.build/release/ssgh'
+    elsif OS.linux?
       bin.install 'ssgh'
+    end
   end
 
   test do
-    system "false"
+    system "#{bin}/ssgh", "--version"
   end
 end
