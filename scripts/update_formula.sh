@@ -17,13 +17,15 @@ EXECUTABLE_NAME=$2
 
 FORMULA_PATH="${EXECUTABLE_NAME}.rb"
 FORMULA_URL="https://api.github.com/repos/417-72KI/homebrew-${EXECUTABLE_NAME}/contents/$FORMULA_PATH"
-SHA=`curl -sS -X GET $FORMULA_URL | jq -r '.sha'`
+CURRENT_FORMULA=`curl -sS -X GET $FORMULA_URL | jq -c .`
+FORMULA_CONTENT=`echo "${CURRENT_FORMULA}" | tr -d '[:cntrl:]' | jq -r '.content'`
+SHA=`echo "${CURRENT_FORMULA}" | tr -d '[:cntrl:]' | jq -r '.sha'`
 
 TAG=$(swift run ssgh --version 2>/dev/null)
 
-echo '\e[33mdownload source\e[m' >&2
+echo '\e[33mdownload source\e[m' 1>&2
 gh release download $TAG --archive=tar.gz -D ./tmp
-echo '\e[33mdownload assets\e[m' >&2
+echo '\e[33mdownload assets\e[m' 1>&2
 gh release download $TAG -D ./tmp
 
 SHA256_SOURCE=$(shasum -a 256 ./tmp/${PROJECT_NAME}-${TAG}.tar.gz | awk '{ print $1 }')
@@ -36,9 +38,13 @@ CONTENT_FORMATTED="$(
     | sed -e "s/{{SHA256_MACOS}}/$SHA256_MACOS/"g \
     | sed -e "s/{{SHA256_LINUX}}/$SHA256_LINUX/"g
 )"
-echo "\e[33mFormatted formula:\n$CONTENT_FORMATTED\n\e[m"
+echo "\e[32mFormatted formula:\n$CONTENT_FORMATTED\n\e[m"
 CONTENT_ENCODED=$(echo $CONTENT_FORMATTED | openssl enc -e -base64 | tr -d '\n ')
-# echo "content_encoded: \n$CONTENT_ENCODED"
+
+if [[ "${CONTENT_ENCODED}" == "${FORMULA_CONTENT}" ]]; then
+    echo '\e[33m[WARN] Content not modified.\e[m'
+    exit 0
+fi
 
 COMMIT_MESSAGE="Update version to ${TAG}"
 
@@ -54,15 +60,15 @@ done
 
 if [ $ACCEPTED -eq 1 ]; then
     curl -sS -X PUT $FORMULA_URL \
-       -H "Content-Type:application/json" \
-       -H "Authorization:token $GITHUB_TOKEN" \
-       -d "{
-      \"path\":\"$FORMULA_PATH\",
-      \"sha\":\"$SHA\",
-      \"content\":\"$CONTENT_ENCODED\",
-      \"message\":\"$COMMIT_MESSAGE\"
-    }" \
-    | jq .
+        -H "Content-Type:application/json" \
+        -H "Authorization:token $GITHUB_TOKEN" \
+        -d "{
+            \"path\":\"$FORMULA_PATH\",
+            \"sha\":\"$SHA\",
+            \"content\":\"$CONTENT_ENCODED\",
+            \"message\":\"$COMMIT_MESSAGE\"
+        }" \
+        | jq .
 else
     echo '\e[31mAbort.\e[m'
 fi
