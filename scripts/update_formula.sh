@@ -12,6 +12,13 @@ function finally {
     rm -rf ./tmp
 }
 
+TAG=$(swift run ssgh --version 2>/dev/null)
+
+if [[ "$TAG" != "$(git describe --exact-match --tags 2>/dev/null)" ]]; then
+    echo '\e[31m[ERROR] Must run on tag.\e[m'
+    exit 1
+fi
+
 PROJECT_NAME=$1
 EXECUTABLE_NAME=$2
 
@@ -20,8 +27,6 @@ FORMULA_URL="https://api.github.com/repos/417-72KI/homebrew-${EXECUTABLE_NAME}/c
 CURRENT_FORMULA=`curl -sS -X GET $FORMULA_URL | jq -c .`
 FORMULA_CONTENT=`echo "${CURRENT_FORMULA}" | tr -d '[:cntrl:]' | jq -r '.content'`
 SHA=`echo "${CURRENT_FORMULA}" | tr -d '[:cntrl:]' | jq -r '.sha'`
-
-TAG=$(swift run ssgh --version 2>/dev/null)
 
 echo '\e[33mdownload source\e[m' 1>&2
 gh release download $TAG --archive=tar.gz -D ./tmp
