@@ -40,6 +40,7 @@ jobs:
           swift package clean
           set -o pipefail && xcrun --sdk macosx \
           xcodebuild \
+          "OTHER_LDFLAGS=\$(OTHER_LDFLAGS) -Wl -weak-lswift_Concurrency -Wl -rpath /usr/lib/swift" \
           -enableCodeCoverage YES \
           -scheme "$(xcrun --sdk macosx xcodebuild -list -json | jq -r '.workspace.schemes[0]' 2>/dev/null)" \
           -destination "platform=macOS" \
