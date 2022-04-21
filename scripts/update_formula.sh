@@ -6,28 +6,33 @@ trap catch ERR
 trap finally EXIT
 
 function catch {
-    echo '\e[31mExit with error\e[m'
+    echo '\e[31mAborted\e[m'
 }
 function finally {
     rm -rf ./tmp
 }
 
-EXECUTABLE_NAME=$1
+PROJECT_NAME=$1
+EXECUTABLE_NAME=$2
 
 FORMULA_PATH="${EXECUTABLE_NAME}.rb"
 FORMULA_URL="https://api.github.com/repos/417-72KI/homebrew-${EXECUTABLE_NAME}/contents/$FORMULA_PATH"
 SHA=`curl -sS -X GET $FORMULA_URL | jq -r '.sha'`
-echo "sha: '$SHA'"
 
 TAG=$(swift run ssgh --version 2>/dev/null)
 
+echo '\e[33mdownload source\e[m' >&2
+gh release download $TAG --archive=tar.gz -D ./tmp
+echo '\e[33mdownload assets\e[m' >&2
 gh release download $TAG -D ./tmp
 
+SHA256_SOURCE=$(shasum -a 256 ./tmp/${PROJECT_NAME}-${TAG}.tar.gz | awk '{ print $1 }')
 SHA256_MACOS=$(shasum -a 256 ./tmp/${EXECUTABLE_NAME}-macos-v${TAG}.zip | awk '{ print $1 }')
 SHA256_LINUX=$(shasum -a 256 ./tmp/${EXECUTABLE_NAME}-linux-v${TAG}.zip | awk '{ print $1 }')
 CONTENT_FORMATTED="$(
     cat ${FORMULA_PATH}.tmpl \
     | sed -e "s/{{TAG}}/${TAG}/"g \
+    | sed -e "s/{{SHA256_SOURCE}}/$SHA256_SOURCE/"g \
     | sed -e "s/{{SHA256_MACOS}}/$SHA256_MACOS/"g \
     | sed -e "s/{{SHA256_LINUX}}/$SHA256_LINUX/"g
 )"
@@ -59,5 +64,5 @@ if [ $ACCEPTED -eq 1 ]; then
     }" \
     | jq .
 else
-    echo '\e[31mAborted.\e[m'
+    echo '\e[31mAbort.\e[m'
 fi
