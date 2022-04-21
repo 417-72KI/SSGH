@@ -29,4 +29,4 @@ release:
 	scripts/release.sh ${executable_name}
 
 formula:
-	scripts/update_formula.sh ${executable_name}
+	scripts/update_formula.sh ${project_name} ${executable_name}
