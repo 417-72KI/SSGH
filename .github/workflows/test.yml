@@ -47,6 +47,7 @@ jobs:
           -resultBundlePath 'test_output/SSGH.xcresult' \
           clean test | xcpretty
       - name: Upload binary
+        if: success() || failure()
         uses: actions/upload-artifact@v3
         with:
           name: bin
@@ -54,11 +55,11 @@ jobs:
           if-no-files-found: error
           retention-days: 1
       - uses: kishikawakatsumi/xcresulttool@v1
+        if: success() || failure()
         with:
           path: test_output/SSGH.xcresult
           show-passed-tests: false
           show-code-coverage: false
-        if: success() || failure()
   verify-binary:
     name: Verify binary
     needs: macOS
