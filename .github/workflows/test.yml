@@ -46,12 +46,29 @@ jobs:
           -clonedSourcePackagesDirPath '.build' \
           -resultBundlePath 'test_output/SSGH.xcresult' \
           clean test | xcpretty
+      - name: Upload binary
+        uses: actions/upload-artifact@v3
+        with:
+          name: bin
+          path: .build/debug/ssgh
+          if-no-files-found: error
+          retention-days: 1
       - uses: kishikawakatsumi/xcresulttool@v1
         with:
           path: test_output/SSGH.xcresult
           show-passed-tests: false
           show-code-coverage: false
         if: success() || failure()
+  verify-binary:
+    name: Verify binary
+    needs: macOS
+    runs-on: macOS-11
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: bin
+      - name: Dump version
+        run: bin/ssgh --version
   linux:
     name: Linux
     needs: generate-matrix
