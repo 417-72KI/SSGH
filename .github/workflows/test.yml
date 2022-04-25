@@ -23,7 +23,7 @@ jobs:
   macOS:
     name: macOS
     needs: generate-matrix
-    runs-on: macOS-11
+    runs-on: macOS-12
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ fromJson(needs.generate-matrix.outputs.matrix).xcode_version }}.app/Contents/Developer
     steps:
@@ -38,7 +38,6 @@ jobs:
       - name: test
         run: |
           swift package clean
-          swift build
           set -o pipefail && xcrun --sdk macosx \
           xcodebuild \
           "OTHER_LDFLAGS=\$(OTHER_LDFLAGS) -Wl -weak-lswift_Concurrency -Wl -rpath /usr/lib/swift" \
@@ -48,30 +47,12 @@ jobs:
           -clonedSourcePackagesDirPath '.build' \
           -resultBundlePath 'test_output/SSGH.xcresult' \
           clean test | xcpretty
-      - name: Upload binary
-        if: success() || failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: bin
-          path: .build/debug/ssgh
-          if-no-files-found: error
-          retention-days: 1
       - uses: kishikawakatsumi/xcresulttool@v1
         if: success() || failure()
         with:
           path: test_output/SSGH.xcresult
           show-passed-tests: false
           show-code-coverage: false
-  verify-binary:
-    name: Verify binary
-    needs: macOS
-    runs-on: macOS-11
-    steps:
-      - uses: actions/download-artifact@v3
-        with:
-          name: bin
-      - name: Dump version
-        run: bin/ssgh --version
   linux:
     name: Linux
     needs: generate-matrix
