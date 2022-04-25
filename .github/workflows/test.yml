@@ -38,6 +38,7 @@ jobs:
       - name: test
         run: |
           swift package clean
+          swift build
           set -o pipefail && xcrun --sdk macosx \
           xcodebuild \
           "OTHER_LDFLAGS=\$(OTHER_LDFLAGS) -Wl -weak-lswift_Concurrency -Wl -rpath /usr/lib/swift" \
