@@ -15,13 +15,12 @@ class Ssgh < Formula
   license "MIT"
   head "https://github.com/417-72KI/SSGH.git", branch: "main"
 
-
   def install
     if OS.mac?
-      system 'swift', 'build', '--disable-sandbox', '-c', 'release', '-Xswiftc', '-suppress-warnings'
-      bin.install '.build/release/ssgh'
+      system "swift", "build", "--disable-sandbox", "-c", "release", "-Xswiftc", "-suppress-warnings"
+      bin.install ".build/release/ssgh"
     elsif OS.linux?
-      bin.install 'ssgh'
+      bin.install "ssgh"
     end
   end
 
