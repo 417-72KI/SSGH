@@ -23,7 +23,7 @@ PROJECT_NAME=$1
 EXECUTABLE_NAME=$2
 
 FORMULA_PATH="${EXECUTABLE_NAME}.rb"
-FORMULA_URL="https://api.github.com/repos/417-72KI/homebrew-${EXECUTABLE_NAME}/contents/$FORMULA_PATH"
+FORMULA_URL="https://api.github.com/repos/417-72KI/homebrew-tap/contents/$FORMULA_PATH"
 CURRENT_FORMULA=`curl -sS -X GET $FORMULA_URL | jq -c .`
 FORMULA_CONTENT=`echo "${CURRENT_FORMULA}" | tr -d '[:cntrl:]' | jq -r '.content'`
 SHA=`echo "${CURRENT_FORMULA}" | tr -d '[:cntrl:]' | jq -r '.sha'`
@@ -51,7 +51,7 @@ if [[ "${CONTENT_ENCODED}" == "${FORMULA_CONTENT}" ]]; then
     exit 0
 fi
 
-COMMIT_MESSAGE="Update version to ${TAG}"
+COMMIT_MESSAGE="Update ${EXECUTABLE_NAME} to ${TAG}"
 
 while :
 do

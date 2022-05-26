@@ -21,8 +21,7 @@ mint install 417-72KI/SSGH@1.1.1
 ### Homebrew
 
 ```sh
-brew tap 417-72KI/SSGH
-brew install ssgh
+brew install 417-72KI/tap/ssgh
 ```
 
 ## Before use
