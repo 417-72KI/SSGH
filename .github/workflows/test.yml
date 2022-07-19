@@ -23,7 +23,7 @@ jobs:
   macOS:
     name: macOS
     needs: generate-matrix
-    runs-on: macOS-11
+    runs-on: macOS-12
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ fromJson(needs.generate-matrix.outputs.matrix).xcode_version }}.app/Contents/Developer
     steps:
@@ -40,6 +40,7 @@ jobs:
           swift package clean
           set -o pipefail && xcrun --sdk macosx \
           xcodebuild \
+          "OTHER_LDFLAGS=\$(OTHER_LDFLAGS) -Wl -weak-lswift_Concurrency -Wl -rpath /usr/lib/swift" \
           -enableCodeCoverage YES \
           -scheme "$(xcrun --sdk macosx xcodebuild -list -json | jq -r '.workspace.schemes[0]' 2>/dev/null)" \
           -destination "platform=macOS" \
@@ -47,11 +48,11 @@ jobs:
           -resultBundlePath 'test_output/SSGH.xcresult' \
           clean test | xcpretty
       - uses: kishikawakatsumi/xcresulttool@v1
+        if: success() || failure()
         with:
           path: test_output/SSGH.xcresult
           show-passed-tests: false
           show-code-coverage: false
-        if: success() || failure()
   linux:
     name: Linux
     needs: generate-matrix

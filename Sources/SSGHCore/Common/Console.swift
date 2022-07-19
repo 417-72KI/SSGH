@@ -5,13 +5,13 @@ import Glibc
 #endif
 import Foundation
 
-func dumpDebug(_ message: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
+public func dumpDebug(_ message: @autoclosure () -> String, file: StaticString = #file, line: UInt = #line) {
     #if DEBUG
     dump(logType: .debug, message(), file: file, line: line)
     #endif
 }
 
-func dumpDebug(_ message: @autoclosure () -> Any, file: StaticString = #file, line: UInt = #line) {
+public func dumpDebug(_ message: @autoclosure () -> Any, file: StaticString = #file, line: UInt = #line) {
     dumpDebug(String(describing: message()), file: file, line: line)
 }
 

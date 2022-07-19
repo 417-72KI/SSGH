@@ -24,7 +24,7 @@ jobs:
   build-macos:
     name: Build Assets for macOS
     needs: generate-matrix
-    runs-on: macOS-latest
+    runs-on: macOS-12
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
