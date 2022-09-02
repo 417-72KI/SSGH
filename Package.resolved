@@ -21,7 +21,7 @@
       },
       {
         "package": "RequestKit",
-        "repositoryURL": "https://github.com/nerdishbynature/RequestKit.git",
+        "repositoryURL": "https://github.com/nerdishbynature/requestkit",
         "state": {
           "branch": null,
           "revision": "e266fd8ac7d71caf4422ffc56ad98ff368329fde",
@@ -33,8 +33,8 @@
         "repositoryURL": "https://github.com/apple/swift-argument-parser.git",
         "state": {
           "branch": null,
-          "revision": "f3c9084a71ef4376f2fabbdf1d3d90a49f1fabdb",
-          "version": "1.1.2"
+          "revision": "9f39744e025c7d377987f30b03770805dcb0bcd1",
+          "version": "1.1.4"
         }
       }
     ]
