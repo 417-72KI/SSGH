@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - '**.swift'
+      - 'Package.resolved'
       - '.github/workflows/test.yml'
       - 'versions.json'
 concurrency: 
