@@ -3,11 +3,7 @@ import Foundation
 import FoundationNetworking
 #endif
 
-#if compiler(>=5.5.2) && canImport(_Concurrency)
 protocol Entity: Decodable, Hashable, Sendable {}
-#else
-protocol Entity: Decodable, Hashable {}
-#endif
 
 extension Array: Entity where Element: Entity {
 }
@@ -27,6 +23,4 @@ struct EmptyEntity: Entity {
     }
 }
 
-#if compiler(>=5.5.2) && canImport(_Concurrency)
 extension EmptyEntity: @unchecked Sendable {}
-#endif

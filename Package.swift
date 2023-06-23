@@ -1,18 +1,17 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.6
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "SSGH",
-    platforms: [.macOS(.v10_15)],
+    platforms: [.macOS(.v11)],
     products: [
         .executable(name: "ssgh", targets: ["SSGH"])
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.2"),
-        // .package(name: "OctoKit", url: "https://github.com/nerdishbynature/octokit.swift", from: "0.11.0"),
-        .package(name: "OctoKit", url: "https://github.com/nerdishbynature/octokit.swift", revision: "8f78b18"),
+        .package(url: "https://github.com/nerdishbynature/octokit.swift", from: "0.12.0"),
         .package(url: "https://github.com/417-72KI/ParameterizedTestUtil.git", from: "1.0.0")
     ],
     targets: [
@@ -29,7 +28,9 @@ let package = Package(
         ),
         .target(
             name: "GitHubAPI",
-            dependencies: ["OctoKit"]
+            dependencies: [
+                .product(name: "OctoKit", package: "octokit.swift")
+            ]
         ),
         .testTarget(
             name: "SSGHTests",

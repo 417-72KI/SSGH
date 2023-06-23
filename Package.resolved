@@ -1,43 +1,41 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "OctoKit",
-        "repositoryURL": "https://github.com/nerdishbynature/octokit.swift",
-        "state": {
-          "branch": "8f78b18",
-          "revision": "8f78b18b3278a378d9a96bd7b832ce4091378c5c",
-          "version": null
-        }
-      },
-      {
-        "package": "ParameterizedTestUtil",
-        "repositoryURL": "https://github.com/417-72KI/ParameterizedTestUtil.git",
-        "state": {
-          "branch": null,
-          "revision": "8612413908048f6227ba5517c75fed8234481c94",
-          "version": "1.0.0"
-        }
-      },
-      {
-        "package": "RequestKit",
-        "repositoryURL": "https://github.com/nerdishbynature/requestkit",
-        "state": {
-          "branch": null,
-          "revision": "e266fd8ac7d71caf4422ffc56ad98ff368329fde",
-          "version": "3.1.0"
-        }
-      },
-      {
-        "package": "swift-argument-parser",
-        "repositoryURL": "https://github.com/apple/swift-argument-parser.git",
-        "state": {
-          "branch": null,
-          "revision": "fee6933f37fde9a5e12a1e4aeaa93fe60116ff2a",
-          "version": "1.2.2"
-        }
+  "pins" : [
+    {
+      "identity" : "octokit.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nerdishbynature/octokit.swift",
+      "state" : {
+        "revision" : "f762f1566f7cd0e683b9329f169c28ab6ef993cc",
+        "version" : "0.12.0"
       }
-    ]
-  },
-  "version": 1
+    },
+    {
+      "identity" : "parameterizedtestutil",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/417-72KI/ParameterizedTestUtil.git",
+      "state" : {
+        "revision" : "8612413908048f6227ba5517c75fed8234481c94",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "requestkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nerdishbynature/requestkit",
+      "state" : {
+        "revision" : "8b0258ea2a4345cbcac90509b764faacea12efb0",
+        "version" : "3.2.1"
+      }
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser.git",
+      "state" : {
+        "revision" : "fee6933f37fde9a5e12a1e4aeaa93fe60116ff2a",
+        "version" : "1.2.2"
+      }
+    }
+  ],
+  "version" : 2
 }
