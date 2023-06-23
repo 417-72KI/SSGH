@@ -2,27 +2,6 @@ import Foundation
 import OctoKit
 
 extension GitHubClientImpl {
-    @available(*, deprecated, message: "Use `async` function instead.")
-    public func getUser(by userId: String) -> Result<User, GitHubAPIError> {
-        // swiftlint:disable:next implicitly_unwrapped_optional
-        var result: Result<OctoKit.User, Swift.Error>!
-        let semaphore = DispatchSemaphore(value: 0)
-        octoKit.user(session, name: userId) {
-            result = $0
-            semaphore.signal()
-        }
-        semaphore.wait()
-        return result.map(User.init)
-            .mapError {
-                if ($0 as NSError).code == 404 {
-                    return .userNotFound(userId)
-                }
-                return .other($0)
-            }
-    }
-}
-
-extension GitHubClientImpl {
     public func getUser(by userId: String) async throws -> User {
         try await withCheckedThrowingContinuation { continuation in
             octoKit.user(session, name: userId) {
