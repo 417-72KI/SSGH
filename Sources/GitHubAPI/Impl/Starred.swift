@@ -2,6 +2,7 @@ import Foundation
 import OctoKit
 
 extension GitHubClientImpl {
+    @available(*, deprecated, message: "Use `async` function instead.")
     public func isStarred(userId: String, repo: String) -> Result<Bool, GitHubAPIError> {
         // swiftlint:disable:next implicitly_unwrapped_optional
         var result: Result<Bool, Swift.Error>!
@@ -15,6 +16,7 @@ extension GitHubClientImpl {
             .mapError(GitHubAPIError.other)
     }
 
+    @available(*, deprecated, message: "Use `async` function instead.")
     public func star(userId: String, repo: String) -> Result<Void, GitHubAPIError> {
         var error: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
@@ -29,6 +31,7 @@ extension GitHubClientImpl {
         return .success(())
     }
 
+    @available(*, deprecated, message: "Use `async` function instead.")
     public func unstar(userId: String, repo: String) -> Result<Void, GitHubAPIError> {
         var error: Swift.Error?
         let semaphore = DispatchSemaphore(value: 0)
@@ -44,7 +47,6 @@ extension GitHubClientImpl {
     }
 }
 
-#if compiler(>=5.5.2) && canImport(_Concurrency)
 extension GitHubClientImpl {
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func isStarred(userId: String, repo: String) async throws -> Bool {
@@ -86,4 +88,3 @@ extension GitHubClientImpl {
         } as Void
     }
 }
-#endif

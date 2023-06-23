@@ -22,6 +22,4 @@ extension Release {
     }
 }
 
-#if compiler(>=5.5.2) && canImport(_Concurrency)
 extension Release: @unchecked Sendable {}
-#endif

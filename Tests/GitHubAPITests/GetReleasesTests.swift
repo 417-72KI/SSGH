@@ -53,7 +53,6 @@ final class GetReleasesTests: XCTestCase {
     }
 
     // MARK: - async/await
-    #if compiler(>=5.5.2) && canImport(_Concurrency)
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testGetReleases_success_async() async throws {
         let stubSession = StubURLSession(path: "/repos/417-72KI/SSGH/releases",
@@ -104,5 +103,4 @@ final class GetReleasesTests: XCTestCase {
             XCTAssertEqual($0 as? GitHubAPIError, .repoNotFound("417-72KI/SGH"))
         }
     }
-    #endif
 }

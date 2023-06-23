@@ -2,6 +2,7 @@ import Foundation
 import OctoKit
 
 extension GitHubClientImpl {
+    @available(*, deprecated, message: "Use `async` function instead.")
     public func getRepos(for userId: String, page: UInt = 1) -> Result<[Repo], GitHubAPIError> {
         // swiftlint:disable:next implicitly_unwrapped_optional
         var result: Result<[OctoKit.Repository], Swift.Error>!
@@ -20,7 +21,6 @@ extension GitHubClientImpl {
     }
 }
 
-#if compiler(>=5.5.2) && canImport(_Concurrency)
 extension GitHubClientImpl {
     @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func getRepos(for userId: String, page: UInt = 1) async throws -> [Repo] {
@@ -40,4 +40,3 @@ extension GitHubClientImpl {
         }
     }
 }
-#endif
