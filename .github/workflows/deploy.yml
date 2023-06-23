@@ -14,8 +14,8 @@ jobs:
       - uses: actions/checkout@v3
       - id: set-matrix
         run: |
-          xcode_version=$(cat versions.json | jq -rc '.xcode_version')
-          swift_version=$(cat versions.json | jq -rc '.swift_version | max')
+          xcode_version=$(cat .github/versions.json | jq -rc '.xcode_version')
+          swift_version=$(cat .github/versions.json | jq -rc '.swift_version | max')
           echo "::set-output name=xcode-version::$xcode_version"
           echo "::set-output name=swift-version::$swift_version"
     outputs:
