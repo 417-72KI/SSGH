@@ -18,7 +18,7 @@ jobs:
       - id: set-matrix
         run: |
           matrix=$(cat .github/versions.json | jq -rc .)
-          echo "::set-output name=matrix::$matrix"
+          echo "matrix=$matrix" >> $GITHUB_OUTPUT
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
   macOS:

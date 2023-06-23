@@ -16,8 +16,8 @@ jobs:
         run: |
           xcode_version=$(cat .github/versions.json | jq -rc '.xcode_version')
           swift_version=$(cat .github/versions.json | jq -rc '.swift_version | max')
-          echo "::set-output name=xcode-version::$xcode_version"
-          echo "::set-output name=swift-version::$swift_version"
+          echo "xcode-version=$xcode_version" >> $GITHUB_OUTPUT
+          echo "swift-version=$swift_version" >> $GITHUB_OUTPUT
     outputs:
       xcode-version: ${{ steps.set-matrix.outputs.xcode-version }}
       swift-version: ${{ steps.set-matrix.outputs.swift-version }}

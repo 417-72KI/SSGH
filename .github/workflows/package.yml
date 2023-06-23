@@ -20,7 +20,7 @@ jobs:
         id: resolve
         run: |
           swift package resolve
-          echo "::set-output name=count::$(git diff --name-only | grep -E '^Package.resolved$' | wc -l)"
+          echo "count=$(git diff --name-only | grep -E '^Package.resolved$' | wc -l)" >> $GITHUB_OUTPUT
       - name: Commit Package.resolved
         if: steps.resolve.outputs.count > 0
         run: |
