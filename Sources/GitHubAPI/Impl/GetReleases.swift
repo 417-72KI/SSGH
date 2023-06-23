@@ -21,7 +21,6 @@ extension GitHubClientImpl {
 }
 
 extension GitHubClientImpl {
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func getReleases(for userId: String, repo: String) async throws -> [Release] {
         try await withCheckedThrowingContinuation { continuation in
             octoKit.listReleases(session, owner: userId, repository: repo) {

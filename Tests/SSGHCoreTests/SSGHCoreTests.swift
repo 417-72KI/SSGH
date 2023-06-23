@@ -117,7 +117,6 @@ extension StubClient {
 }
 
 extension StubClient {
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func getUser(by userId: String) async throws -> User {
         switch getUser(by: userId) as Result {
         case let .success(result): return result
@@ -125,7 +124,6 @@ extension StubClient {
         }
     }
 
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func getRepos(for userId: String, page: UInt) async throws -> [Repo] {
         switch getRepos(for: userId, page: page) as Result {
         case let .success(result): return result
@@ -133,7 +131,6 @@ extension StubClient {
         }
     }
 
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func getReleases(for userId: String, repo: String) async throws -> [Release] {
         switch getReleases(for: userId, repo: repo) as Result {
         case let .success(result): return result
@@ -141,7 +138,6 @@ extension StubClient {
         }
     }
 
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func isStarred(userId: String, repo: String) async throws -> Bool {
         switch isStarred(userId: userId, repo: repo) as Result {
         case let .success(result): return result
@@ -149,7 +145,6 @@ extension StubClient {
         }
     }
 
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func star(userId: String, repo: String) async throws {
         switch star(userId: userId, repo: repo) as Result {
         case let .success(result): return result
@@ -157,7 +152,6 @@ extension StubClient {
         }
     }
 
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func unstar(userId: String, repo: String) async throws {
         switch unstar(userId: userId, repo: repo) as Result {
         case let .success(result): return result

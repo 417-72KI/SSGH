@@ -36,7 +36,6 @@ final class GetUserTests: XCTestCase {
     }
 
     // MARK: - async/await
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testGetUser_success_async() async throws {
         let stubSession = StubURLSession(path: "/users/417-72KI",
                                          method: .get,
@@ -52,7 +51,6 @@ final class GetUserTests: XCTestCase {
         XCTAssertTrue(stubSession.wasCalled)
     }
     
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testGetUser_notExist_async() async throws {
         let stubSession = StubURLSession(path: "/users/41772KI",
                                          method: .get,

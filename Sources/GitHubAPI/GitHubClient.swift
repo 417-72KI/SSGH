@@ -14,17 +14,11 @@ public protocol GitHubClient {
     @available(*, deprecated, message: "Use `async` function instead.")
     func unstar(userId: String, repo: String) -> Result<Void, GitHubAPIError>
 
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func getUser(by userId: String) async throws -> User
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func getRepos(for userId: String, page: UInt) async throws -> [Repo]
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func getReleases(for userId: String, repo: String) async throws -> [Release]
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func isStarred(userId: String, repo: String) async throws -> Bool
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func star(userId: String, repo: String) async throws
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func unstar(userId: String, repo: String) async throws
 }
 

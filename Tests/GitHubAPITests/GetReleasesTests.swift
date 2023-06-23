@@ -53,7 +53,6 @@ final class GetReleasesTests: XCTestCase {
     }
 
     // MARK: - async/await
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testGetReleases_success_async() async throws {
         let stubSession = StubURLSession(path: "/repos/417-72KI/SSGH/releases",
                                          method: .get,
@@ -73,7 +72,6 @@ final class GetReleasesTests: XCTestCase {
         XCTAssertTrue(stubSession.wasCalled)
     }
 
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testGetReleases_userNotExist_async() async throws {
         let stubSession = StubURLSession(path: "/repos/41772KI/SSGH/releases",
                                          method: .get,
@@ -89,7 +87,6 @@ final class GetReleasesTests: XCTestCase {
         XCTAssertTrue(stubSession.wasCalled)
     }
 
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testGetReleases_repoNotExist_async() async throws {
         let stubSession = StubURLSession(path: "/repos/417-72KI/SGH/releases",
                                          method: .get,

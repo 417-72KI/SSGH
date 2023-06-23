@@ -60,7 +60,6 @@ final class StarredTests: XCTestCase {
     }
 
     // MARK: - async/await
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testIsStarred_true_async() async throws {
         let stubSession = StubURLSession(path: "/user/starred/417-72KI/SSGH",
                                          method: .get,
@@ -73,7 +72,6 @@ final class StarredTests: XCTestCase {
         XCTAssertTrue(stubSession.wasCalled)
     }
 
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testIsStarred_false_async() async throws {
         let stubSession = StubURLSession(path: "/user/starred/417-72KI/SSGH",
                                          method: .get,
@@ -86,7 +84,6 @@ final class StarredTests: XCTestCase {
         XCTAssertTrue(stubSession.wasCalled)
     }
 
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testStar_success_async() async throws {
         let stubSession = StubURLSession(path: "/user/starred/417-72KI/SSGH",
                                          method: .put,
@@ -100,7 +97,6 @@ final class StarredTests: XCTestCase {
         XCTAssertTrue(stubSession.wasCalled)
     }
 
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     func testUnstar_success_async() async throws {
         let stubSession = StubURLSession(path: "/user/starred/417-72KI/SSGH",
                                          method: .delete,

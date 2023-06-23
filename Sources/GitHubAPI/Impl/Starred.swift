@@ -48,7 +48,6 @@ extension GitHubClientImpl {
 }
 
 extension GitHubClientImpl {
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func isStarred(userId: String, repo: String) async throws -> Bool {
         try await withCheckedThrowingContinuation { continuation in
             octoKit.star(session, owner: userId, repository: repo) {
@@ -62,7 +61,6 @@ extension GitHubClientImpl {
         }
     }
 
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func star(userId: String, repo: String) async throws {
         try await withCheckedThrowingContinuation { continuation in
             octoKit.putStar(session, owner: userId, repository: repo) {
@@ -75,7 +73,6 @@ extension GitHubClientImpl {
         } as Void
     }
 
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func unstar(userId: String, repo: String) async throws {
         try await withCheckedThrowingContinuation { continuation in
             octoKit.deleteStar(session, owner: userId, repository: repo) {

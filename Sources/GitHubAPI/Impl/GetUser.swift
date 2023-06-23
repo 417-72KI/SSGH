@@ -23,7 +23,6 @@ extension GitHubClientImpl {
 }
 
 extension GitHubClientImpl {
-    @available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
     public func getUser(by userId: String) async throws -> User {
         try await withCheckedThrowingContinuation { continuation in
             octoKit.user(session, name: userId) {
