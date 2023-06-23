@@ -9,13 +9,13 @@
 You can star all repos for the specific user.
 
 ## Requirement
-- macOS 10.15 or newer
+- macOS 12 or newer
 
 ## Installation
 ### Mint
 
 ```sh
-mint install 417-72KI/SSGH@1.1.1
+mint install 417-72KI/SSGH@1.3.0
 ```
 
 ### Homebrew
