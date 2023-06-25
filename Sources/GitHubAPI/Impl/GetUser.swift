@@ -3,18 +3,15 @@ import OctoKit
 
 extension GitHubClientImpl {
     public func getUser(by userId: String) async throws -> User {
-        try await withCheckedThrowingContinuation { continuation in
-            octoKit.user(session, name: userId) {
-                switch $0 {
-                case let .success(result):
-                    continuation.resume(returning: User(result))
-                case let .failure(error):
-                    if (error as NSError).code == 404 {
-                        continuation.resume(throwing: GitHubAPIError.userNotFound(userId))
-                    } else {
-                        continuation.resume(throwing: GitHubAPIError.other(error))
-                    }
-                }
+        do {
+            let user = try await octoKit.user(session, name: userId)
+            return User(user)
+        } catch {
+            if case 404 = (error as NSError).code {
+                throw GitHubAPIError.userNotFound(userId)
+            } else {
+                print(error)
+                throw GitHubAPIError.other(error)
             }
         }
     }
