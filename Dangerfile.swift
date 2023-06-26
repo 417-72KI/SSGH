@@ -3,6 +3,7 @@ import Danger
 let danger = Danger()
 
 // fileImport: DangerfileExtensions/Git+Extension.swift
+// fileImport: DangerfileExtensions/OctoKit+Extension.swift
 
 SwiftLint.lint(inline: true)
 
@@ -24,4 +25,21 @@ if danger.git.modifiedFiles.contains("LICENSE") {
 
 if danger.git.deletedFiles.contains("LICENSE") {
     danger.fail("Do not delete LICENSE !!")
+}
+
+if (danger.warnings + danger.fails).isEmpty,
+   let github = danger.github {
+    do {
+        let repo = github.pullRequest.base.repo
+        let pullRequestNumber = github.pullRequest.number
+
+        let review = try await github.api.postReview(owner: repo.owner.login,
+                                                     repository: repo.name,
+                                                     pullRequestNumber: pullRequestNumber,
+                                                     event: .approve)
+        print(review)
+    } catch {
+        print(error)
+        danger.fail(error.localizedDescription)
+    }
 }
