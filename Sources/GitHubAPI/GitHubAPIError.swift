@@ -1,13 +1,13 @@
 import Foundation
 
-public enum GitHubAPIError: Error {
+public enum GitHubAPIError: LocalizedError {
     case userNotFound(String)
     case repoNotFound(String)
     case other(Swift.Error)
 }
 
-extension GitHubAPIError: CustomStringConvertible {
-    public var description: String {
+extension GitHubAPIError {
+    public var errorDescription: String? {
         switch self {
         case let .userNotFound(userId):
             return "User(\(userId)) not found."
