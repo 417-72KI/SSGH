@@ -14,6 +14,7 @@ extension Octokit {
         comments: [Review.Comment] = []
     ) async throws -> Review {
         let router = ReviewRouter.postReview(configuration, owner, repository, pullRequestNumber, commitId, event, body, comments)
+        print(router)
         return try await router.load(dateDecodingStrategy: .formatted(Time.rfc3339DateFormatter), expectedResultType: Review.self)
     }
 }
