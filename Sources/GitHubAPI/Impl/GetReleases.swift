@@ -3,18 +3,14 @@ import OctoKit
 
 extension GitHubClientImpl {
     public func getReleases(for userId: String, repo: String) async throws -> [Release] {
-        try await withCheckedThrowingContinuation { continuation in
-            octoKit.listReleases(session, owner: userId, repository: repo) {
-                switch $0 {
-                case let .success(result):
-                    continuation.resume(returning: result.map(Release.init))
-                case let .failure(error):
-                    if (error as NSError).code == 404 {
-                        continuation.resume(throwing: GitHubAPIError.repoNotFound("\(userId)/\(repo)"))
-                    } else {
-                        continuation.resume(throwing: GitHubAPIError.other(error))
-                    }
-                }
+        do {
+            let releases = try await octoKit.listReleases(session, owner: userId, repository: repo)
+            return releases.map(Release.init)
+        } catch {
+            if case 404 = (error as NSError).code {
+                throw GitHubAPIError.repoNotFound("\(userId)/\(repo)")
+            } else {
+                throw GitHubAPIError.other(error)
             }
         }
     }

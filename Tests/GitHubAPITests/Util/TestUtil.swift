@@ -143,12 +143,12 @@ extension StubURLSession {
         guard url.host == expectedURL.host,
               url.path == expectedURL.path,
               httpMethod == expectedHTTPMethod else {
-                  throw StubError.unexpectedRequest(
-                    expected: (expectedHTTPMethod, expectedURL),
-                    actual: (httpMethod, url)
-                  )
-              }
-        let data = try XCTUnwrap(responseData, file: file, line: line)
+            throw StubError.unexpectedRequest(
+                expected: (expectedHTTPMethod, expectedURL),
+                actual: (httpMethod, url)
+            )
+        }
+        let data = responseData ?? Data()
         let response = try XCTUnwrap(
             HTTPURLResponse(
                 url: request.url!,
