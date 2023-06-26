@@ -6,12 +6,8 @@ extension GitHubClientImpl {
         do {
             let repos = try await octoKit.repositories(session, owner: userId, page: "\(page)")
             return repos.map(Repo.init)
-        } catch {
-            if case 404 = (error as NSError).code {
-                throw GitHubAPIError.userNotFound(userId)
-            } else {
-                throw GitHubAPIError.other(error)
-            }
+        } catch let error as NSError where error.code == 404 {
+            throw GitHubAPIError.userNotFound(userId)
         }
     }
 }
