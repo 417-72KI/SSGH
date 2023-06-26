@@ -32,11 +32,13 @@ if (danger.warnings + danger.fails).isEmpty,
     do {
         let repo = github.pullRequest.base.repo
         let pullRequestNumber = github.pullRequest.number
-
-        let review = try await github.api.postReview(owner: repo.owner.login,
-                                                     repository: repo.name,
-                                                     pullRequestNumber: pullRequestNumber,
-                                                     event: .approve)
+        
+        let review = try await github.api.postReview(
+            owner: repo.owner.login,
+            repository: repo.name,
+            pullRequestNumber: pullRequestNumber,
+            event: .approve
+        )
         print(review)
     } catch {
         print(error)

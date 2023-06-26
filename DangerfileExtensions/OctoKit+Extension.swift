@@ -4,18 +4,19 @@ import RequestKit
 
 extension Octokit {
     @discardableResult
-    func postReview(owner: String,
-                    repository: String,
-                    pullRequestNumber: Int,
-                    commitId: String? = nil,
-                    event: Review.Event,
-                    body: String? = nil,
-                    comments: [Review.Comment] = []) async throws -> Review {
+    func postReview(
+        owner: String,
+        repository: String,
+        pullRequestNumber: Int,
+        commitId: String? = nil,
+        event: Review.Event,
+        body: String? = nil,
+        comments: [Review.Comment] = []
+    ) async throws -> Review {
         let router = ReviewRouter.postReview(configuration, owner, repository, pullRequestNumber, commitId, event, body, comments)
         return try await router.load(dateDecodingStrategy: .formatted(Time.rfc3339DateFormatter), expectedResultType: Review.self)
     }
 }
-
 
 // MARK: -
 extension Review {
@@ -51,6 +52,7 @@ extension Review.Comment {
 
 // MARK: -
 private enum ReviewRouter {
+    // swiftlint:disable:next enum_case_associated_values_count discouraged_optional_collection
     case postReview(Configuration, String, String, Int, String?, Review.Event?, String?, [Review.Comment]?)
 }
 
@@ -64,7 +66,7 @@ extension ReviewRouter: JSONPostRouter {
         }
     }
 
-    var params: [String : Any] {
+    var params: [String: Any] {
         switch self {
         case let .postReview(_, _, _, _, commitId, event, body, comments):
             var parameters = [String: Any]()
