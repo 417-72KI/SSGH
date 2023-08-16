@@ -10,7 +10,7 @@ let package = Package(
         .executable(name: "ssgh", targets: ["SSGH"])
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.2"),
+        .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.3"),
         .package(url: "https://github.com/nerdishbynature/octokit.swift", from: "0.12.0"),
         .package(url: "https://github.com/417-72KI/ParameterizedTestUtil.git", from: "1.0.0")
     ],
