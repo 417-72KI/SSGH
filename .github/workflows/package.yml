@@ -4,6 +4,7 @@ on:
     branches: main
     paths: 
       - Package.swift
+      - Package.resolved
       - .github/workflows/package.yml
 jobs:
   resolve-package:
