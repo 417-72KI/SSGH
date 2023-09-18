@@ -2,7 +2,9 @@ name: Package
 on:
   push:
     branches: main
-    paths: Package.swift
+    paths: 
+      - Package.swift
+      - .github/workflows/package.yml
 jobs:
   resolve-package:
     name: Resolve package
@@ -27,4 +29,4 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
           git commit -m "Update Package.resolved" Package.resolved
-          git push
+          git push -f
