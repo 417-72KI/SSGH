@@ -30,3 +30,11 @@ jobs:
           git config user.email github-actions@github.com
           git commit -m "Update Package.resolved" Package.resolved
           git push -f
+      - name: Create Pull Request if failed
+        if: ${{ steps.resolve.outputs.count > 0 && failure() }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git checkout -b 'auto/update-package-resolved'
+          git push -fu origin 'auto/update-package-resolved'
+          gh pr create -t 'Update Package.resolved' -b ''
