@@ -9,7 +9,8 @@
 You can star all repos for the specific user.
 
 ## Requirement
-- macOS 12 or newer
+- macOS 12+
+- Swift 5.7+
 
 ## Installation
 ### Mint
