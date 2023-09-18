@@ -1,14 +1,27 @@
 name: Package
 on:
-  push:
-    branches: main
-    paths: Package.swift
+  pull_request:
+    paths: 
+      - Package.swift
+      - .github/workflows/package.yml
 jobs:
+  precheck:
+    runs-on: ubuntu-latest
+    outputs:
+      files_changed: ${{ steps.file_changes.outputs.files }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: file_changes
+        uses: trilom/file-changes-action@v1.2.4
   resolve-package:
     name: Resolve package
     runs-on: macos-latest
+    needs: precheck
+    if: ${{ !contains(fromJson(needs.precheck.outputs.files_changed), 'Package.resolved') }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
       - uses: actions/cache@v3
         with:
           path: .build
