@@ -14,7 +14,7 @@ jobs:
     name: Generate matrix
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - id: set-matrix
         run: |
           matrix=$(cat .github/versions.json | jq -rc .)
@@ -28,7 +28,7 @@ jobs:
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ fromJson(needs.generate-matrix.outputs.matrix).xcode_version }}.app/Contents/Developer
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/cache@v3
         with:
           path: .build
@@ -65,7 +65,7 @@ jobs:
     container:
       image: swift:${{ matrix.swift_version }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/cache@v3
         with:
           path: .build
