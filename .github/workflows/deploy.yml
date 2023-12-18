@@ -45,7 +45,7 @@ jobs:
           "$EXECUTABLE_PATH" --version
           zip -j ".build/${EXECUTABLE_NAME}-macos-v${EXECUTABLE_VERSION}.zip" "$EXECUTABLE_PATH" LICENSE
       - name: Upload zip
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macos
           path: .build/${{ env.EXECUTABLE_NAME }}-macos-v${{ env.EXECUTABLE_VERSION }}.zip
@@ -79,7 +79,7 @@ jobs:
           apt-get -qq update && apt-get -qq install -y zip
           zip -j .build/${EXECUTABLE_NAME}-linux-v${EXECUTABLE_VERSION}.zip "$EXECUTABLE_PATH" LICENSE
       - name: Upload zip
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux
           path: .build/${{ env.EXECUTABLE_NAME }}-linux-v${{ env.EXECUTABLE_VERSION }}.zip
