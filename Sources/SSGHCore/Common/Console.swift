@@ -23,7 +23,7 @@ public func dumpError(_ message: @autoclosure () -> String, file: StaticString =
     dump(logType: .error, message(), file: file, line: line)
 }
 
-public func dumpError(_ error: @autoclosure () -> Error, file: StaticString = #file, line: UInt = #line) {
+public func dumpError(_ error: @autoclosure () -> any Error, file: StaticString = #file, line: UInt = #line) {
     dumpError(error().localizedDescription, file: file, line: line)
 }
 
@@ -31,7 +31,7 @@ public func dumpWarn(_ message: @autoclosure () -> String, file: StaticString = 
     dump(logType: .warn, message(), file: file, line: line)
 }
 
-public func dumpWarn(_ error: @autoclosure () -> Error, file: StaticString = #file, line: UInt = #line) {
+public func dumpWarn(_ error: @autoclosure () -> any Error, file: StaticString = #file, line: UInt = #line) {
     dumpWarn(error().localizedDescription, file: file, line: line)
 }
 

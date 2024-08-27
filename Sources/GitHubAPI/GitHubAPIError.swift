@@ -3,7 +3,7 @@ import Foundation
 public enum GitHubAPIError: Error {
     case userNotFound(String)
     case repoNotFound(String)
-    case other(Swift.Error)
+    case other(any Swift.Error)
 }
 
 extension GitHubAPIError: CustomStringConvertible {

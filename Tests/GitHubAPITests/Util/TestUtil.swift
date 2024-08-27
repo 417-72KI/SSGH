@@ -85,7 +85,7 @@ extension StubURLSession {
 }
 
 extension StubURLSession {
-    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol {
+    func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, (any Error)?) -> Void) -> any URLSessionDataTaskProtocol {
         defer { wasCalled = true }
         do {
             let url = try XCTUnwrap(request.url, file: file, line: line)
@@ -110,7 +110,7 @@ extension StubURLSession {
         return StubURLSessionDataTask()
     }
 
-    func uploadTask(with request: URLRequest, fromData bodyData: Data?, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTaskProtocol {
+    func uploadTask(with request: URLRequest, fromData bodyData: Data?, completionHandler: @escaping (Data?, URLResponse?, (any Error)?) -> Void) -> any URLSessionDataTaskProtocol {
         defer { wasCalled = true }
         do {
             let url = try XCTUnwrap(request.url, file: file, line: line)
@@ -135,7 +135,7 @@ extension StubURLSession {
         return StubURLSessionDataTask()
     }
 
-    func data(for request: URLRequest, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
+    func data(for request: URLRequest, delegate: (any URLSessionTaskDelegate)?) async throws -> (Data, URLResponse) {
         defer { wasCalled = true }
 
         let url = try XCTUnwrap(request.url, file: file, line: line)
@@ -162,7 +162,7 @@ extension StubURLSession {
         return (data, response)
     }
 
-    func upload(for request: URLRequest, from bodyData: Data, delegate: URLSessionTaskDelegate?) async throws -> (Data, URLResponse) {
+    func upload(for request: URLRequest, from bodyData: Data, delegate: (any URLSessionTaskDelegate)?) async throws -> (Data, URLResponse) {
         defer { wasCalled = true }
 
         let url = try XCTUnwrap(request.url, file: file, line: line)
@@ -205,7 +205,7 @@ extension XCTest {
         _ message: @autoclosure () -> String = "",
         file: StaticString = #filePath,
         line: UInt = #line,
-        _ errorHandler: (_ error: Error) -> Void = { _ in }
+        _ errorHandler: (_ error: any Error) -> Void = { _ in }
     ) async {
         do {
             _ = try await expression()

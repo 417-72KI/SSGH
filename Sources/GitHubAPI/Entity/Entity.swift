@@ -18,7 +18,7 @@ struct EmptyEntity: Entity {
         self.response = response
     }
 
-    init(from decoder: Decoder) throws {
+    init(from decoder: any Decoder) throws {
         throw DecodingError.typeMismatch(EmptyEntity.self, .init(codingPath: [], debugDescription: ""))
     }
 }

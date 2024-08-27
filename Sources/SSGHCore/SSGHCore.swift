@@ -2,7 +2,7 @@ import Foundation
 import GitHubAPI
 
 public struct SSGHCore {
-    let gitHubClient: GitHubClient
+    let gitHubClient: any GitHubClient
     let dryRunMode: Bool
 }
 

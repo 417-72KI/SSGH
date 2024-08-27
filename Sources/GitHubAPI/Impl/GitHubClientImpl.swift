@@ -8,7 +8,7 @@ import RequestKit
 public func defaultGitHubClient(
     token: String,
     session: any RequestKitURLSession = URLSession.shared
-) -> GitHubClient {
+) -> any GitHubClient {
     GitHubClientImpl(token: token, session: session)
 }
 
