@@ -1,17 +1,35 @@
-name: Test
+name: CI
 on: 
   pull_request:
-    paths:
-      - '**.swift'
-      - 'Package.resolved'
-      - '.github/workflows/test.yml'
-      - '.github/versions.json'
+    types: [opened, synchronize, edited]
 concurrency: 
   group: ${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true
 jobs:
+  needs-test:
+    name: Needs Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Detect files from diff to run tests
+        id: detect-swift-files
+        run: |
+          DIFF="$(gh pr view ${{ github.event.pull_request.html_url }} --json files --jq '.files | map(.path)' | jq -rc '.[]')"
+          value=false
+          for file in $(echo '[".swift", "Package.resolved", ".github/workflows/ci.yml", ".github/versions.json"]' | jq -r '.[]'); do
+            if [ $(echo "$DIFF" | grep "$file" | wc -l | tr -d ' ') -gt 0 ]; then
+              value=true
+              break
+            fi
+          done
+          echo result=$value >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
+    outputs:
+      result: ${{ steps.detect-swift-files.outputs.result }}
   generate-matrix:
     name: Generate matrix
+    needs: needs-test
+    if: ${{ fromJson(needs.needs-test.outputs.result) }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -78,3 +96,14 @@ jobs:
         run: swift build
       - name: test
         run: swift package clean && swift test
+  danger:
+    name: Danger
+    needs: [macOS, linux]
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Danger
+        uses: 417-72KI/danger-swiftlint@v5.10
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
