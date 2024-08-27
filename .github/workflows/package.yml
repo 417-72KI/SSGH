@@ -11,7 +11,7 @@ concurrency:
 jobs:
   resolve-package:
     name: Resolve package
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
       - uses: actions/create-github-app-token@v1
         id: app-token
