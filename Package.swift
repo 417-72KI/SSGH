@@ -55,6 +55,7 @@ let package = Package(
 )
 
 if isDevelop {
+    #if os(macOS)
     package.dependencies.append(contentsOf: [
         .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.56.2"),
     ])
@@ -65,4 +66,5 @@ if isDevelop {
             .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"),
         ])
     }
+    #endif
 }
