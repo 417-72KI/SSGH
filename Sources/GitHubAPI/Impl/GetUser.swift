@@ -4,7 +4,7 @@ import OctoKit
 extension GitHubClientImpl {
     public func getUser(by userId: String) async throws -> User {
         do {
-            let user = try await octoKit.user(session, name: userId)
+            let user = try await octoKit.user(name: userId)
             return User(user)
         } catch {
             if case 404 = (error as NSError).code {

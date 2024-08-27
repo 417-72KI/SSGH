@@ -5,7 +5,10 @@ import FoundationNetworking
 import OctoKit
 import RequestKit
 
-public func defaultGitHubClient(token: String, session: RequestKitURLSession = URLSession.shared) -> GitHubClient {
+public func defaultGitHubClient(
+    token: String,
+    session: any RequestKitURLSession = URLSession.shared
+) -> GitHubClient {
     GitHubClientImpl(token: token, session: session)
 }
 
@@ -13,10 +16,8 @@ final class GitHubClientImpl: GitHubClient {
     let domain = "https://github.com"
 
     let octoKit: Octokit
-    let session: RequestKitURLSession
 
-    init(token: String, session: RequestKitURLSession) {
-        octoKit = .init(.init(token))
-        self.session = session
+    init(token: String, session: any RequestKitURLSession) {
+        octoKit = .init(.init(token), session: session)
     }
 }
