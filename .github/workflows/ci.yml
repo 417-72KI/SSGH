@@ -42,7 +42,7 @@ jobs:
   macOS:
     name: macOS
     needs: generate-matrix
-    runs-on: macOS-12
+    runs-on: macOS-latest
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ fromJson(needs.generate-matrix.outputs.matrix).xcode_version }}.app/Contents/Developer
     steps:
