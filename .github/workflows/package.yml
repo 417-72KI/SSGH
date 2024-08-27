@@ -6,12 +6,24 @@ on:
       - Package.swift
       - Package.resolved
       - .github/workflows/package.yml
+concurrency: 
+  group: ${{ github.ref }}-${{ github.workflow }}
+  cancel-in-progress: true
 jobs:
   resolve-package:
     name: Resolve package
     runs-on: macos-latest
     steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+      - name: Set token to env
+        run: echo GH_TOKEN=${{ steps.app-token.outputs.token }} >> $GITHUB_ENV
       - uses: actions/checkout@v4
+        with:
+          token: ${{ env.GH_TOKEN }}
       - uses: actions/cache@v4
         with:
           path: .build
@@ -34,7 +46,7 @@ jobs:
       - name: Create Pull Request if failed
         if: ${{ steps.resolve.outputs.count > 0 && failure() }}
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ env.GH_TOKEN }}
         run: |
           git checkout -b 'auto/update-package-resolved'
           git push -fu origin 'auto/update-package-resolved'
