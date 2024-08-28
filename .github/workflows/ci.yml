@@ -42,7 +42,7 @@ jobs:
   macOS:
     name: macOS
     needs: generate-matrix
-    runs-on: macOS-12
+    runs-on: macOS-14
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ fromJson(needs.generate-matrix.outputs.matrix).xcode_version }}.app/Contents/Developer
     steps:
@@ -54,6 +54,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-swift
             ${{ runner.os }}-
+      - name: Update User Defaults
+        run: |
+          defaults write com.apple.dt.XCBuild EnableSwiftBuildSystemIntegration 1
+          defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
+          defaults write com.apple.dt.Xcode IDESkipMacroFingerprintValidation -bool YES    
       - name: test
         run: |
           swift package clean

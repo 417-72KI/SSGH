@@ -5,6 +5,7 @@ set -eu
 EXECUTABLE_NAME=$1
 APPLICATION_INFO_FILE_NAME='ApplicationInfo.swift'
 APPLICATION_INFO_FILE_PATH="$(find Sources -name "${APPLICATION_INFO_FILE_NAME}")"
+PACKAGE_SWIFT_FILE_PATH='Package.swift'
 
 if [ `git symbolic-ref --short HEAD` != 'main' ]; then
     echo 'Release is enabled only in main.'
@@ -31,13 +32,20 @@ cd $(git rev-parse --show-toplevel)
 # Version
 TAG=$(swift run ssgh --version 2>/dev/null)
 if [ "$(git tag | grep -E "^${TAG}$")" != '' ]; then
-    echo "\e[31mTag: '${TAG}' already exists.\e[m"
+    echo "\e[31mTag: '$TAG' already exists.\e[m"
     exit 1
 fi
 
+# Package
+sed -i '' -E "s/(let isDevelop = )true/\1false/g" "$PACKAGE_SWIFT_FILE_PATH"
+
 # TAG
-git commit -m "Bump version to ${TAG}" "${APPLICATION_INFO_FILE_PATH}"
+git commit -m "Bump version to $TAG" "$APPLICATION_INFO_FILE_PATH" "$PACKAGE_SWIFT_FILE_PATH"
 git push origin main
 
 # Release
-gh release create ${TAG}
+gh release create "$TAG"
+
+sed -i '' -E "s/(let isDevelop = )false/\1true/g" "$PACKAGE_SWIFT_FILE_PATH"
+git commit -m "Set develop mode" "$PACKAGE_SWIFT_FILE_PATH"
+git push origin main

@@ -1,7 +1,9 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.9
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+
+let isDevelop = true
 
 let package = Package(
     name: "SSGH",
@@ -51,3 +53,18 @@ let package = Package(
     ],
     swiftLanguageVersions: [.v5]
 )
+
+if isDevelop {
+    #if os(macOS)
+    package.dependencies.append(contentsOf: [
+        .package(url: "https://github.com/SimplyDanny/SwiftLintPlugins", from: "0.56.2"),
+    ])
+
+    package.targets.filter { $0.type == .regular }.forEach {
+        if $0.plugins == nil { $0.plugins = [] }
+        $0.plugins?.append(contentsOf: [
+            .plugin(name: "SwiftLintBuildToolPlugin", package: "SwiftLintPlugins"),
+        ])
+    }
+    #endif
+}
