@@ -71,7 +71,7 @@ jobs:
           -clonedSourcePackagesDirPath '.build' \
           -resultBundlePath 'test_output/SSGH.xcresult' \
           clean test | xcpretty
-      - uses: kishikawakatsumi/xcresulttool@v1
+      - uses: kishikawakatsumi/xcresulttool@2b37f116695328d5e503ac8dadca0f1545a51da4 # v1
         if: success() || failure()
         with:
           path: test_output/SSGH.xcresult
@@ -109,6 +109,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Danger
-        uses: 417-72KI/danger-swiftlint@v5.10
+        uses: 417-72KI/danger-swiftlint@be83293124f2c7a628c7610583d3cc67a367c92b # v5.10
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
