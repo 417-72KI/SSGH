@@ -107,8 +107,15 @@ jobs:
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+      - name: Set token to env
+        run: echo GH_TOKEN=${{ steps.app-token.outputs.token }} >> $GITHUB_ENV
       - uses: actions/checkout@v4
       - name: Danger
         uses: 417-72KI/danger-swiftlint@43b6256431e50e838b15f0ade42669db00308b0f # v6.1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
