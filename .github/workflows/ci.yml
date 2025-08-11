@@ -32,7 +32,7 @@ jobs:
     if: ${{ fromJson(needs.needs-test.outputs.result) }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - id: set-matrix
         run: |
           matrix=$(cat .github/versions.json | jq -rc .)
@@ -46,7 +46,7 @@ jobs:
     env:
       DEVELOPER_DIR: /Applications/Xcode_${{ fromJson(needs.generate-matrix.outputs.matrix).xcode_version }}.app/Contents/Developer
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/cache@v4
         with:
           path: .build
@@ -88,7 +88,7 @@ jobs:
     container:
       image: swift:${{ matrix.swift_version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/cache@v4
         with:
           path: .build
@@ -107,7 +107,7 @@ jobs:
     if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Danger
         uses: 417-72KI/danger-swiftlint@43b6256431e50e838b15f0ade42669db00308b0f # v6.1
         env:
