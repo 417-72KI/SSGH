@@ -27,7 +27,7 @@ jobs:
     runs-on: macOS-12
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: .build
           key: ${{ runner.os }}-swift-${{ hashFiles('Package.resolved') }}
@@ -64,7 +64,7 @@ jobs:
       image: swift:${{ needs.generate-matrix.outputs.swift-version }}
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: .build
           key: ${{ runner.os }}-swift-${{ hashFiles('Package.resolved') }}
