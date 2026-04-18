@@ -109,6 +109,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Danger
-        uses: 417-72KI/danger-swiftlint@c332c5760ed64ddb55c8b54d0562e7df5a275e2d # v6.2
+        uses: 417-72KI/danger-swiftlint@cede6b054f0974088af775b7843437f4b14dc33e # v6.3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
