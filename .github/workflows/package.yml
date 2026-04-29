@@ -13,17 +13,17 @@ jobs:
     name: Resolve package
     runs-on: macos-15
     steps:
-      - uses: actions/create-github-app-token@v3
+      - uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3
         id: app-token
         with:
           app-id: ${{ secrets.BOT_APP_ID }}
           private-key: ${{ secrets.BOT_PRIVATE_KEY }}
       - name: Set token to env
         run: echo GH_TOKEN=${{ steps.app-token.outputs.token }} >> $GITHUB_ENV
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           token: ${{ env.GH_TOKEN }}
-      - uses: actions/cache@v5
+      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
         with:
           path: .build
           key: ${{ runner.os }}-swift-${{ hashFiles('Package.resolved') }}
