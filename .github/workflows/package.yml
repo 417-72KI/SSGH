@@ -20,7 +20,7 @@ jobs:
           private-key: ${{ secrets.BOT_PRIVATE_KEY }}
       - name: Set token to env
         run: echo GH_TOKEN=${{ steps.app-token.outputs.token }} >> $GITHUB_ENV
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
           token: ${{ env.GH_TOKEN }}
       - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5
